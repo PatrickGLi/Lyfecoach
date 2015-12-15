@@ -2,11 +2,15 @@
 <html>
 <head>
   <title>Lyfecoach</title>
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <% if current_user %>
+    <p><%= current_user.username %> <%= button_to "Log Out", session_url, method: :delete%></p>
+  <% end %>
 
 <%= yield %>
 
