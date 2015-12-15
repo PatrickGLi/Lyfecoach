@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  before_action :has_user, only:[:new]
+  before_action :no_user, only:[:show]
+
   def new
     @user = User.new
   end
@@ -14,6 +17,9 @@ class UsersController < ApplicationController
       flash.now[:errors] = @user.errors.full_messages
       render :new
     end
+  end
+
+  def show
   end
 
   private

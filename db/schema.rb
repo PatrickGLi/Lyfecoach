@@ -11,17 +11,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151215060416) do
+ActiveRecord::Schema.define(version: 20151215181846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "events", force: :cascade do |t|
+    t.string   "title",                                                                                                                                                                                                                                                                               null: false
+    t.string   "location",                                                                                                                                                                                                                                                                            null: false
+    t.date     "start_time",                                                                                                                                                                                                                                                                          null: false
+    t.date     "end_time",                                                                                                                                                                                                                                                                            null: false
+    t.text     "description",                                                                                                                                                                                                                                                                         null: false
+    t.integer  "ticket_max",                                                                                                                                                                                                                                                                          null: false
+    t.integer  "view_count",   default: 0,                                                                                                                                                                                                                                                            null: false
+    t.string   "category",                                                                                                                                                                                                                                                                            null: false
+    t.text     "url",          default: "https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=&url=https%3A%2F%2Fpixabay.com%2Fen%2Fsilhouette-sunset-landscape-woman-283298%2F&bvm=bv.110151844,d.cGc&psig=AFQjCNEIkN-4xKzQ4jLYazWlpb_cc6p3ug&ust=1450288362611394", null: false
+    t.integer  "organizer_id",                                                                                                                                                                                                                                                                        null: false
+    t.datetime "created_at",                                                                                                                                                                                                                                                                          null: false
+    t.datetime "updated_at",                                                                                                                                                                                                                                                                          null: false
+  end
+
+  add_index "events", ["organizer_id"], name: "index_events_on_organizer_id", using: :btree
+  add_index "events", ["title"], name: "index_events_on_title", unique: true, using: :btree
+
   create_table "users", force: :cascade do |t|
-    t.string   "username",        null: false
-    t.string   "password_digest", null: false
-    t.string   "session_token",   null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.string   "username",                                                                                                     null: false
+    t.string   "password_digest",                                                                                              null: false
+    t.string   "session_token",                                                                                                null: false
+    t.datetime "created_at",                                                                                                   null: false
+    t.datetime "updated_at",                                                                                                   null: false
+    t.string   "name"
+    t.text     "description"
+    t.text     "url",             default: "http://s3.amazonaws.com/wavesforwater/images/avatar-default.gif?sizes=/y:33/x:33"
   end
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
