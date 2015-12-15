@@ -1,0 +1,37 @@
+{
+  "name": "Lyfecoach",
+  "version": "1.0.0",
+  "description": "[Heroku link][heroku]",
+  "main": "webpack.config.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "dependencies": {
+    "babel-loader": "^6.2.0",
+    "history": "^1.16.0",
+    "flux": "^2.1.1",
+    "babel-core": "^6.3.17",
+    "jquery": "^2.1.4",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-addons-linked-state-mixin": "^0.14.3",
+    "react-router": "^1.0.2",
+    "webpack": "^1.12.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrickLi727/Lyfecoach.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PatrickLi727/Lyfecoach/issues"
+  },
+  "homepage": "https://github.com/PatrickLi727/Lyfecoach#readme"
+}
