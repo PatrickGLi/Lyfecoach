@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   def has_user
     if current_user
       flash[:notice] = "You're already signed in!"
-      redirect_to user_url
+      redirect_to root_url
     end
   end
 
