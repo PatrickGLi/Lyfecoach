@@ -10,9 +10,6 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <% if current_user %>
-    <p><%= current_user.username %> <%= button_to "Log Out", session_url, method: :delete%></p>
-  <% end %>
 
 <%= yield %>
 

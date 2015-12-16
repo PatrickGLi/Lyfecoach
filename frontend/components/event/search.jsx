@@ -1,7 +1,7 @@
 var React = require('react'),
     Map = require('./map'),
     EventIndex = require('./index'),
-    Filter = require('../filter');
+    Filter = require('../filter/filter');
 
 var EventSearch = React.createClass({
 

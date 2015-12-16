@@ -7,6 +7,13 @@ ApiActions = {
       actionType: EventConstants.EVENTS_RECEIVED,
       events: events
     });
+  },
+
+  receiveSingleEvent: function(event) {
+    AppDispatcher.dispatch({
+      actionType: EventConstants.SINGLE_EVENT_RECEIVED,
+      event: event
+    });
   }
 }
 

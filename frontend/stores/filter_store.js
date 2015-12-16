@@ -12,6 +12,8 @@ FilterStore.__onDispatch = function(payload) {
       updateFilter(payload.button);
       break;
   }
+
+  FilterStore.__emitChange();
 };
 
 FilterStore.fetch = function() {
@@ -24,8 +26,6 @@ function updateFilter (buttonClicked) {
   } else {
     shownFilter = buttonClicked;
   }
-
-  FilterStore.__emitChange();
 }
 
 module.exports = FilterStore;
