@@ -2,18 +2,25 @@ var React = require('react'),
     FilterStore = require('../../stores/filter_store');
 
 var PriceFilter = React.createClass({
-
+  options: {
+    paid: '',
+    free: ''
+  },
 
   getInitialState: function() {
-    return ()
+    return (this.options);
   },
 
   componentDidMount: function() {
-    FilterStore.addListener(this.handleChange);
+    this.token = FilterStore.addListener(this.handleChange);
+  },
+
+  componentWillUnmount: function() {
+    this.token.remove();
   },
 
   handleChange: function() {
-    console.log("hey!");
+    console.log("hey")
   },
 
   render: function() {
