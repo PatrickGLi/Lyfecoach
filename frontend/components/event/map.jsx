@@ -1,6 +1,6 @@
 var React = require('react'),
-    EventStore = require('../stores/event_store'),
-    MapActions = require('../actions/map_actions');
+    EventStore = require('../../stores/event_store'),
+    MapActions = require('../../actions/map_actions');
 
 var Map = React.createClass({
 
@@ -14,6 +14,10 @@ var Map = React.createClass({
     });
   },
 
+  componentWillUnmount: function() {
+    this.token.remove();
+  },
+
   getMap: function(lat, lng) {
     var mapDOMNode = this.refs.map;
     var mapOptions = {
@@ -21,7 +25,7 @@ var Map = React.createClass({
       zoom: 13
     };
     this.map = new google.maps.Map(mapDOMNode, mapOptions);
-    EventStore.addListener(this.addMarkers);
+    this.token = EventStore.addListener(this.addMarkers);
     MapActions.fetchEvents();
   },
 

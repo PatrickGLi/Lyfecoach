@@ -14,6 +14,10 @@ FilterStore.__onDispatch = function(payload) {
   }
 };
 
+FilterStore.fetch = function() {
+  return shownFilter;
+}
+
 function updateFilter (buttonClicked) {
   if (shownFilter === buttonClicked) {
     shownFilter = null;
