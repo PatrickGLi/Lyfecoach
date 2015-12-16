@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   before_action :has_user, only:[:new]
-  
+
   def new
     @user = User.new
   end
@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
     else
       login!(user)
       flash[:notice] = "Signed in!"
-      redirect_to user_url
+      redirect_to root_url
     end
   end
 
