@@ -13,6 +13,10 @@ EventStore.all = function() {
   return events;
 };
 
+EventStore.find = function(id) {
+  return _events[id];
+};
+
 var resetEvents = function(events){
   _events = {};
   events.forEach(function(event) {
@@ -20,10 +24,17 @@ var resetEvents = function(events){
   });
 };
 
+var resetSingleEvent = function (event) {
+  _events[event.id] = event;
+};
+
 EventStore.__onDispatch = function(payload) {
   switch(payload.actionType) {
     case EventConstants.EVENTS_RECEIVED:
       resetEvents(payload.events);
+      break;
+    case EventConstants.SINGLE_EVENT_RECEIVED:
+      resetSingleEvent(payload.event);
       break;
   }
 

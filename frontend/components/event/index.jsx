@@ -21,16 +21,7 @@ var EventIndex = React.createClass({
 
   render: function() {
     var events = this.state.events.map(function(event, index) {
-
-      return ( <IndexItem key={index}
-                          image={event.url}
-                          title={event.title}
-                          location={event.location}
-                          startTime={event.start_time}
-                          endTime={event.end_time}
-                          price={event.price}/>
-              );
-
+      return ( <IndexItem key={index} event={event}/> );
     });
 
     return (

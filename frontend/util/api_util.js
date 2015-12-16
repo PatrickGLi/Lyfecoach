@@ -2,10 +2,16 @@ var ApiActions = require('../actions/api_actions');
 
 ApiUtil = {
   fetchEvents: function(){
-    $.getJSON('api/events', {}, function(eventData) {
-      ApiActions.receiveAll(eventData);
+    $.getJSON('api/events', {}, function(eventsData) {
+      ApiActions.receiveAll(eventsData);
     });
-  }
+  },
+
+  fetchSingleEvent: function(eventId) {
+    $.getJSON('api/events/' + eventId, {}, function(eventData) {
+      ApiActions.receiveSingleEvent(eventData);
+    });
+  },
 }
 
 module.exports = ApiUtil;

@@ -1,6 +1,6 @@
 var React = require('react'),
-    FilterActions = require('../actions/filter_actions'),
-    PriceFilter = require('./subfilter/price');
+    FilterActions = require('../../actions/filter_actions'),
+    PriceFilter = require('./price');
 
 var Filter = React.createClass({
 
