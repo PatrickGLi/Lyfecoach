@@ -1,6 +1,7 @@
 var React = require('react'),
     EventStore = require('../../stores/event_store'),
-    SearchActions = require('../../actions/map_actions');
+    ReactDOM = require('react-dom'),
+    SearchActions = require('../../actions/search_actions');
 
 var Map = React.createClass({
 
@@ -10,10 +11,9 @@ var Map = React.createClass({
     navigator.geolocation.getCurrentPosition(this.getMap);
   },
 
-  getMap: function() {
+  getMap: function(position) {
     var lat = position.coords.latitude;
     var lng = position.coords.longitude;
-
     var map = ReactDOM.findDOMNode(this.refs.map);
     var mapOptions = {
      center: { lat: lat, lng: lng },
@@ -23,10 +23,6 @@ var Map = React.createClass({
    this.map = new google.maps.Map(map, mapOptions);
   },
 
-  componentWillUnmount: function() {
-    this.token.remove();
-  },
-
   componentWillReceiveProps: function() {
     this._onChange();
   },
@@ -34,14 +30,13 @@ var Map = React.createClass({
 
   _onChange: function() {
     var events = this.props.events;
-
     var currentMarkers = this.markers.slice(0);
     var eventsToAddMarkers = [];
 
     events.forEach(function(event) {
       var index = null;
 
-      for (var i = 0; i < currentEvents.length; i++) {
+      for (var i = 0; i < currentMarkers.length; i++) {
         if (currentMarkers[i].eventId == event.id) {
           index = i;
           break;
@@ -51,38 +46,12 @@ var Map = React.createClass({
       if (index === null) {
         eventsToAddMarkers.push(event);
       } else {
-        //stays
-      }
-    },
-    var benches = this.props.benches;
-    var toAdd = [], toRemove = this.markers.slice(0);
-    benches.forEach(function(bench, idx){
-      var idx = -1;
-      //check if bench is already on map as a marker
-      for(var i = 0; i < toRemove.length; i++){
-        if(toRemove[i].benchId == bench.id){
-          idx = i;
-          break;
-        }
-      }
-      if(idx === -1){
-        //if it's not already on the map, we need to add a marker
-        toAdd.push(bench);
-      } else {
-        //if it IS already on the map AND in the store, we don't need
-        //to remove it
-        toRemove.splice(idx, 1);
+        currentMarkers.splice(index, 1);
       }
     });
-    toAdd.forEach(this.createMarkerFromBench);
-    toRemove.forEach(this.removeMarker);
 
-    if (this.props.singleBench) {
-      this.map.setOptions({draggable: false});
-      this.map.setCenter(this.centerBenchCoords());
-    }
-      this.props.events.forEach(this.createMarkerForEvent);
-    //in filters, will change the markers on the m ap
+    eventsToAddMarkers.forEach(this.addMarker);
+    currentMarkers.forEach(this.removeMarker);
   },
 
   addMarker: function(event) {
@@ -94,12 +63,16 @@ var Map = React.createClass({
       eventId: event.id,
       animation: null
     });
+  },
 
-    removeMarker: function(event) {
-
+  removeMarker: function(marker) {
+    for (var i = 0; i < this.markers.length; i++) {
+      if (this.markers[i] === marker) {
+        this.markers[i].setMap(null);
+        this.markers.splice(i, 1);
+        break;
+      }
     }
-
-    this.markers.push(marker);
   },
 
   render: function() {

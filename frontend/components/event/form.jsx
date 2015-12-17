@@ -64,6 +64,17 @@ var EventForm = React.createClass({
     return this.props.location.query;
   },
 
+  addImage: function (e) {
+    debugger
+    e.preventDefault();
+    cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, function(error, results){
+      debugger
+      // if(!error){
+      //   this.props.postImage(results[0]);
+      // }
+    }.bind(this));
+  },
+
   render: function(){
     var lat = this._coords().lat, lng = this._coords().lng;
 
@@ -126,9 +137,9 @@ var EventForm = React.createClass({
             <input type="text" disabled="true" value={lng}/>
             <br/>
 
-            <label>Add Event Image</label>
-            <input type="text" placeholder="Placeholder for image"/>
-            <br/>
+            <div className="upload-form">
+              <button onClick={this.addImage}>ADD EVENT IMAGE</button>
+            </div>
 
             <label>Add a Description</label>
             <textarea valueLink={this.linkState('description')}></textarea>
