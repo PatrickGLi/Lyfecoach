@@ -20,7 +20,6 @@ var NavBar = React.createClass({
 
   componentWillUnmount: function() {
     this.currentUserListener.remove();
-    this.dropdownListener.remove();
   },
 
   getCurrentUser: function() {
@@ -61,9 +60,7 @@ var NavBar = React.createClass({
 
             <div className="nav navbar-nav pull-right user-settings">
               <UserDropdown name={this.state.currentUser.fname}/>
-
-              <div onClick={this.showHelpDropdown}
-                   className="nav-links">Help</div>
+              <HelpDropdown/>
               <div onClick={this.goToEventForm}
                    id="create-event-link">Create Event</div>
             </div>

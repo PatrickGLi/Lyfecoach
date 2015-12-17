@@ -31289,7 +31289,6 @@
 	
 	  componentWillUnmount: function () {
 	    this.currentUserListener.remove();
-	    this.dropdownListener.remove();
 	  },
 	
 	  getCurrentUser: function () {
@@ -31342,12 +31341,7 @@
 	            'div',
 	            { className: 'nav navbar-nav pull-right user-settings' },
 	            React.createElement(UserDropdown, { name: this.state.currentUser.fname }),
-	            React.createElement(
-	              'div',
-	              { onClick: this.showHelpDropdown,
-	                className: 'nav-links' },
-	              'Help'
-	            ),
+	            React.createElement(HelpDropdown, null),
 	            React.createElement(
 	              'div',
 	              { onClick: this.goToEventForm,
@@ -31414,7 +31408,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ReactConstants = __webpack_require__(240);
+	    ReactConstants = __webpack_require__(240),
+	    DropdownStore = __webpack_require__(249);
 	
 	var UserDropdown = React.createClass({
 	  displayName: 'UserDropdown',
@@ -31423,9 +31418,22 @@
 	    return { dropdown: "dropdown-hidden" };
 	  },
 	
-	  componentDidMount: function () {},
+	  componentDidMount: function () {
+	    this.token = DropdownStore.addListener(this._onChange);
+	  },
 	
-	  componentWillUnmount: function () {},
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {
+	    // if (DropdownStore.fetch() === this.props.name)
+	  },
+	
+	  toggleUserDropdown: function (e) {
+	    debugger;
+	    DropdownActions.showDropdown(e.target);
+	  },
 	
 	  render: function () {
 	    return React.createElement(
@@ -31433,7 +31441,7 @@
 	      null,
 	      React.createElement(
 	        'div',
-	        { onClick: this.showUserDropdown,
+	        { onClick: this.toggleUserDropdown,
 	          className: 'nav-links' },
 	        this.props.name
 	      ),
@@ -31441,12 +31449,21 @@
 	        'div',
 	        { id: this.state.dropdown },
 	        React.createElement(
-	          'form',
-	          { method: 'post', action: 'session' },
-	          React.createElement('input', { type: 'hidden', name: '_method', value: 'delete' }),
-	          React.createElement('input', { name: 'authenticity_token',
-	            type: 'hidden', value: ReactConstants.AUTH_TOKEN }),
-	          React.createElement('input', { type: 'submit', value: 'Sign Out' })
+	          'div',
+	          null,
+	          'Account Settings'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'form',
+	            { method: 'post', action: 'session' },
+	            React.createElement('input', { type: 'hidden', name: '_method', value: 'delete' }),
+	            React.createElement('input', { name: 'authenticity_token',
+	              type: 'hidden', value: ReactConstants.AUTH_TOKEN }),
+	            React.createElement('input', { type: 'submit', value: 'Sign Out' })
+	          )
 	        )
 	      )
 	    );
@@ -31793,8 +31810,8 @@
 	
 	DropdownStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
-	    case DropdownConstants.Dropdown_CLICKED:
-	      updateDropdown(payload.button);
+	    case DropdownConstants.DROPDOWN_CLICKED:
+	      updateDropdown(payload.dropdown);
 	      break;
 	  }
 	
@@ -31806,6 +31823,7 @@
 	};
 	
 	function updateDropdown(buttonClicked) {
+	  debugger;
 	  if (shownDropdown === buttonClicked) {
 	    shownDropdown = null;
 	  } else {
@@ -31919,10 +31937,10 @@
 	    DropdownConstants = __webpack_require__(250);
 	
 	DropdownActions = {
-	  showDropdown: function (button) {
+	  showDropdown: function (dropdown) {
 	    AppDispatcher.dispatch({
-	      actionType: DropdownConstants.Dropdown_CLICKED,
-	      button: button
+	      actionType: DropdownConstants.DROPDOWN_CLICKED,
+	      dropdown: dropdown
 	    });
 	  }
 	};
@@ -31933,13 +31951,46 @@
 /* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
+	var React = __webpack_require__(1),
+	    DropdownStore = __webpack_require__(249);
 	
 	var HelpDropdown = React.createClass({
 	  displayName: 'HelpDropdown',
 	
+	  getInitialState: function () {
+	    return { dropdown: "dropdown-hidden" };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = DropdownStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {},
+	
+	  toggleHelpDropdown: function (e) {
+	    DropdownActions.showDropdown(e.target);
+	  },
+	
 	  render: function () {
-	    return React.createElement('div', null);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.toggleHelpDropdown,
+	          className: 'nav-links' },
+	        'Help'
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        'Hiddenstuff'
+	      )
+	    );
 	  }
 	});
 	
