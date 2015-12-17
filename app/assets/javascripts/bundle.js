@@ -31924,9 +31924,10 @@
 /* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var ApiUtil = __webpack_require__(181);
-	var LinkedStateMixin = __webpack_require__(260);
+	var React = __webpack_require__(1),
+	    ApiUtil = __webpack_require__(181),
+	    LinkedStateMixin = __webpack_require__(260),
+	    EventStore = __webpack_require__(159);
 	
 	var EventForm = React.createClass({
 	  displayName: 'EventForm',
@@ -31935,11 +31936,36 @@
 	
 	  getInitialState: function () {
 	    return {
+	      location: "",
+	      title: "",
+	      startTime: "",
+	      endTime: "",
 	      description: ""
 	    };
 	  },
 	
+	  componentDidMount: function () {
+	    autocomplete = new google.maps.places.Autocomplete(this.refs.autocomplete, { types: ['geocode'] });
+	  },
+	
+	  geolocate: function () {
+	    if (navigator.geolocation) {
+	      navigator.geolocation.getCurrentPosition(function (position) {
+	        var geolocation = {
+	          lat: position.coords.latitude,
+	          lng: position.coords.longitude
+	        };
+	        var circle = new google.maps.Circle({
+	          center: geolocation,
+	          radius: position.coords.accuracy
+	        });
+	        autocomplete.setBounds(circle.getBounds());
+	      });
+	    }
+	  },
+	
 	  handleSubmit: function (event) {
+	    debugger;
 	    event.preventDefault();
 	    var Event = Object.assign({}, this.state, this._coords());
 	    ApiUtil.createEvent(Event);
@@ -31955,6 +31981,7 @@
 	  _coords: function () {
 	    return this.props.location.query;
 	  },
+	
 	  render: function () {
 	    var lat = this._coords().lat,
 	        lng = this._coords().lng;
@@ -31978,28 +32005,21 @@
 	          valueLink: this.linkState('title'),
 	          placeholder: 'Give a short distinct name' }),
 	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Location'
-	        ),
-	        React.createElement('input', { type: 'text',
-	          valueLink: this.linkState('location'),
-	          placeholder: 'Specify where it\'s held' }),
-	        React.createElement('br', null),
+	        React.createElement('input', { ref: 'autocomplete', placeholder: 'Enter your address',
+	          onFocus: this.geolocate, type: 'text' }),
 	        React.createElement(
 	          'label',
 	          null,
 	          'Start Time'
 	        ),
-	        React.createElement('input', { type: 'date', valueLink: this.linkState('startTime') }),
+	        React.createElement('input', { type: 'time', valueLink: this.linkState('startTime') }),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
 	          null,
 	          'End Time'
 	        ),
-	        React.createElement('input', { type: 'date', valueLink: this.linkState('startTime') }),
+	        React.createElement('input', { type: 'time', valueLink: this.linkState('endTime') }),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
@@ -32028,6 +32048,7 @@
 	          'Add a Description'
 	        ),
 	        React.createElement('textarea', { valueLink: this.linkState('description') }),
+	        React.createElement('br', null),
 	        '//Add Tickets if there is time',
 	        React.createElement('input', { type: 'submit', value: 'create Event' })
 	      ),
