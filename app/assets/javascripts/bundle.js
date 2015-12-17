@@ -31493,7 +31493,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    History = __webpack_require__(184).History;
+	    History = __webpack_require__(184).History,
+	    Jumbotron = __webpack_require__(259);
 	
 	LandingPage = React.createClass({
 	  displayName: 'LandingPage',
@@ -31505,7 +31506,8 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'container' },
+	      null,
+	      React.createElement(Jumbotron, null),
 	      React.createElement(
 	        'button',
 	        { onClick: this.searchEvents },
@@ -32187,6 +32189,70 @@
 	});
 	
 	module.exports = DateFilter;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    History = __webpack_require__(184).History;
+	
+	var Jumbotron = React.createClass({
+	  displayName: 'Jumbotron',
+	
+	  mixins: [History],
+	
+	  goToEventForm: function (e) {
+	    this.history.pushState(null, 'api/events/new');
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'jumbotron' },
+	      React.createElement(
+	        'div',
+	        { className: 'container' },
+	        React.createElement(
+	          'div',
+	          { className: 'jumbo-host col-md-6' },
+	          React.createElement(
+	            'h2',
+	            null,
+	            'Sell Tickets'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'Promote, manage, and host successful events.'
+	          ),
+	          React.createElement(
+	            'button',
+	            { onClick: this.goToEventForm,
+	              className: 'btn btn-primary btn-md' },
+	            'Get Started'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'jumbo-customer col-md-6' },
+	          React.createElement(
+	            'h2',
+	            null,
+	            'Explore'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'Know your city, and expand your horizons. Follow your favorite event hosts, and always know what\'s happening in your area.'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Jumbotron;
 
 /***/ }
 /******/ ]);

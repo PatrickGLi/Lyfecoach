@@ -1,5 +1,6 @@
 var React = require('react'),
-    History = require('react-router').History;
+    History = require('react-router').History,
+    Jumbotron = require('./jumbotron');
 
 LandingPage = React.createClass({
 
@@ -9,9 +10,11 @@ LandingPage = React.createClass({
 
   render: function() {
     return (
-      <div className='container'>
+      <div>
+        <Jumbotron/>
         <button onClick={this.searchEvents}>Search Events</button>
-    </div>)
+      </div>
+    );
   }
 
 
