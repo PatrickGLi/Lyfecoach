@@ -59,10 +59,11 @@ var NavBar = React.createClass({
             </div>
 
             <div className="nav navbar-nav pull-right user-settings">
+              <div onClick={this.goToEventForm}
+                   id="create-event-link">Be a host.
+              </div>
               <UserDropdown name={this.state.currentUser.fname}/>
               <HelpDropdown/>
-              <div onClick={this.goToEventForm}
-                   id="create-event-link">Create Event</div>
             </div>
           </div>
 
