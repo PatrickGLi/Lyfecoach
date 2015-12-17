@@ -52,15 +52,17 @@
 	    Route = __webpack_require__(184).Route,
 	    IndexRoute = __webpack_require__(184).IndexRoute,
 	    App = __webpack_require__(235),
-	    LandingPage = __webpack_require__(240),
-	    EventSearch = __webpack_require__(241),
-	    EventDetail = __webpack_require__(251);
+	    LandingPage = __webpack_require__(241),
+	    EventSearch = __webpack_require__(242),
+	    EventDetail = __webpack_require__(251),
+	    EventForm = __webpack_require__(253);
 	
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: LandingPage }),
 	  React.createElement(Route, { path: 'api/events', component: EventSearch }),
+	  React.createElement(Route, { path: 'api/events/new', component: EventForm }),
 	  React.createElement(Route, { path: 'api/events/:eventId', component: EventDetail })
 	);
 	
@@ -26424,16 +26426,6 @@
 	    $.getJSON('api/users/' + currentUserId, {}, function (currentUser) {
 	      ApiActions.getCurrentUser(currentUser);
 	    });
-	  },
-	
-	  signOut: function () {
-	    $.ajax({
-	      method: 'delete',
-	      url: 'session',
-	      success: function () {
-	        debugger;
-	      }
-	    });
 	  }
 	};
 	
@@ -31276,8 +31268,9 @@
 	var React = __webpack_require__(1),
 	    NavBarActions = __webpack_require__(237),
 	    CurrentUserStore = __webpack_require__(238),
-	    Dropdown = __webpack_require__(255),
-	    ReactConstants = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../constants/react_constants\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())),
+	    ReactConstants = __webpack_require__(240),
+	    UserDropdown = __webpack_require__(239),
+	    HelpDropdown = __webpack_require__(255),
 	    History = __webpack_require__(184).History;
 	
 	var NavBar = React.createClass({
@@ -31290,8 +31283,13 @@
 	  },
 	
 	  componentDidMount: function () {
-	    CurrentUserStore.addListener(this.getCurrentUser);
+	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
 	    NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.currentUserListener.remove();
+	    this.dropdownListener.remove();
 	  },
 	
 	  getCurrentUser: function () {
@@ -31299,10 +31297,12 @@
 	  },
 	
 	  returnToHomepage: function () {
-	    this.history.pushState(null, 'api/events/' + this.props.event.id, {});
+	    this.history.pushState(null, '/', {});
 	  },
 	
-	  showDropdown: function () {},
+	  goToEventForm: function () {
+	    this.history.pushState(null, 'api/events/new');
+	  },
 	
 	  render: function () {
 	    if (this.state.currentUser === null) {
@@ -31310,20 +31310,53 @@
 	    }
 	
 	    return React.createElement(
-	      'div',
-	      null,
+	      'nav',
+	      { className: 'navbar navbar-default' },
 	      React.createElement(
 	        'div',
-	        { onClick: this.returnToHomepage },
-	        'I\'m the logo.'
-	      ),
-	      'I\'m the nav bar.',
-	      React.createElement(
-	        'div',
-	        { onClick: this.showDropdown },
-	        this.state.currentUser.fname
-	      ),
-	      React.createElement(Dropdown, null)
+	        { className: 'container-fluid' },
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-header' },
+	          React.createElement(
+	            'button',
+	            { type: 'button', className: 'navbar-toggle collapsed',
+	              'data-toggle': 'collapse',
+	              'data-target': '#collapse-menu',
+	              'aria-expanded': 'false' },
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'collapse navbar-collapse', id: 'collapse-menu' },
+	          React.createElement(
+	            'div',
+	            { className: 'nav navbar-nav pull-left' },
+	            React.createElement('img', { id: 'logo', src: 'http://static4.wikia.nocookie.net/__cb20131121214007/destinypedia/images/7/71/Information_Icon.svg',
+	              onClick: this.returnToHomepage })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'nav navbar-nav pull-right user-settings' },
+	            React.createElement(UserDropdown, { name: this.state.currentUser.fname }),
+	            React.createElement(
+	              'div',
+	              { onClick: this.showHelpDropdown,
+	                className: 'nav-links' },
+	              'Help'
+	            ),
+	            React.createElement(
+	              'div',
+	              { onClick: this.goToEventForm,
+	                id: 'create-event-link' },
+	              'Create Event'
+	            )
+	          )
+	        )
+	      )
 	    );
 	  }
 	});
@@ -31377,8 +31410,64 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 239 */,
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactConstants = __webpack_require__(240);
+	
+	var UserDropdown = React.createClass({
+	  displayName: 'UserDropdown',
+	
+	  getInitialState: function () {
+	    return { dropdown: "dropdown-hidden" };
+	  },
+	
+	  componentDidMount: function () {},
+	
+	  componentWillUnmount: function () {},
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.showUserDropdown,
+	          className: 'nav-links' },
+	        this.props.name
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        React.createElement(
+	          'form',
+	          { method: 'post', action: 'session' },
+	          React.createElement('input', { type: 'hidden', name: '_method', value: 'delete' }),
+	          React.createElement('input', { name: 'authenticity_token',
+	            type: 'hidden', value: ReactConstants.AUTH_TOKEN }),
+	          React.createElement('input', { type: 'submit', value: 'Sign Out' })
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UserDropdown;
+
+/***/ },
 /* 240 */
+/***/ function(module, exports) {
+
+	var ReactConstants = {
+	  AUTH_TOKEN: window.formAuthenticityToken,
+	  CURRENT_USER: window.currentUserId
+	};
+	
+	module.exports = ReactConstants;
+
+/***/ },
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -31408,13 +31497,13 @@
 	module.exports = LandingPage;
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    Map = __webpack_require__(242),
-	    EventIndex = __webpack_require__(244),
-	    Filter = __webpack_require__(246);
+	    Map = __webpack_require__(243),
+	    EventIndex = __webpack_require__(245),
+	    Filter = __webpack_require__(247);
 	
 	var EventSearch = React.createClass({
 	  displayName: 'EventSearch',
@@ -31433,12 +31522,12 @@
 	module.exports = EventSearch;
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
-	    MapActions = __webpack_require__(243);
+	    MapActions = __webpack_require__(244);
 	
 	var Map = React.createClass({
 	  displayName: 'Map',
@@ -31490,7 +31579,7 @@
 	module.exports = Map;
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(181);
@@ -31504,12 +31593,12 @@
 	module.exports = MapActions;
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
-	    IndexItem = __webpack_require__(245);
+	    IndexItem = __webpack_require__(246);
 	
 	var EventIndex = React.createClass({
 	  displayName: 'EventIndex',
@@ -31547,7 +31636,7 @@
 	module.exports = EventIndex;
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -31606,18 +31695,18 @@
 	module.exports = IndexItem;
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    FilterActions = __webpack_require__(247),
-	    PriceFilter = __webpack_require__(249);
+	    DropdownActions = __webpack_require__(254),
+	    PriceFilter = __webpack_require__(248);
 	
 	var Filter = React.createClass({
 	  displayName: 'Filter',
 	
 	  handleFilter: function (event) {
-	    FilterActions.showFilter(event.target);
+	    DropdownActions.showDropdown(event.target);
 	  },
 	
 	  render: function () {
@@ -31652,39 +31741,11 @@
 	module.exports = Filter;
 
 /***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(177),
-	    FilterConstants = __webpack_require__(248);
-	
-	FilterActions = {
-	  showFilter: function (button) {
-	    AppDispatcher.dispatch({
-	      actionType: FilterConstants.FILTER_CLICKED,
-	      button: button
-	    });
-	  }
-	};
-	
-	module.exports = FilterActions;
-
-/***/ },
 /* 248 */
-/***/ function(module, exports) {
-
-	FilterConstants = {
-	  FILTER_CLICKED: "FILTER_CLICKED"
-	};
-	
-	module.exports = FilterConstants;
-
-/***/ },
-/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    FilterStore = __webpack_require__(250);
+	    DropdownStore = __webpack_require__(249);
 	
 	var PriceFilter = React.createClass({
 	  displayName: 'PriceFilter',
@@ -31699,7 +31760,7 @@
 	  },
 	
 	  componentDidMount: function () {
-	    this.token = FilterStore.addListener(this.handleChange);
+	    this.token = DropdownStore.addListener(this.handleChange);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -31719,40 +31780,50 @@
 	module.exports = PriceFilter;
 
 /***/ },
-/* 250 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(160).Store,
 	    AppDispatcher = __webpack_require__(177),
-	    FilterConstants = __webpack_require__(248);
+	    DropdownConstants = __webpack_require__(250);
 	
-	var shownFilter = null;
+	var shownDropdown = null;
 	
-	var FilterStore = new Store(AppDispatcher);
+	var DropdownStore = new Store(AppDispatcher);
 	
-	FilterStore.__onDispatch = function (payload) {
+	DropdownStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
-	    case FilterConstants.FILTER_CLICKED:
-	      updateFilter(payload.button);
+	    case DropdownConstants.Dropdown_CLICKED:
+	      updateDropdown(payload.button);
 	      break;
 	  }
 	
-	  FilterStore.__emitChange();
+	  DropdownStore.__emitChange();
 	};
 	
-	FilterStore.fetch = function () {
-	  return shownFilter;
+	DropdownStore.fetch = function () {
+	  return shownDropdown;
 	};
 	
-	function updateFilter(buttonClicked) {
-	  if (shownFilter === buttonClicked) {
-	    shownFilter = null;
+	function updateDropdown(buttonClicked) {
+	  if (shownDropdown === buttonClicked) {
+	    shownDropdown = null;
 	  } else {
-	    shownFilter = buttonClicked;
+	    shownDropdown = buttonClicked;
 	  }
 	}
 	
-	module.exports = FilterStore;
+	module.exports = DropdownStore;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports) {
+
+	DropdownConstants = {
+	  DROPDOWN_CLICKED: "DROPDOWN_CLICKED"
+	};
+	
+	module.exports = DropdownConstants;
 
 /***/ },
 /* 251 */
@@ -31821,59 +31892,58 @@
 	module.exports = DetailActions;
 
 /***/ },
-/* 253 */,
-/* 254 */
-/***/ function(module, exports) {
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
 
-	var ReactConstants = {
-	  AUTH_TOKEN: window.formAuthenticityToken,
-	  CURRENT_USER: window.currentUserId
+	var React = __webpack_require__(1);
+	
+	var EventForm = React.createClass({
+	  displayName: 'EventForm',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'I\'m the event form.'
+	    );
+	  }
+	});
+	
+	module.exports = EventForm;
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(177),
+	    DropdownConstants = __webpack_require__(250);
+	
+	DropdownActions = {
+	  showDropdown: function (button) {
+	    AppDispatcher.dispatch({
+	      actionType: DropdownConstants.Dropdown_CLICKED,
+	      button: button
+	    });
+	  }
 	};
 	
-	module.exports = ReactConstants;
+	module.exports = DropdownActions;
 
 /***/ },
 /* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1),
-	    UserDropdownActions = __webpack_require__(256),
-	    ReactConstants = __webpack_require__(254);
+	var React = __webpack_require__(1);
 	
-	var UserDropdown = React.createClass({
-	  displayName: 'UserDropdown',
-	
-	  signOut: function () {
-	    UserDropdownActions.signOut();
-	  },
+	var HelpDropdown = React.createClass({
+	  displayName: 'HelpDropdown',
 	
 	  render: function () {
-	    return React.createElement(
-	      'form',
-	      { method: 'post', action: 'session' },
-	      React.createElement('input', { type: 'hidden', name: '_method', value: 'delete' }),
-	      React.createElement('input', { name: 'authenticity_token',
-	        type: 'hidden', value: ReactConstants.AUTH_TOKEN }),
-	      React.createElement('input', { type: 'submit', value: 'Sign Out' })
-	    );
+	    return React.createElement('div', null);
 	  }
 	});
 	
-	module.exports = UserDropdown;
-
-/***/ },
-/* 256 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(181);
-	
-	DropdownActions = {
-	  signOut: function () {
-	    ApiUtil.signOut();
-	  }
-	};
-	
-	module.exports = DropdownActions;
+	module.exports = HelpDropdown;
 
 /***/ }
 /******/ ]);

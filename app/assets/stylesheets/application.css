@@ -15,17 +15,51 @@
  *= require_self
  */
 
- .map {
-   width: 500px;
-   height: 500px;
+
+ #logo {
+   height: 100px;
+   width: 100px;
  }
 
- img:hover {
+ .user-settings div {
+   display: inline-block;
+   text-align: center;
+   margin: 0 10px;
+ }
+
+ .user-settings div:hover {
    cursor: pointer;
  }
 
- img {
-   -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-   -moz-box-shadow:    3px 3px 5px 6px #ccc;  /* Firefox 3.5 - 3.6 */
-   box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+ .nav-links {
+   width: 50px;
+   height: 50px;
+   line-height: 50px;
  }
+
+
+ #create-event-link {
+   width: 100px;
+   height: 70px;
+   line-height: 70px;
+   outline: 1px solid black;
+ }
+
+ #dropdown-hidden {
+   display: none;
+ }
+
+  .map {
+    width: 300px;
+    height: 300px;
+  }
+
+  img:hover {
+    cursor: pointer;
+  }
+
+  img {
+    -webkit-box-shadow: 3px 3px 5px 6px #ccc;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+    -moz-box-shadow:    3px 3px 5px 6px #ccc;  /* Firefox 3.5 - 3.6 */
+    box-shadow:         3px 3px 5px 6px #ccc;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
+  }
