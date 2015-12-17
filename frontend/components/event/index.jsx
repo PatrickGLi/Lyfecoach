@@ -3,25 +3,17 @@ var React = require('react'),
     IndexItem = require('./indexItem');
 
 var EventIndex = React.createClass({
-  getInitialState: function() {
-    return ({ events: EventStore.all() });
-  },
-
-  componentDidMount: function() {
-    this.token = EventStore.addListener(this.fetchEvents);
-  },
-
-  componentWillUnmount: function() {
-    this.token.remove();
-  },
-
-  fetchEvents: function(){
-    this.setState({ events: EventStore.all() });
+  showEventDetail: function(event) {
+    this.props.history.pushState(null, 'api/events/' + event.id);
   },
 
   render: function() {
-    var events = this.state.events.map(function(event, index) {
-      return ( <IndexItem key={index} event={event}/> );
+    var showEventDetail = this.showEventDetail;
+    var events = this.props.events.map(function(event) {
+      var bindedClick = showEventDetail.bind(null, event);
+      return ( <IndexItem onClick={bindedClick}
+                          key={event.id}
+                          event={event}/> );
     });
 
     return (

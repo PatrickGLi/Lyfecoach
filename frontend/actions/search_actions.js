@@ -1,5 +1,4 @@
-var ApiUtil = require('../util/api_util'),
-    SearchConstants = require('../constants/search_constants');
+var ApiUtil = require('../util/api_util');
 
 SearchActions = {
   fetchEvents: function() {

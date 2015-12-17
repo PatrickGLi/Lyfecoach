@@ -2,7 +2,8 @@ var React = require('react'),
     Map = require('./map'),
     EventStore = require('../../stores/event_store'),
     EventIndex = require('./index'),
-    Filter = require('../filter/filter');
+    Filter = require('../filter/filter'),
+    SearchActions = require('../../actions/search_actions');
 
 
 function _getAllEvents() {
@@ -18,11 +19,11 @@ var EventSearch = React.createClass({
 
   componentDidMount: function() {
     this.eventsChanged = EventStore.addListener(this._eventsChanged);
-    navigator.geolocation.getCurrentPosition(SearchActions.fetchEvents);
+    SearchActions.fetchEvents();
   },
 
   _eventsChanged: function() {
-    this.setState({ benches: _getAllEvents() });
+    this.setState({ events: _getAllEvents() });
   },
 
   componentWillUnmount: function() {
@@ -34,7 +35,7 @@ var EventSearch = React.createClass({
             <div>
               <Map events={this.state.events}/>
               <Filter/>
-              <EventIndex/>
+              <EventIndex events={this.state.events} history={this.props.history}/>
             </div>
            );
   }

@@ -19677,6 +19677,7 @@
 	  for (var id in _events) {
 	    events.push(_events[id]);
 	  }
+	
 	  return events;
 	};
 	
@@ -31696,7 +31697,8 @@
 	    Map = __webpack_require__(247),
 	    EventStore = __webpack_require__(159),
 	    EventIndex = __webpack_require__(248),
-	    Filter = __webpack_require__(250);
+	    Filter = __webpack_require__(250),
+	    SearchActions = __webpack_require__(263);
 	
 	function _getAllEvents() {
 	  return EventStore.all();
@@ -31713,11 +31715,11 @@
 	
 	  componentDidMount: function () {
 	    this.eventsChanged = EventStore.addListener(this._eventsChanged);
-	    navigator.geolocation.getCurrentPosition(SearchActions.fetchEvents);
+	    SearchActions.fetchEvents();
 	  },
 	
 	  _eventsChanged: function () {
-	    this.setState({ benches: _getAllEvents() });
+	    this.setState({ events: _getAllEvents() });
 	  },
 	
 	  componentWillUnmount: function () {
@@ -31730,7 +31732,7 @@
 	      null,
 	      React.createElement(Map, { events: this.state.events }),
 	      React.createElement(Filter, null),
-	      React.createElement(EventIndex, null)
+	      React.createElement(EventIndex, { events: this.state.events, history: this.props.history })
 	    );
 	  }
 	});
@@ -31765,6 +31767,11 @@
 	    };
 	
 	    this.map = new google.maps.Map(map, mapOptions);
+	    this.mapLoaded();
+	  },
+	
+	  mapLoaded: function () {
+	    this._onChange();
 	  },
 	
 	  componentWillReceiveProps: function () {
@@ -31837,25 +31844,17 @@
 	var EventIndex = React.createClass({
 	  displayName: 'EventIndex',
 	
-	  getInitialState: function () {
-	    return { events: EventStore.all() };
-	  },
-	
-	  componentDidMount: function () {
-	    this.token = EventStore.addListener(this.fetchEvents);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  fetchEvents: function () {
-	    this.setState({ events: EventStore.all() });
+	  showEventDetail: function (event) {
+	    this.props.history.pushState(null, 'api/events/' + event.id);
 	  },
 	
 	  render: function () {
-	    var events = this.state.events.map(function (event, index) {
-	      return React.createElement(IndexItem, { key: index, event: event });
+	    var showEventDetail = this.showEventDetail;
+	    var events = this.props.events.map(function (event) {
+	      var bindedClick = showEventDetail.bind(null, event);
+	      return React.createElement(IndexItem, { onClick: bindedClick,
+	        key: event.id,
+	        event: event });
 	    });
 	
 	    return React.createElement(
@@ -31875,22 +31874,15 @@
 
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159);
-	History = __webpack_require__(184).History;
 	
 	var IndexItem = React.createClass({
 	  displayName: 'IndexItem',
-	
-	  mixins: [History],
-	
-	  showEventDetail: function (e) {
-	    this.history.pushState(null, 'api/events/' + this.props.event.id, {});
-	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      { className: 'col-xs-4 test' },
-	      React.createElement('img', { onClick: this.showEventDetail,
+	      React.createElement('img', { onClick: this.props.onClick,
 	        src: this.props.event.url,
 	        className: 'img-circle img-responsive',
 	        alt: 'Responsive image' }),
@@ -32283,6 +32275,7 @@
 	var React = __webpack_require__(1),
 	    ApiUtil = __webpack_require__(181),
 	    LinkedStateMixin = __webpack_require__(259),
+	    ReactDOM = __webpack_require__(158),
 	    EventStore = __webpack_require__(159);
 	
 	var EventForm = React.createClass({
@@ -32303,6 +32296,7 @@
 	  },
 	
 	  componentDidMount: function () {
+	    console.log("form mounted");
 	    $(window).keydown(function (event) {
 	      if (event.keyCode == 13) {
 	        event.preventDefault();
@@ -32310,10 +32304,14 @@
 	      }
 	    });
 	
-	    autocomplete = new google.maps.places.Autocomplete(this.refs.autocomplete, { types: ['geocode'] });
+	    var autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
+	    console.log(autoCompleteInput);
+	
+	    this.autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, { types: ['geocode'] });
 	  },
 	
 	  geolocate: function () {
+	    var that = this;
 	    if (navigator.geolocation) {
 	      navigator.geolocation.getCurrentPosition(function (position) {
 	        var geolocation = {
@@ -32324,7 +32322,7 @@
 	          center: geolocation,
 	          radius: position.coords.accuracy
 	        });
-	        autocomplete.setBounds(circle.getBounds());
+	        that.autocomplete.setBounds(circle.getBounds());
 	      });
 	    }
 	  },
@@ -32348,13 +32346,12 @@
 	  },
 	
 	  addImage: function (e) {
-	    debugger;
 	    e.preventDefault();
 	    cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, (function (error, results) {
-	      debugger;
-	      // if(!error){
-	      //   this.props.postImage(results[0]);
-	      // }
+	      if (!error) {
+	        debugger;
+	        this.props.postImage(results[0]);
+	      }
 	    }).bind(this));
 	  },
 	
@@ -32406,7 +32403,6 @@
 	        React.createElement('input', { valueLink: this.linkState('location'),
 	          ref: 'autocomplete', placeholder: 'Enter your address',
 	          onFocus: this.geolocate, type: 'text' }),
-	        '//how to get autocomplete to always reflect state',
 	        React.createElement(
 	          'label',
 	          null,
@@ -32708,8 +32704,7 @@
 /* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ApiUtil = __webpack_require__(181),
-	    SearchConstants = __webpack_require__(264);
+	var ApiUtil = __webpack_require__(181);
 	
 	SearchActions = {
 	  fetchEvents: function () {
@@ -32718,16 +32713,6 @@
 	};
 	
 	module.exports = SearchActions;
-
-/***/ },
-/* 264 */
-/***/ function(module, exports) {
-
-	var SearchConstants = {
-	  LOCATION_RECEIVED: "LOCATION_RECEIVED"
-	};
-	
-	module.exports = SearchConstants;
 
 /***/ }
 /******/ ]);

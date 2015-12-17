@@ -1,6 +1,7 @@
 var React = require('react'),
     ApiUtil = require('../../util/api_util'),
     LinkedStateMixin = require('react-addons-linked-state-mixin'),
+    ReactDOM = require('react-dom'),
     EventStore = require('../../stores/event_store');
 
 var EventForm = React.createClass({
@@ -19,18 +20,24 @@ var EventForm = React.createClass({
   },
 
   componentDidMount: function() {
+    console.log("form mounted");
     $(window).keydown(function(event){
-    if(event.keyCode == 13) {
-      event.preventDefault();
-      return false;
-    }
-  });
+      if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+      }
+    });
 
-    autocomplete = new google.maps.places.Autocomplete(this.refs.autocomplete,
-       {types: ['geocode']});
+    var autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
+    console.log(autoCompleteInput);
+
+    this.autocomplete = new google.maps.places.Autocomplete(autoCompleteInput,
+      {types: ['geocode']});
+
   },
 
   geolocate: function() {
+    var that = this;
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         var geolocation = {
@@ -41,7 +48,7 @@ var EventForm = React.createClass({
           center: geolocation,
           radius: position.coords.accuracy
         });
-        autocomplete.setBounds(circle.getBounds());
+        that.autocomplete.setBounds(circle.getBounds());
       });
     }
   },
@@ -65,13 +72,12 @@ var EventForm = React.createClass({
   },
 
   addImage: function (e) {
-    debugger
     e.preventDefault();
     cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, function(error, results){
-      debugger
-      // if(!error){
-      //   this.props.postImage(results[0]);
-      // }
+      if(!error){
+        debugger
+        this.props.postImage(results[0]);
+      }
     }.bind(this));
   },
 
@@ -111,11 +117,8 @@ var EventForm = React.createClass({
               ref="autocomplete" placeholder="Enter your address"
              onFocus={this.geolocate} type="text"></input>
 
-           //how to get autocomplete to always reflect state
-
            <label>Start Time</label>
            <input type="date" valueLink={this.linkState('startDate')}/>
-
 
            <select valueLink={this.linkState('startTime')}>
              {times}
