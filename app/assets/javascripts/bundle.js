@@ -52,10 +52,10 @@
 	    Route = __webpack_require__(184).Route,
 	    IndexRoute = __webpack_require__(184).IndexRoute,
 	    App = __webpack_require__(235),
-	    LandingPage = __webpack_require__(241),
-	    EventSearch = __webpack_require__(242),
-	    EventDetail = __webpack_require__(251),
-	    EventForm = __webpack_require__(253);
+	    LandingPage = __webpack_require__(244),
+	    EventSearch = __webpack_require__(246),
+	    EventDetail = __webpack_require__(257),
+	    EventForm = __webpack_require__(259);
 	
 	var routes = React.createElement(
 	  Route,
@@ -31268,9 +31268,9 @@
 	var React = __webpack_require__(1),
 	    NavBarActions = __webpack_require__(237),
 	    CurrentUserStore = __webpack_require__(238),
-	    ReactConstants = __webpack_require__(240),
-	    UserDropdown = __webpack_require__(239),
-	    HelpDropdown = __webpack_require__(255),
+	    ReactConstants = __webpack_require__(239),
+	    UserDropdown = __webpack_require__(240),
+	    HelpDropdown = __webpack_require__(243),
 	    History = __webpack_require__(184).History;
 	
 	var NavBar = React.createClass({
@@ -31405,11 +31405,22 @@
 
 /***/ },
 /* 239 */
+/***/ function(module, exports) {
+
+	var ReactConstants = {
+	  AUTH_TOKEN: window.formAuthenticityToken,
+	  CURRENT_USER: window.currentUserId
+	};
+	
+	module.exports = ReactConstants;
+
+/***/ },
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ReactConstants = __webpack_require__(240),
-	    DropdownStore = __webpack_require__(249);
+	    ReactConstants = __webpack_require__(239),
+	    DropdownStore = __webpack_require__(241);
 	
 	var UserDropdown = React.createClass({
 	  displayName: 'UserDropdown',
@@ -31478,343 +31489,12 @@
 	module.exports = UserDropdown;
 
 /***/ },
-/* 240 */
-/***/ function(module, exports) {
-
-	var ReactConstants = {
-	  AUTH_TOKEN: window.formAuthenticityToken,
-	  CURRENT_USER: window.currentUserId
-	};
-	
-	module.exports = ReactConstants;
-
-/***/ },
 /* 241 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    History = __webpack_require__(184).History,
-	    Jumbotron = __webpack_require__(259);
-	
-	LandingPage = React.createClass({
-	  displayName: 'LandingPage',
-	
-	  searchEvents: function (e) {
-	    this.props.history.pushState(null, 'api/events', {});
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(Jumbotron, null),
-	      React.createElement(
-	        'button',
-	        { onClick: this.searchEvents },
-	        'Search Events'
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = LandingPage;
-
-/***/ },
-/* 242 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    Map = __webpack_require__(243),
-	    EventIndex = __webpack_require__(245),
-	    Filter = __webpack_require__(247);
-	
-	var EventSearch = React.createClass({
-	  displayName: 'EventSearch',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(Map, null),
-	      React.createElement(Filter, null),
-	      React.createElement(EventIndex, null)
-	    );
-	  }
-	});
-	
-	module.exports = EventSearch;
-
-/***/ },
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    EventStore = __webpack_require__(159),
-	    MapActions = __webpack_require__(244);
-	
-	var Map = React.createClass({
-	  displayName: 'Map',
-	
-	  componentDidMount: function () {
-	    var that = this;
-	
-	    navigator.geolocation.getCurrentPosition(function (position) {
-	      var lat = position.coords.latitude;
-	      var lng = position.coords.longitude;
-	      return that.getMap(lat, lng);
-	    });
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  getMap: function (lat, lng) {
-	    var mapDOMNode = this.refs.map;
-	    var mapOptions = {
-	      center: { lat: lat, lng: lng },
-	      zoom: 13
-	    };
-	    this.map = new google.maps.Map(mapDOMNode, mapOptions);
-	    this.token = EventStore.addListener(this.addMarkers);
-	    MapActions.fetchEvents();
-	  },
-	
-	  addMarkers: function () {
-	    var that = this;
-	    EventStore.all().forEach(function (event) {
-	      var myLatLng = { lat: event.lat, lng: event.lng };
-	
-	      var marker = new google.maps.Marker({
-	        position: myLatLng,
-	        map: that.map,
-	        animation: null
-	      });
-	    });
-	  },
-	
-	  render: function () {
-	    return React.createElement('div', { className: 'map', ref: 'map' });
-	  }
-	
-	});
-	
-	module.exports = Map;
-
-/***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(181);
-	
-	MapActions = {
-	  fetchEvents: function () {
-	    ApiUtil.fetchEvents();
-	  }
-	};
-	
-	module.exports = MapActions;
-
-/***/ },
-/* 245 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    EventStore = __webpack_require__(159),
-	    IndexItem = __webpack_require__(246);
-	
-	var EventIndex = React.createClass({
-	  displayName: 'EventIndex',
-	
-	  getInitialState: function () {
-	    return { events: EventStore.all() };
-	  },
-	
-	  componentDidMount: function () {
-	    this.token = EventStore.addListener(this.fetchEvents);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  fetchEvents: function () {
-	    this.setState({ events: EventStore.all() });
-	  },
-	
-	  render: function () {
-	    var events = this.state.events.map(function (event, index) {
-	      return React.createElement(IndexItem, { key: index, event: event });
-	    });
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'row' },
-	      events
-	    );
-	  }
-	
-	});
-	
-	module.exports = EventIndex;
-
-/***/ },
-/* 246 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    EventStore = __webpack_require__(159);
-	History = __webpack_require__(184).History;
-	
-	var IndexItem = React.createClass({
-	  displayName: 'IndexItem',
-	
-	  mixins: [History],
-	
-	  showEventDetail: function (e) {
-	    this.history.pushState(null, 'api/events/' + this.props.event.id, {});
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'col-xs-4 test' },
-	      React.createElement('img', { onClick: this.showEventDetail,
-	        src: this.props.event.url,
-	        className: 'img-circle img-responsive',
-	        alt: 'Responsive image' }),
-	      React.createElement(
-	        'div',
-	        null,
-	        this.props.event.title
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        'Location: ',
-	        this.props.event.location
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        'Start Time: ',
-	        this.props.event.start_time,
-	        ', End Time: ',
-	        this.props.event.end_time
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        '$',
-	        this.props.event.price,
-	        ' Hosted by: ',
-	        this.props.event.organizer
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = IndexItem;
-
-/***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    DropdownActions = __webpack_require__(254),
-	    PriceFilter = __webpack_require__(248),
-	    CategoryFilter = __webpack_require__(256),
-	    EventTypeFilter = __webpack_require__(257),
-	    DateFilter = __webpack_require__(258);
-	
-	var Filter = React.createClass({
-	  displayName: 'Filter',
-	
-	  handleFilter: function (event) {
-	    DropdownActions.showDropdown(event.target);
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(PriceFilter, null),
-	      React.createElement(CategoryFilter, null),
-	      React.createElement(EventTypeFilter, null),
-	      React.createElement(DateFilter, null)
-	    );
-	  }
-	});
-	
-	module.exports = Filter;
-
-/***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    DropdownStore = __webpack_require__(249);
-	
-	var PriceFilter = React.createClass({
-	  displayName: 'PriceFilter',
-	
-	  getInitialState: function () {
-	    return {
-	      dropdown: "dropdown-hidden",
-	      label: "Price"
-	    };
-	  },
-	
-	  componentDidMount: function () {
-	    this.token = DropdownStore.addListener(this._onChange);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  _onChange: function () {
-	    if (DropdownStore.fetch() === this.state.label) {
-	      this.setState({ dropdown: "" });
-	    } else {
-	      this.setState({ dropdown: "dropdown-hidden" });
-	    }
-	  },
-	
-	  togglePriceDropdown: function (e) {
-	    DropdownActions.showDropdown(e.target.innerHTML);
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { onClick: this.togglePriceDropdown },
-	        this.state.label
-	      ),
-	      React.createElement(
-	        'div',
-	        { id: this.state.dropdown },
-	        'Hiddenstuff'
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = PriceFilter;
-
-/***/ },
-/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(160).Store,
 	    AppDispatcher = __webpack_require__(177),
-	    DropdownConstants = __webpack_require__(250);
+	    DropdownConstants = __webpack_require__(242);
 	
 	var shownDropdown = null;
 	
@@ -31845,7 +31525,7 @@
 	module.exports = DropdownStore;
 
 /***/ },
-/* 250 */
+/* 242 */
 /***/ function(module, exports) {
 
 	DropdownConstants = {
@@ -31855,238 +31535,11 @@
 	module.exports = DropdownConstants;
 
 /***/ },
-/* 251 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    EventStore = __webpack_require__(159),
-	    DetailActions = __webpack_require__(252);
-	
-	var Detail = React.createClass({
-	  displayName: 'Detail',
-	
-	  getInitialState: function () {
-	    return { event: this.getStateFromStore() };
-	  },
-	
-	  showEventDetail: function () {
-	    this.setState({ event: this.getStateFromStore() });
-	  },
-	
-	  componentDidMount: function () {
-	    this.token = EventStore.addListener(this.showEventDetail);
-	    DetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
-	  },
-	
-	  componentWillReceiveProps: function () {
-	    DetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  getStateFromStore: function () {
-	    return EventStore.find(parseInt(this.props.params.eventId));
-	  },
-	
-	  render: function () {
-	    if (typeof this.state.event === 'undefined') {
-	      return React.createElement('div', null);
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      this.state.event.title
-	    );
-	  }
-	
-	});
-	
-	module.exports = Detail;
-
-/***/ },
-/* 252 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(181);
-	
-	var DetailActions = {
-	  fetchSingleEvent: function (eventId) {
-	    ApiUtil.fetchSingleEvent(eventId);
-	  }
-	};
-	
-	module.exports = DetailActions;
-
-/***/ },
-/* 253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ApiUtil = __webpack_require__(181),
-	    LinkedStateMixin = __webpack_require__(260),
-	    EventStore = __webpack_require__(159);
-	
-	var EventForm = React.createClass({
-	  displayName: 'EventForm',
-	
-	  mixins: [LinkedStateMixin],
-	
-	  getInitialState: function () {
-	    return {
-	      location: "",
-	      title: "",
-	      startTime: "",
-	      endTime: "",
-	      description: ""
-	    };
-	  },
-	
-	  componentDidMount: function () {
-	    autocomplete = new google.maps.places.Autocomplete(this.refs.autocomplete, { types: ['geocode'] });
-	  },
-	
-	  geolocate: function () {
-	    if (navigator.geolocation) {
-	      navigator.geolocation.getCurrentPosition(function (position) {
-	        var geolocation = {
-	          lat: position.coords.latitude,
-	          lng: position.coords.longitude
-	        };
-	        var circle = new google.maps.Circle({
-	          center: geolocation,
-	          radius: position.coords.accuracy
-	        });
-	        autocomplete.setBounds(circle.getBounds());
-	      });
-	    }
-	  },
-	
-	  handleSubmit: function (event) {
-	    debugger;
-	    event.preventDefault();
-	    var Event = Object.assign({}, this.state, this._coords());
-	    ApiUtil.createEvent(Event);
-	    this.navigateToSearch();
-	  },
-	  navigateToSearch: function () {
-	    this.props.history.pushState(null, "/");
-	  },
-	  handleCancel: function (event) {
-	    event.preventDefault();
-	    this.navigateToSearch();
-	  },
-	  _coords: function () {
-	    return this.props.location.query;
-	  },
-	
-	  render: function () {
-	    var lat = this._coords().lat,
-	        lng = this._coords().lng;
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h3',
-	        null,
-	        'Event Details'
-	      ),
-	      React.createElement(
-	        'form',
-	        { onSubmit: this.handleSubmit },
-	        React.createElement(
-	          'label',
-	          null,
-	          'Event Title'
-	        ),
-	        React.createElement('input', { type: 'text',
-	          valueLink: this.linkState('title'),
-	          placeholder: 'Give a short distinct name' }),
-	        React.createElement('br', null),
-	        React.createElement('input', { ref: 'autocomplete', placeholder: 'Enter your address',
-	          onFocus: this.geolocate, type: 'text' }),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Start Time'
-	        ),
-	        React.createElement('input', { type: 'time', valueLink: this.linkState('startTime') }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'End Time'
-	        ),
-	        React.createElement('input', { type: 'time', valueLink: this.linkState('endTime') }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Latitude'
-	        ),
-	        React.createElement('input', { type: 'text', disabled: 'true', value: lat }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Longitude'
-	        ),
-	        React.createElement('input', { type: 'text', disabled: 'true', value: lng }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Add Event Image'
-	        ),
-	        React.createElement('input', { type: 'text', placeholder: 'Placeholder for image' }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Add a Description'
-	        ),
-	        React.createElement('textarea', { valueLink: this.linkState('description') }),
-	        React.createElement('br', null),
-	        '//Add Tickets if there is time',
-	        React.createElement('input', { type: 'submit', value: 'create Event' })
-	      ),
-	      React.createElement(
-	        'button',
-	        { onClick: this.handleCancel },
-	        'Cancel'
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = EventForm;
-
-/***/ },
-/* 254 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(177),
-	    DropdownConstants = __webpack_require__(250);
-	
-	DropdownActions = {
-	  showDropdown: function (dropdownLabel) {
-	    AppDispatcher.dispatch({
-	      actionType: DropdownConstants.DROPDOWN_CLICKED,
-	      dropdownLabel: dropdownLabel
-	    });
-	  }
-	};
-	
-	module.exports = DropdownActions;
-
-/***/ },
-/* 255 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    DropdownStore = __webpack_require__(249);
+	    DropdownStore = __webpack_require__(241);
 	
 	var HelpDropdown = React.createClass({
 	  displayName: 'HelpDropdown',
@@ -32140,181 +31593,39 @@
 	module.exports = HelpDropdown;
 
 /***/ },
-/* 256 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    DropdownStore = __webpack_require__(249);
+	    History = __webpack_require__(184).History,
+	    Jumbotron = __webpack_require__(245);
 	
-	var CategoryFilter = React.createClass({
-	  displayName: 'CategoryFilter',
+	LandingPage = React.createClass({
+	  displayName: 'LandingPage',
 	
-	  getInitialState: function () {
-	    return {
-	      dropdown: "dropdown-hidden",
-	      label: "Category"
-	    };
-	  },
-	
-	  componentDidMount: function () {
-	    this.token = DropdownStore.addListener(this._onChange);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  _onChange: function () {
-	    if (DropdownStore.fetch() === this.state.label) {
-	      this.setState({ dropdown: "" });
-	    } else {
-	      this.setState({ dropdown: "dropdown-hidden" });
-	    }
-	  },
-	
-	  toggleCategoryDropdown: function (e) {
-	    DropdownActions.showDropdown(e.target.innerHTML);
+	  searchEvents: function (e) {
+	    this.props.history.pushState(null, 'api/events', {});
 	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      null,
+	      React.createElement(Jumbotron, null),
 	      React.createElement(
-	        'div',
-	        { onClick: this.toggleCategoryDropdown },
-	        this.state.label
-	      ),
-	      React.createElement(
-	        'div',
-	        { id: this.state.dropdown },
-	        'Hiddenstuff'
+	        'button',
+	        { onClick: this.searchEvents },
+	        'Search Events'
 	      )
 	    );
 	  }
 	
 	});
 	
-	module.exports = CategoryFilter;
+	module.exports = LandingPage;
 
 /***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    DropdownStore = __webpack_require__(249);
-	
-	var EventTypeFilter = React.createClass({
-	  displayName: 'EventTypeFilter',
-	
-	  getInitialState: function () {
-	    return {
-	      dropdown: "dropdown-hidden",
-	      label: "EventType"
-	    };
-	  },
-	
-	  componentDidMount: function () {
-	    this.token = DropdownStore.addListener(this._onChange);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  _onChange: function () {
-	    if (DropdownStore.fetch() === this.state.label) {
-	      this.setState({ dropdown: "" });
-	    } else {
-	      this.setState({ dropdown: "dropdown-hidden" });
-	    }
-	  },
-	
-	  toggleEventTypeDropdown: function (e) {
-	    DropdownActions.showDropdown(e.target.innerHTML);
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { onClick: this.toggleEventTypeDropdown },
-	        this.state.label
-	      ),
-	      React.createElement(
-	        'div',
-	        { id: this.state.dropdown },
-	        'Hiddenstuff'
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = EventTypeFilter;
-
-/***/ },
-/* 258 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    DropdownStore = __webpack_require__(249);
-	
-	var DateFilter = React.createClass({
-	  displayName: 'DateFilter',
-	
-	  getInitialState: function () {
-	    return {
-	      dropdown: "dropdown-hidden",
-	      label: "Date"
-	    };
-	  },
-	
-	  componentDidMount: function () {
-	    this.token = DropdownStore.addListener(this._onChange);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  _onChange: function () {
-	    if (DropdownStore.fetch() === this.state.label) {
-	      this.setState({ dropdown: "" });
-	    } else {
-	      this.setState({ dropdown: "dropdown-hidden" });
-	    }
-	  },
-	
-	  toggleDateDropdown: function (e) {
-	    DropdownActions.showDropdown(e.target.innerHTML);
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { onClick: this.toggleDateDropdown },
-	        this.state.label
-	      ),
-	      React.createElement(
-	        'div',
-	        { id: this.state.dropdown },
-	        'Hiddenstuff'
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = DateFilter;
-
-/***/ },
-/* 259 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -32376,6 +31687,692 @@
 	});
 	
 	module.exports = Jumbotron;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    Map = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./map\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())),
+	    EventStore = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../stores/event_store\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())),
+	    EventIndex = __webpack_require__(249),
+	    Filter = __webpack_require__(251);
+	
+	function _getAllEvents() {
+	  return EventStore.all();
+	}
+	
+	var EventSearch = React.createClass({
+	  displayName: 'EventSearch',
+	
+	  getInitialState: function () {
+	    return {
+	      events: _getAllEvents()
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.eventsChanged = EventStore.addListener(this._eventsChanged);
+	    SearchActions.fetchEvents();
+	  },
+	
+	  _eventsChanged: function () {
+	    this.setState({ benches: _getAllEvents() });
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.eventsChanged.remove();
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(Map, { events: this.state.events }),
+	      React.createElement(Filter, null),
+	      React.createElement(EventIndex, null)
+	    );
+	  }
+	});
+	
+	module.exports = EventSearch;
+
+/***/ },
+/* 247 */,
+/* 248 */,
+/* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    EventStore = __webpack_require__(159),
+	    IndexItem = __webpack_require__(250);
+	
+	var EventIndex = React.createClass({
+	  displayName: 'EventIndex',
+	
+	  getInitialState: function () {
+	    return { events: EventStore.all() };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = EventStore.addListener(this.fetchEvents);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  fetchEvents: function () {
+	    this.setState({ events: EventStore.all() });
+	  },
+	
+	  render: function () {
+	    var events = this.state.events.map(function (event, index) {
+	      return React.createElement(IndexItem, { key: index, event: event });
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'row' },
+	      events
+	    );
+	  }
+	
+	});
+	
+	module.exports = EventIndex;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    EventStore = __webpack_require__(159);
+	History = __webpack_require__(184).History;
+	
+	var IndexItem = React.createClass({
+	  displayName: 'IndexItem',
+	
+	  mixins: [History],
+	
+	  showEventDetail: function (e) {
+	    this.history.pushState(null, 'api/events/' + this.props.event.id, {});
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'col-xs-4 test' },
+	      React.createElement('img', { onClick: this.showEventDetail,
+	        src: this.props.event.url,
+	        className: 'img-circle img-responsive',
+	        alt: 'Responsive image' }),
+	      React.createElement(
+	        'div',
+	        null,
+	        this.props.event.title
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'Location: ',
+	        this.props.event.location
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'Start Time: ',
+	        this.props.event.start_time,
+	        ', End Time: ',
+	        this.props.event.end_time
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        '$',
+	        this.props.event.price,
+	        ' Hosted by: ',
+	        this.props.event.organizer
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = IndexItem;
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    DropdownActions = __webpack_require__(252),
+	    PriceFilter = __webpack_require__(253),
+	    CategoryFilter = __webpack_require__(254),
+	    EventTypeFilter = __webpack_require__(255),
+	    DateFilter = __webpack_require__(256);
+	
+	var Filter = React.createClass({
+	  displayName: 'Filter',
+	
+	  handleFilter: function (event) {
+	    DropdownActions.showDropdown(event.target);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(PriceFilter, null),
+	      React.createElement(CategoryFilter, null),
+	      React.createElement(EventTypeFilter, null),
+	      React.createElement(DateFilter, null)
+	    );
+	  }
+	});
+	
+	module.exports = Filter;
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(177),
+	    DropdownConstants = __webpack_require__(242);
+	
+	DropdownActions = {
+	  showDropdown: function (dropdownLabel) {
+	    AppDispatcher.dispatch({
+	      actionType: DropdownConstants.DROPDOWN_CLICKED,
+	      dropdownLabel: dropdownLabel
+	    });
+	  }
+	};
+	
+	module.exports = DropdownActions;
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    DropdownStore = __webpack_require__(241);
+	
+	var PriceFilter = React.createClass({
+	  displayName: 'PriceFilter',
+	
+	  getInitialState: function () {
+	    return {
+	      dropdown: "dropdown-hidden",
+	      label: "Price"
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = DropdownStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
+	  },
+	
+	  togglePriceDropdown: function (e) {
+	    DropdownActions.showDropdown(e.target.innerHTML);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.togglePriceDropdown },
+	        this.state.label
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        'Hiddenstuff'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = PriceFilter;
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    DropdownStore = __webpack_require__(241);
+	
+	var CategoryFilter = React.createClass({
+	  displayName: 'CategoryFilter',
+	
+	  getInitialState: function () {
+	    return {
+	      dropdown: "dropdown-hidden",
+	      label: "Category"
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = DropdownStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
+	  },
+	
+	  toggleCategoryDropdown: function (e) {
+	    DropdownActions.showDropdown(e.target.innerHTML);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.toggleCategoryDropdown },
+	        this.state.label
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        'Hiddenstuff'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = CategoryFilter;
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    DropdownStore = __webpack_require__(241);
+	
+	var EventTypeFilter = React.createClass({
+	  displayName: 'EventTypeFilter',
+	
+	  getInitialState: function () {
+	    return {
+	      dropdown: "dropdown-hidden",
+	      label: "EventType"
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = DropdownStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
+	  },
+	
+	  toggleEventTypeDropdown: function (e) {
+	    DropdownActions.showDropdown(e.target.innerHTML);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.toggleEventTypeDropdown },
+	        this.state.label
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        'Hiddenstuff'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = EventTypeFilter;
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    DropdownStore = __webpack_require__(241);
+	
+	var DateFilter = React.createClass({
+	  displayName: 'DateFilter',
+	
+	  getInitialState: function () {
+	    return {
+	      dropdown: "dropdown-hidden",
+	      label: "Date"
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = DropdownStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
+	  },
+	
+	  toggleDateDropdown: function (e) {
+	    DropdownActions.showDropdown(e.target.innerHTML);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.toggleDateDropdown },
+	        this.state.label
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        'Hiddenstuff'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = DateFilter;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    EventStore = __webpack_require__(159),
+	    DetailActions = __webpack_require__(258);
+	
+	var Detail = React.createClass({
+	  displayName: 'Detail',
+	
+	  getInitialState: function () {
+	    return { event: this.getStateFromStore() };
+	  },
+	
+	  showEventDetail: function () {
+	    this.setState({ event: this.getStateFromStore() });
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = EventStore.addListener(this.showEventDetail);
+	    DetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
+	  },
+	
+	  componentWillReceiveProps: function () {
+	    DetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  getStateFromStore: function () {
+	    return EventStore.find(parseInt(this.props.params.eventId));
+	  },
+	
+	  render: function () {
+	    if (typeof this.state.event === 'undefined') {
+	      return React.createElement('div', null);
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      this.state.event.title
+	    );
+	  }
+	
+	});
+	
+	module.exports = Detail;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(181);
+	
+	var DetailActions = {
+	  fetchSingleEvent: function (eventId) {
+	    ApiUtil.fetchSingleEvent(eventId);
+	  }
+	};
+	
+	module.exports = DetailActions;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ApiUtil = __webpack_require__(181),
+	    LinkedStateMixin = __webpack_require__(260),
+	    EventStore = __webpack_require__(159);
+	
+	var EventForm = React.createClass({
+	  displayName: 'EventForm',
+	
+	  mixins: [LinkedStateMixin],
+	
+	  getInitialState: function () {
+	    return {
+	      location: "",
+	      title: "",
+	      startDate: "",
+	      startTime: "",
+	      endDate: "",
+	      endTime: "",
+	      description: ""
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    $(window).keydown(function (event) {
+	      if (event.keyCode == 13) {
+	        event.preventDefault();
+	        return false;
+	      }
+	    });
+	
+	    autocomplete = new google.maps.places.Autocomplete(this.refs.autocomplete, { types: ['geocode'] });
+	  },
+	
+	  geolocate: function () {
+	    if (navigator.geolocation) {
+	      navigator.geolocation.getCurrentPosition(function (position) {
+	        var geolocation = {
+	          lat: position.coords.latitude,
+	          lng: position.coords.longitude
+	        };
+	        var circle = new google.maps.Circle({
+	          center: geolocation,
+	          radius: position.coords.accuracy
+	        });
+	        autocomplete.setBounds(circle.getBounds());
+	      });
+	    }
+	  },
+	
+	  handleSubmit: function (event) {
+	    debugger;
+	    event.preventDefault();
+	    var Event = Object.assign({}, this.state, this._coords());
+	    ApiUtil.createEvent(Event);
+	    this.navigateToSearch();
+	  },
+	  navigateToSearch: function () {
+	    this.props.history.pushState(null, "/");
+	  },
+	  handleCancel: function (event) {
+	    event.preventDefault();
+	    this.navigateToSearch();
+	  },
+	  _coords: function () {
+	    return this.props.location.query;
+	  },
+	
+	  render: function () {
+	    var lat = this._coords().lat,
+	        lng = this._coords().lng;
+	
+	    var times = [],
+	        time;
+	
+	    for (var i = 0; i < 24; i++) {
+	      if (i === 0) {
+	        time = "12:00 AM";
+	      } else if (i === 12) {
+	        time = "12:00 PM";
+	      } else if (i < 12) {
+	        time = i.toString() + ":00 AM";
+	      } else {
+	        time = (i - 12).toString() + ":00 PM";
+	      }
+	
+	      times.push(React.createElement(
+	        'option',
+	        { key: i, value: time },
+	        time
+	      ));
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Event Details'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'label',
+	          null,
+	          'Event Title'
+	        ),
+	        React.createElement('input', { type: 'text',
+	          valueLink: this.linkState('title'),
+	          placeholder: 'Give a short distinct name' }),
+	        React.createElement('br', null),
+	        React.createElement('input', { valueLink: this.linkState('location'),
+	          ref: 'autocomplete', placeholder: 'Enter your address',
+	          onFocus: this.geolocate, type: 'text' }),
+	        '//how to get autocomplete to always reflect state',
+	        React.createElement(
+	          'label',
+	          null,
+	          'Start Time'
+	        ),
+	        React.createElement('input', { type: 'date', valueLink: this.linkState('startDate') }),
+	        React.createElement(
+	          'select',
+	          { valueLink: this.linkState('startTime') },
+	          times
+	        ),
+	        React.createElement(
+	          'label',
+	          null,
+	          'End Time'
+	        ),
+	        React.createElement('input', { type: 'date', valueLink: this.linkState('endDate') }),
+	        React.createElement(
+	          'select',
+	          { type: 'number', valueLink: this.linkState('endTime') },
+	          times
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Latitude'
+	        ),
+	        React.createElement('input', { type: 'text', disabled: 'true', value: lat }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Longitude'
+	        ),
+	        React.createElement('input', { type: 'text', disabled: 'true', value: lng }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Add Event Image'
+	        ),
+	        React.createElement('input', { type: 'text', placeholder: 'Placeholder for image' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Add a Description'
+	        ),
+	        React.createElement('textarea', { valueLink: this.linkState('description') }),
+	        React.createElement('br', null),
+	        '//Add Tickets if there is time',
+	        React.createElement('input', { type: 'submit', value: 'create Event' })
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this.handleCancel },
+	        'Cancel'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = EventForm;
 
 /***/ },
 /* 260 */

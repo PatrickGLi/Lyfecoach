@@ -24,7 +24,7 @@ var resetEvents = function(events){
   });
 };
 
-var resetSingleEvent = function (event) {
+var resetSingleEvent = function(event) {
   _events[event.id] = event;
 };
 

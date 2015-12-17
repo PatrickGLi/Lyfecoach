@@ -16,8 +16,10 @@ event_type = %w(Attraction Appearance Concert Screening Seminar
 
   Event.create(title: "#{Faker::Book.title} #{index}",
                location: Faker::Address.street_address,
-               start_time: Faker::Date.between(20.days.ago, 10.days.ago),
-               end_time: Faker::Date.between(10.days.ago, Date.today),
+               start_date: Faker::Date.between(20.days.ago, 10.days.ago),
+               end_date: Faker::Date.between(10.days.ago, Date.today),
+               start_time: "5:00 PM",
+               end_time: "9:00 PM",
                description: Faker::Lorem.paragraph,
                ticket_max: rand(100..10000),
                price: rand(10..100),
