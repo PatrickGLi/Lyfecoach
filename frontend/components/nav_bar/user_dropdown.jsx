@@ -4,7 +4,9 @@ var React = require('react'),
 
 var UserDropdown = React.createClass({
   getInitialState: function() {
-    return({ dropdown: "dropdown-hidden" });
+    return({ dropdown: "dropdown-hidden",
+             label: this.props.name
+    });
   },
 
   componentDidMount: function() {
@@ -16,19 +18,22 @@ var UserDropdown = React.createClass({
   },
 
   _onChange: function() {
-    // if (DropdownStore.fetch() === this.props.name)
+    if (DropdownStore.fetch() === this.state.label) {
+      this.setState({ dropdown: ""});
+    } else {
+      this.setState({ dropdown: "dropdown-hidden" });
+    }
   },
 
   toggleUserDropdown: function(e) {
-    debugger
-    DropdownActions.showDropdown(e.target);
+    DropdownActions.showDropdown(e.target.innerHTML);
   },
 
   render: function() {
     return(
       <div>
         <div onClick={this.toggleUserDropdown}
-             className="nav-links">{this.props.name}
+             className="nav-links">{this.state.label}
         </div>
         <div id={this.state.dropdown}>
           <div>Account Settings</div>

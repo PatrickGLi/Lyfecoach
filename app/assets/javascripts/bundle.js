@@ -31295,11 +31295,11 @@
 	    this.setState({ currentUser: CurrentUserStore.fetch() });
 	  },
 	
-	  returnToHomepage: function () {
+	  returnToHomepage: function (e) {
 	    this.history.pushState(null, '/', {});
 	  },
 	
-	  goToEventForm: function () {
+	  goToEventForm: function (e) {
 	    this.history.pushState(null, 'api/events/new');
 	  },
 	
@@ -31415,7 +31415,9 @@
 	  displayName: 'UserDropdown',
 	
 	  getInitialState: function () {
-	    return { dropdown: "dropdown-hidden" };
+	    return { dropdown: "dropdown-hidden",
+	      label: this.props.name
+	    };
 	  },
 	
 	  componentDidMount: function () {
@@ -31427,12 +31429,15 @@
 	  },
 	
 	  _onChange: function () {
-	    // if (DropdownStore.fetch() === this.props.name)
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
 	  },
 	
 	  toggleUserDropdown: function (e) {
-	    debugger;
-	    DropdownActions.showDropdown(e.target);
+	    DropdownActions.showDropdown(e.target.innerHTML);
 	  },
 	
 	  render: function () {
@@ -31443,7 +31448,7 @@
 	        'div',
 	        { onClick: this.toggleUserDropdown,
 	          className: 'nav-links' },
-	        this.props.name
+	        this.state.label
 	      ),
 	      React.createElement(
 	        'div',
@@ -31493,7 +31498,7 @@
 	LandingPage = React.createClass({
 	  displayName: 'LandingPage',
 	
-	  searchEvents: function () {
+	  searchEvents: function (e) {
 	    this.props.history.pushState(null, 'api/events', {});
 	  },
 	
@@ -31665,7 +31670,7 @@
 	
 	  mixins: [History],
 	
-	  showEventDetail: function () {
+	  showEventDetail: function (e) {
 	    this.history.pushState(null, 'api/events/' + this.props.event.id, {});
 	  },
 	
@@ -31717,7 +31722,10 @@
 
 	var React = __webpack_require__(1),
 	    DropdownActions = __webpack_require__(254),
-	    PriceFilter = __webpack_require__(248);
+	    PriceFilter = __webpack_require__(248),
+	    CategoryFilter = __webpack_require__(256),
+	    EventTypeFilter = __webpack_require__(257),
+	    DateFilter = __webpack_require__(258);
 	
 	var Filter = React.createClass({
 	  displayName: 'Filter',
@@ -31730,27 +31738,10 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'button',
-	        { onClick: this.handleFilter },
-	        'Price'
-	      ),
-	      React.createElement(
-	        'button',
-	        { onClick: this.handleFilter },
-	        'Category'
-	      ),
-	      React.createElement(
-	        'button',
-	        { onClick: this.handleFilter },
-	        'Event Type'
-	      ),
-	      React.createElement(
-	        'button',
-	        { onClick: this.handleFilter },
-	        'Date'
-	      ),
-	      React.createElement(PriceFilter, null)
+	      React.createElement(PriceFilter, null),
+	      React.createElement(CategoryFilter, null),
+	      React.createElement(EventTypeFilter, null),
+	      React.createElement(DateFilter, null)
 	    );
 	  }
 	});
@@ -31767,29 +31758,48 @@
 	var PriceFilter = React.createClass({
 	  displayName: 'PriceFilter',
 	
-	  options: {
-	    paid: '',
-	    free: ''
-	  },
-	
 	  getInitialState: function () {
-	    return this.options;
+	    return {
+	      dropdown: "dropdown-hidden",
+	      label: "Price"
+	    };
 	  },
 	
 	  componentDidMount: function () {
-	    this.token = DropdownStore.addListener(this.handleChange);
+	    this.token = DropdownStore.addListener(this._onChange);
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.token.remove();
 	  },
 	
-	  handleChange: function () {
-	    console.log("hey");
+	  _onChange: function () {
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
+	  },
+	
+	  togglePriceDropdown: function (e) {
+	    DropdownActions.showDropdown(e.target.innerHTML);
 	  },
 	
 	  render: function () {
-	    return React.createElement('div', null);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.togglePriceDropdown },
+	        this.state.label
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        'Hiddenstuff'
+	      )
+	    );
 	  }
 	
 	});
@@ -31811,7 +31821,7 @@
 	DropdownStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case DropdownConstants.DROPDOWN_CLICKED:
-	      updateDropdown(payload.dropdown);
+	      updateDropdown(payload.dropdownLabel);
 	      break;
 	  }
 	
@@ -31822,12 +31832,11 @@
 	  return shownDropdown;
 	};
 	
-	function updateDropdown(buttonClicked) {
-	  debugger;
-	  if (shownDropdown === buttonClicked) {
+	function updateDropdown(labelClicked) {
+	  if (shownDropdown === labelClicked) {
 	    shownDropdown = null;
 	  } else {
-	    shownDropdown = buttonClicked;
+	    shownDropdown = labelClicked;
 	  }
 	}
 	
@@ -31937,10 +31946,10 @@
 	    DropdownConstants = __webpack_require__(250);
 	
 	DropdownActions = {
-	  showDropdown: function (dropdown) {
+	  showDropdown: function (dropdownLabel) {
 	    AppDispatcher.dispatch({
 	      actionType: DropdownConstants.DROPDOWN_CLICKED,
-	      dropdown: dropdown
+	      dropdownLabel: dropdownLabel
 	    });
 	  }
 	};
@@ -31958,7 +31967,10 @@
 	  displayName: 'HelpDropdown',
 	
 	  getInitialState: function () {
-	    return { dropdown: "dropdown-hidden" };
+	    return {
+	      dropdown: "dropdown-hidden",
+	      label: "Help"
+	    };
 	  },
 	
 	  componentDidMount: function () {
@@ -31969,10 +31981,16 @@
 	    this.token.remove();
 	  },
 	
-	  _onChange: function () {},
+	  _onChange: function () {
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
+	  },
 	
 	  toggleHelpDropdown: function (e) {
-	    DropdownActions.showDropdown(e.target);
+	    DropdownActions.showDropdown(e.target.innerHTML);
 	  },
 	
 	  render: function () {
@@ -31983,7 +32001,7 @@
 	        'div',
 	        { onClick: this.toggleHelpDropdown,
 	          className: 'nav-links' },
-	        'Help'
+	        this.state.label
 	      ),
 	      React.createElement(
 	        'div',
@@ -31995,6 +32013,180 @@
 	});
 	
 	module.exports = HelpDropdown;
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    DropdownStore = __webpack_require__(249);
+	
+	var CategoryFilter = React.createClass({
+	  displayName: 'CategoryFilter',
+	
+	  getInitialState: function () {
+	    return {
+	      dropdown: "dropdown-hidden",
+	      label: "Category"
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = DropdownStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
+	  },
+	
+	  toggleCategoryDropdown: function (e) {
+	    DropdownActions.showDropdown(e.target.innerHTML);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.toggleCategoryDropdown },
+	        this.state.label
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        'Hiddenstuff'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = CategoryFilter;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    DropdownStore = __webpack_require__(249);
+	
+	var EventTypeFilter = React.createClass({
+	  displayName: 'EventTypeFilter',
+	
+	  getInitialState: function () {
+	    return {
+	      dropdown: "dropdown-hidden",
+	      label: "EventType"
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = DropdownStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
+	  },
+	
+	  toggleEventTypeDropdown: function (e) {
+	    DropdownActions.showDropdown(e.target.innerHTML);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.toggleEventTypeDropdown },
+	        this.state.label
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        'Hiddenstuff'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = EventTypeFilter;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    DropdownStore = __webpack_require__(249);
+	
+	var DateFilter = React.createClass({
+	  displayName: 'DateFilter',
+	
+	  getInitialState: function () {
+	    return {
+	      dropdown: "dropdown-hidden",
+	      label: "Date"
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = DropdownStore.addListener(this._onChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {
+	    if (DropdownStore.fetch() === this.state.label) {
+	      this.setState({ dropdown: "" });
+	    } else {
+	      this.setState({ dropdown: "dropdown-hidden" });
+	    }
+	  },
+	
+	  toggleDateDropdown: function (e) {
+	    DropdownActions.showDropdown(e.target.innerHTML);
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { onClick: this.toggleDateDropdown },
+	        this.state.label
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: this.state.dropdown },
+	        'Hiddenstuff'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = DateFilter;
 
 /***/ }
 /******/ ]);

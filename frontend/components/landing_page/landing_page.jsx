@@ -3,7 +3,7 @@ var React = require('react'),
 
 LandingPage = React.createClass({
 
-  searchEvents: function() {
+  searchEvents: function(e) {
     this.props.history.pushState(null, 'api/events', {});
   },
 

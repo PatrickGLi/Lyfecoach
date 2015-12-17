@@ -26,11 +26,11 @@ var NavBar = React.createClass({
     this.setState({ currentUser: CurrentUserStore.fetch() });
   },
 
-  returnToHomepage: function() {
+  returnToHomepage: function(e) {
     this.history.pushState(null, '/', {});
   },
 
-  goToEventForm: function() {
+  goToEventForm: function(e) {
     this.history.pushState(null,'api/events/new');
   },
 
