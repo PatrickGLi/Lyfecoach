@@ -10,13 +10,22 @@ var EventForm = React.createClass({
     return {
       location: "",
       title: "",
+      startDate: "",
       startTime: "",
+      endDate: "",
       endTime: "",
       description: ""
     };
   },
 
   componentDidMount: function() {
+    $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+
     autocomplete = new google.maps.places.Autocomplete(this.refs.autocomplete,
        {types: ['geocode']});
   },
@@ -57,6 +66,24 @@ var EventForm = React.createClass({
 
   render: function(){
     var lat = this._coords().lat, lng = this._coords().lng;
+
+    var times = [],
+        time;
+
+    for (var i = 0; i < 24; i++) {
+      if (i === 0) {
+        time = "12:00 AM"
+      } else if (i === 12) {
+        time = "12:00 PM"
+      } else if (i < 12) {
+        time = i.toString() + ":00 AM"
+      } else {
+        time = (i - 12).toString() + ":00 PM"
+      }
+
+      times.push(<option key={i} value={time}>{time}</option>);
+    }
+
     return (
         <div>
           <h3>Event Details</h3>
@@ -69,16 +96,27 @@ var EventForm = React.createClass({
                    placeholder="Give a short distinct name"/>
             <br/>
 
-            <input ref="autocomplete" placeholder="Enter your address"
+            <input valueLink={this.linkState('location')}
+              ref="autocomplete" placeholder="Enter your address"
              onFocus={this.geolocate} type="text"></input>
 
+           //how to get autocomplete to always reflect state
 
-            <label>Start Time</label>
-            <input type="time" valueLink={this.linkState('startTime')}/>
-            <br/>
+           <label>Start Time</label>
+           <input type="date" valueLink={this.linkState('startDate')}/>
+
+
+           <select valueLink={this.linkState('startTime')}>
+             {times}
+            </select>
 
             <label>End Time</label>
-            <input type="time" valueLink={this.linkState('endTime')}/>
+            <input type="date" valueLink={this.linkState('endDate')}/>
+
+
+            <select type="number" valueLink={this.linkState('endTime')}>
+              {times}
+            </select>
             <br/>
 
             <label>Latitude</label>
