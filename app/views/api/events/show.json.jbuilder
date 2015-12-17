@@ -9,4 +9,4 @@ json.price @event.price
 json.url @event.url
 json.lat @event.lat
 json.lng @event.lng
-json.organizer @event.organizer.username
+json.organizer @event.organizer.email

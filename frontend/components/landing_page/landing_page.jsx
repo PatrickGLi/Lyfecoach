@@ -8,9 +8,9 @@ LandingPage = React.createClass({
   },
 
   render: function() {
-    return (<div>
-      I'm the landing page.
-      <button onClick={this.searchEvents}>Search Events</button>
+    return (
+      <div className='container'>
+        <button onClick={this.searchEvents}>Search Events</button>
     </div>)
   }
 

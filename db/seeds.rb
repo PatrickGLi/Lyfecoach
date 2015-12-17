@@ -31,9 +31,10 @@ event_type = %w(Attraction Appearance Concert Screening Seminar
 end
 
 5.times do
-  User.create(username: Faker::Internet.user_name,
+  User.create(email: Faker::Internet.user_name,
+              fname: Faker::Name.first_name,
+              lname: Faker::Name.last_name,
               password: "password",
-              name: Faker::Name.name,
               description: Faker::Lorem.paragraph,
               url: Faker::Avatar.image)
 end
