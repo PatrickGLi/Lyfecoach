@@ -1,6 +1,9 @@
 var React = require('react'),
     DropdownActions = require('../../actions/dropdown_actions'),
-    PriceFilter = require('./price');
+    PriceFilter = require('./price'),
+    CategoryFilter = require('./category'),
+    EventTypeFilter = require('./event_type'),
+    DateFilter = require('./date');
 
 var Filter = React.createClass({
 
@@ -11,14 +14,11 @@ var Filter = React.createClass({
   render: function() {
     return (
       <div>
-        <button onClick={this.handleFilter}>Price</button>
-
-        <button onClick={this.handleFilter}>Category</button>
-        <button onClick={this.handleFilter}>Event Type</button>
-        <button onClick={this.handleFilter}>Date</button>
         <PriceFilter/>
+        <CategoryFilter/>
+        <EventTypeFilter/>
+        <DateFilter/>
       </div>
-
     );
   }
 });

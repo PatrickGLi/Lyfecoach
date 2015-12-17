@@ -6,7 +6,7 @@ var React = require('react'),
 var IndexItem = React.createClass({
   mixins: [History],
 
-  showEventDetail: function() {
+  showEventDetail: function(e) {
     this.history.pushState(null, 'api/events/' + this.props.event.id, {});
   },
 
