@@ -1,17 +1,44 @@
-var React = require('react');
-var ApiUtil = require('../../util/api_util');
-var LinkedStateMixin = require('react-addons-linked-state-mixin');
+var React = require('react'),
+    ApiUtil = require('../../util/api_util'),
+    LinkedStateMixin = require('react-addons-linked-state-mixin'),
+    EventStore = require('../../stores/event_store');
 
 var EventForm = React.createClass({
   mixins: [LinkedStateMixin],
 
   getInitialState: function(){
     return {
-      description: "",
+      location: "",
+      title: "",
+      startTime: "",
+      endTime: "",
+      description: ""
     };
   },
 
+  componentDidMount: function() {
+    autocomplete = new google.maps.places.Autocomplete(this.refs.autocomplete,
+       {types: ['geocode']});
+  },
+
+  geolocate: function() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var geolocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        var circle = new google.maps.Circle({
+          center: geolocation,
+          radius: position.coords.accuracy
+        });
+        autocomplete.setBounds(circle.getBounds());
+      });
+    }
+  },
+
   handleSubmit: function(event){
+    debugger
     event.preventDefault();
     var Event = Object.assign({}, this.state, this._coords());
     ApiUtil.createEvent(Event);
@@ -27,6 +54,7 @@ var EventForm = React.createClass({
   _coords: function(){
     return this.props.location.query;
   },
+
   render: function(){
     var lat = this._coords().lat, lng = this._coords().lng;
     return (
@@ -35,23 +63,22 @@ var EventForm = React.createClass({
           <form onSubmit={this.handleSubmit}>
 
             <label>Event Title</label>
+
             <input type="text"
                    valueLink={this.linkState('title')}
                    placeholder="Give a short distinct name"/>
             <br/>
 
-            <label>Location</label>
-            <input type="text"
-                   valueLink={this.linkState('location')}
-                   placeholder="Specify where it's held"/>
-            <br/>
+            <input ref="autocomplete" placeholder="Enter your address"
+             onFocus={this.geolocate} type="text"></input>
+
 
             <label>Start Time</label>
-            <input type="date" valueLink={this.linkState('startTime')}/>
+            <input type="time" valueLink={this.linkState('startTime')}/>
             <br/>
 
             <label>End Time</label>
-            <input type="date" valueLink={this.linkState('startTime')}/>
+            <input type="time" valueLink={this.linkState('endTime')}/>
             <br/>
 
             <label>Latitude</label>
@@ -67,6 +94,7 @@ var EventForm = React.createClass({
 
             <label>Add a Description</label>
             <textarea valueLink={this.linkState('description')}></textarea>
+            <br/>
 
             //Add Tickets if there is time
 
