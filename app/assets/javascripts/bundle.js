@@ -54,8 +54,8 @@
 	    App = __webpack_require__(235),
 	    LandingPage = __webpack_require__(244),
 	    EventSearch = __webpack_require__(246),
-	    EventDetail = __webpack_require__(257),
-	    EventForm = __webpack_require__(259);
+	    EventDetail = __webpack_require__(256),
+	    EventForm = __webpack_require__(258);
 	
 	var routes = React.createElement(
 	  Route,
@@ -31693,10 +31693,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    Map = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./map\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())),
-	    EventStore = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../stores/event_store\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())),
-	    EventIndex = __webpack_require__(249),
-	    Filter = __webpack_require__(251);
+	    Map = __webpack_require__(247),
+	    EventStore = __webpack_require__(159),
+	    EventIndex = __webpack_require__(248),
+	    Filter = __webpack_require__(250);
 	
 	function _getAllEvents() {
 	  return EventStore.all();
@@ -31713,7 +31713,7 @@
 	
 	  componentDidMount: function () {
 	    this.eventsChanged = EventStore.addListener(this._eventsChanged);
-	    SearchActions.fetchEvents();
+	    navigator.geolocation.getCurrentPosition(SearchActions.fetchEvents);
 	  },
 	
 	  _eventsChanged: function () {
@@ -31738,14 +31738,101 @@
 	module.exports = EventSearch;
 
 /***/ },
-/* 247 */,
-/* 248 */,
-/* 249 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
-	    IndexItem = __webpack_require__(250);
+	    ReactDOM = __webpack_require__(158),
+	    SearchActions = __webpack_require__(263);
+	
+	var Map = React.createClass({
+	  displayName: 'Map',
+	
+	  componentDidMount: function () {
+	    var that = this;
+	    this.markers = [];
+	    navigator.geolocation.getCurrentPosition(this.getMap);
+	  },
+	
+	  getMap: function (position) {
+	    var lat = position.coords.latitude;
+	    var lng = position.coords.longitude;
+	    var map = ReactDOM.findDOMNode(this.refs.map);
+	    var mapOptions = {
+	      center: { lat: lat, lng: lng },
+	      zoom: 13
+	    };
+	
+	    this.map = new google.maps.Map(map, mapOptions);
+	  },
+	
+	  componentWillReceiveProps: function () {
+	    this._onChange();
+	  },
+	
+	  _onChange: function () {
+	    var events = this.props.events;
+	    var currentMarkers = this.markers.slice(0);
+	    var eventsToAddMarkers = [];
+	
+	    events.forEach(function (event) {
+	      var index = null;
+	
+	      for (var i = 0; i < currentMarkers.length; i++) {
+	        if (currentMarkers[i].eventId == event.id) {
+	          index = i;
+	          break;
+	        }
+	      }
+	
+	      if (index === null) {
+	        eventsToAddMarkers.push(event);
+	      } else {
+	        currentMarkers.splice(index, 1);
+	      }
+	    });
+	
+	    eventsToAddMarkers.forEach(this.addMarker);
+	    currentMarkers.forEach(this.removeMarker);
+	  },
+	
+	  addMarker: function (event) {
+	    var myLatLng = { lat: event.lat, lng: event.lng };
+	
+	    var marker = new google.maps.Marker({
+	      position: myLatLng,
+	      map: this.map,
+	      eventId: event.id,
+	      animation: null
+	    });
+	  },
+	
+	  removeMarker: function (marker) {
+	    for (var i = 0; i < this.markers.length; i++) {
+	      if (this.markers[i] === marker) {
+	        this.markers[i].setMap(null);
+	        this.markers.splice(i, 1);
+	        break;
+	      }
+	    }
+	  },
+	
+	  render: function () {
+	    return React.createElement('div', { className: 'map', ref: 'map' });
+	  }
+	
+	});
+	
+	module.exports = Map;
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    EventStore = __webpack_require__(159),
+	    IndexItem = __webpack_require__(249);
 	
 	var EventIndex = React.createClass({
 	  displayName: 'EventIndex',
@@ -31783,7 +31870,7 @@
 	module.exports = EventIndex;
 
 /***/ },
-/* 250 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -31842,15 +31929,15 @@
 	module.exports = IndexItem;
 
 /***/ },
-/* 251 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    DropdownActions = __webpack_require__(252),
-	    PriceFilter = __webpack_require__(253),
-	    CategoryFilter = __webpack_require__(254),
-	    EventTypeFilter = __webpack_require__(255),
-	    DateFilter = __webpack_require__(256);
+	    DropdownActions = __webpack_require__(251),
+	    PriceFilter = __webpack_require__(252),
+	    CategoryFilter = __webpack_require__(253),
+	    EventTypeFilter = __webpack_require__(254),
+	    DateFilter = __webpack_require__(255);
 	
 	var Filter = React.createClass({
 	  displayName: 'Filter',
@@ -31874,7 +31961,7 @@
 	module.exports = Filter;
 
 /***/ },
-/* 252 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(177),
@@ -31892,7 +31979,7 @@
 	module.exports = DropdownActions;
 
 /***/ },
-/* 253 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -31950,7 +32037,7 @@
 	module.exports = PriceFilter;
 
 /***/ },
-/* 254 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -32008,7 +32095,7 @@
 	module.exports = CategoryFilter;
 
 /***/ },
-/* 255 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -32066,7 +32153,7 @@
 	module.exports = EventTypeFilter;
 
 /***/ },
-/* 256 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -32124,12 +32211,12 @@
 	module.exports = DateFilter;
 
 /***/ },
-/* 257 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
-	    DetailActions = __webpack_require__(258);
+	    DetailActions = __webpack_require__(257);
 	
 	var Detail = React.createClass({
 	  displayName: 'Detail',
@@ -32176,7 +32263,7 @@
 	module.exports = Detail;
 
 /***/ },
-/* 258 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(181);
@@ -32190,12 +32277,12 @@
 	module.exports = DetailActions;
 
 /***/ },
-/* 259 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    ApiUtil = __webpack_require__(181),
-	    LinkedStateMixin = __webpack_require__(260),
+	    LinkedStateMixin = __webpack_require__(259),
 	    EventStore = __webpack_require__(159);
 	
 	var EventForm = React.createClass({
@@ -32258,6 +32345,17 @@
 	  },
 	  _coords: function () {
 	    return this.props.location.query;
+	  },
+	
+	  addImage: function (e) {
+	    debugger;
+	    e.preventDefault();
+	    cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, (function (error, results) {
+	      debugger;
+	      // if(!error){
+	      //   this.props.postImage(results[0]);
+	      // }
+	    }).bind(this));
 	  },
 	
 	  render: function () {
@@ -32347,12 +32445,14 @@
 	        React.createElement('input', { type: 'text', disabled: 'true', value: lng }),
 	        React.createElement('br', null),
 	        React.createElement(
-	          'label',
-	          null,
-	          'Add Event Image'
+	          'div',
+	          { className: 'upload-form' },
+	          React.createElement(
+	            'button',
+	            { onClick: this.addImage },
+	            'ADD EVENT IMAGE'
+	          )
 	        ),
-	        React.createElement('input', { type: 'text', placeholder: 'Placeholder for image' }),
-	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
 	          null,
@@ -32375,13 +32475,13 @@
 	module.exports = EventForm;
 
 /***/ },
-/* 260 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(261);
+	module.exports = __webpack_require__(260);
 
 /***/ },
-/* 261 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32398,8 +32498,8 @@
 	
 	'use strict';
 	
-	var ReactLink = __webpack_require__(262);
-	var ReactStateSetters = __webpack_require__(263);
+	var ReactLink = __webpack_require__(261);
+	var ReactStateSetters = __webpack_require__(262);
 	
 	/**
 	 * A simple mixin around ReactLink.forState().
@@ -32422,7 +32522,7 @@
 	module.exports = LinkedStateMixin;
 
 /***/ },
-/* 262 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32496,7 +32596,7 @@
 	module.exports = ReactLink;
 
 /***/ },
-/* 263 */
+/* 262 */
 /***/ function(module, exports) {
 
 	/**
@@ -32603,6 +32703,31 @@
 	};
 	
 	module.exports = ReactStateSetters;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(181),
+	    SearchConstants = __webpack_require__(264);
+	
+	SearchActions = {
+	  fetchEvents: function () {
+	    ApiUtil.fetchEvents();
+	  }
+	};
+	
+	module.exports = SearchActions;
+
+/***/ },
+/* 264 */
+/***/ function(module, exports) {
+
+	var SearchConstants = {
+	  LOCATION_RECEIVED: "LOCATION_RECEIVED"
+	};
+	
+	module.exports = SearchConstants;
 
 /***/ }
 /******/ ]);
