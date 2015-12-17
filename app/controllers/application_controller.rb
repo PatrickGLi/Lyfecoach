@@ -20,14 +20,14 @@ class ApplicationController < ActionController::Base
     session[:session_token] = nil
   end
 
-  def has_user
+  def currently_signed_in
     if current_user
       flash[:notice] = "You're already signed in!"
       redirect_to root_url
     end
   end
 
-  def no_user
+  def currently_signed_out
     if current_user.nil?
       flash[:notice] = "You have to sign in!"
       redirect_to new_session_url

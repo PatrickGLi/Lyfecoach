@@ -1,4 +1,8 @@
-<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+<script>
+  window.currentUserId = <%= @current_user_id %>
+  window.formAuthenticityToken = "<%= form_authenticity_token %>"
+</script>
+<%= javascript_include_tag 'application'%>
 <%= render "/shared/errors" %>
 <div id="content">
 </div>

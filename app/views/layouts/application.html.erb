@@ -6,8 +6,14 @@
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBHe24_LJ1FPTws6P6RD4GUpBtyaBEBMQ">
   </script>
   <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all'%>
   <%= csrf_meta_tags %>
+  <!-- <script type="text/javascript">
+    window.CLOUDINARY_OPTIONS = {
+      upload_preset: "<%= ENV['UPLOAD_PRESET'] %>"
+      cloud_name: "<%= ENV['CLOUD_NAME'] %>"
+    };
+  </script> -->
 </head>
 <body>
 
