@@ -1,19 +1,13 @@
 var React = require('react'),
     EventStore = require('../../stores/event_store');
-    History = require('react-router').History;
 
 
 var IndexItem = React.createClass({
-  mixins: [History],
-
-  showEventDetail: function(e) {
-    this.history.pushState(null, 'api/events/' + this.props.event.id, {});
-  },
 
   render: function() {
     return(
       <div className="col-xs-4 test">
-        <img onClick={this.showEventDetail}
+        <img onClick={this.props.onClick}
              src={this.props.event.url}
              className="img-circle img-responsive"
              alt="Responsive image">

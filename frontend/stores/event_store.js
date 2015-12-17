@@ -10,6 +10,7 @@ EventStore.all = function() {
   for (var id in _events) {
     events.push(_events[id]);
   }
+  
   return events;
 };
 

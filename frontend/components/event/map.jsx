@@ -21,12 +21,16 @@ var Map = React.createClass({
    };
 
    this.map = new google.maps.Map(map, mapOptions);
+   this.mapLoaded();
+  },
+
+  mapLoaded: function() {
+    this._onChange();
   },
 
   componentWillReceiveProps: function() {
     this._onChange();
   },
-
 
   _onChange: function() {
     var events = this.props.events;
