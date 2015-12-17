@@ -8,8 +8,8 @@ var DropdownStore = new Store(AppDispatcher);
 
 DropdownStore.__onDispatch = function(payload) {
   switch (payload.actionType) {
-    case DropdownConstants.Dropdown_CLICKED:
-      updateDropdown(payload.button);
+    case DropdownConstants.DROPDOWN_CLICKED:
+      updateDropdown(payload.dropdown);
       break;
   }
 
@@ -21,6 +21,7 @@ DropdownStore.fetch = function() {
 }
 
 function updateDropdown (buttonClicked) {
+  debugger
   if (shownDropdown === buttonClicked) {
     shownDropdown = null;
   } else {
