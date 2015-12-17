@@ -1,11 +1,11 @@
 var React = require('react'),
-    FilterActions = require('../../actions/filter_actions'),
+    DropdownActions = require('../../actions/dropdown_actions'),
     PriceFilter = require('./price');
 
 var Filter = React.createClass({
 
   handleFilter: function(event) {
-    FilterActions.showFilter(event.target);
+    DropdownActions.showDropdown(event.target);
   },
 
   render: function() {

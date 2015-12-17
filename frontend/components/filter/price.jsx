@@ -1,5 +1,5 @@
 var React = require('react'),
-    FilterStore = require('../../stores/filter_store');
+    DropdownStore = require('../../stores/dropdown_store');
 
 var PriceFilter = React.createClass({
   options: {
@@ -12,7 +12,7 @@ var PriceFilter = React.createClass({
   },
 
   componentDidMount: function() {
-    this.token = FilterStore.addListener(this.handleChange);
+    this.token = DropdownStore.addListener(this.handleChange);
   },
 
   componentWillUnmount: function() {

@@ -1,8 +1,9 @@
 var React = require('react'),
     NavBarActions = require('../../actions/nav_bar/nav_bar_actions'),
     CurrentUserStore = require('../../stores/current_user_store'),
-    Dropdown = require('./user_dropdown'),
-    ReactConstants = require('../constants/react_constants'),
+    ReactConstants = require('../../constants/react_constants'),
+    UserDropdown = require('./user_dropdown'),
+    HelpDropdown = require('./help_dropdown'),
     History = require('react-router').History;
 
 var NavBar = React.createClass({
@@ -13,8 +14,13 @@ var NavBar = React.createClass({
   },
 
   componentDidMount: function() {
-    CurrentUserStore.addListener(this.getCurrentUser);
+    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
     NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
+  },
+
+  componentWillUnmount: function() {
+    this.currentUserListener.remove();
+    this.dropdownListener.remove();
   },
 
   getCurrentUser: function() {
@@ -22,29 +28,50 @@ var NavBar = React.createClass({
   },
 
   returnToHomepage: function() {
-    this.history.pushState(null, 'api/events/' + this.props.event.id, {});
+    this.history.pushState(null, '/', {});
   },
 
-  showDropdown: function() {
-
+  goToEventForm: function() {
+    this.history.pushState(null,'api/events/new');
   },
 
   render: function() {
     if (this.state.currentUser === null) { return <div></div>; }
 
     return (
-      <div>
-        <div onClick={this.returnToHomepage}>
-          I'm the logo.
-        </div>
-        I'm the nav bar.
+      <nav className="navbar navbar-default">
+        <div className="container-fluid">
 
-        <div onClick={this.showDropdown}>
-          {this.state.currentUser.fname}
+          <div className="navbar-header">
+            <button type="button" className="navbar-toggle collapsed"
+                    data-toggle="collapse"
+                    data-target="#collapse-menu"
+                    aria-expanded="false">
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+          </div>
+
+          <div className="collapse navbar-collapse" id="collapse-menu">
+            <div className="nav navbar-nav pull-left">
+              <img id="logo" src="http://static4.wikia.nocookie.net/__cb20131121214007/destinypedia/images/7/71/Information_Icon.svg"
+                   onClick={this.returnToHomepage}/>
+            </div>
+
+            <div className="nav navbar-nav pull-right user-settings">
+              <UserDropdown name={this.state.currentUser.fname}/>
+
+              <div onClick={this.showHelpDropdown}
+                   className="nav-links">Help</div>
+              <div onClick={this.goToEventForm}
+                   id="create-event-link">Create Event</div>
+            </div>
+          </div>
+
         </div>
-        <Dropdown/>
-      </div>
-    )
+      </nav>
+    );
   }
 });
 

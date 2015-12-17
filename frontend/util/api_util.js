@@ -17,16 +17,6 @@ ApiUtil = {
     $.getJSON('api/users/' + currentUserId, {}, function(currentUser) {
       ApiActions.getCurrentUser(currentUser);
     });
-  },
-
-  signOut: function() {
-    $.ajax({
-      method: 'delete',
-      url: 'session',
-      success: function() {
-        debugger
-      }
-    });
   }
 }
 
