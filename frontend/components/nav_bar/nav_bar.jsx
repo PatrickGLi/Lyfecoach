@@ -2,24 +2,33 @@ var React = require('react'),
     NavBarActions = require('../../actions/nav_bar/nav_bar_actions'),
     CurrentUserStore = require('../../stores/current_user_store'),
     ReactConstants = require('../../constants/react_constants'),
+    DropdownActions = require('../../actions/dropdown_actions'),
+    DropdownStore = require('../../stores/dropdown_store'),
     UserDropdown = require('./user_dropdown'),
-    HelpDropdown = require('./help_dropdown'),
-    History = require('react-router').History;
+    HelpDropdown = require('./help_dropdown');
 
 var NavBar = React.createClass({
-  mixins: [History],
 
   getInitialState: function() {
-    return ({ currentUser: CurrentUserStore.fetch() });
+    return ({
+      currentUser: CurrentUserStore.fetch(),
+      shown: ""
+    });
   },
 
   componentDidMount: function() {
     this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
+    this.currentDropdownListener = DropdownStore.addListener(this._onChange);
     NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
+  },
+
+  _onChange: function() {
+    this.setState({ shown: DropdownStore.fetch() });
   },
 
   componentWillUnmount: function() {
     this.currentUserListener.remove();
+    this.currentDropdownListener.remove();
   },
 
   getCurrentUser: function() {
@@ -27,11 +36,15 @@ var NavBar = React.createClass({
   },
 
   returnToHomepage: function(e) {
-    this.history.pushState(null, '/', {});
+    this.props.history.pushState(null, '/', {});
   },
 
   goToEventForm: function(e) {
-    this.history.pushState(null,'api/events/new');
+    this.props.history.pushState(null,'api/events/new');
+  },
+
+  handleClick: function(e) {
+    DropdownActions.showDropdown(e.target.innerHTML);
   },
 
   render: function() {
@@ -62,8 +75,8 @@ var NavBar = React.createClass({
               <div onClick={this.goToEventForm}
                    id="create-event-link">Be a host.
               </div>
-              <UserDropdown name={this.state.currentUser.fname}/>
-              <HelpDropdown/>
+              <UserDropdown toggle={this.state.shown} onClick={this.handleClick} name={this.state.currentUser.fname}/>
+              <HelpDropdown toggle={this.state.shown} onClick={this.handleClick}/>
             </div>
           </div>
 

@@ -1,41 +1,22 @@
-var React = require('react'),
-    DropdownStore = require('../../stores/dropdown_store');
+var React = require('react');
 
 var HelpDropdown = React.createClass({
-  getInitialState: function() {
-    return({
-      dropdown: "dropdown-hidden",
-      label: "Help"
-    });
-  },
-
-  componentDidMount: function() {
-    this.token = DropdownStore.addListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    this.token.remove();
-  },
-
-  _onChange: function() {
-    if (DropdownStore.fetch() === this.state.label) {
-      this.setState({ dropdown: ""});
-    } else {
-      this.setState({ dropdown: "dropdown-hidden" });
-    }
-  },
-
-  toggleHelpDropdown: function(e) {
-    DropdownActions.showDropdown(e.target.innerHTML);
-  },
 
   render: function() {
+    this.label = "Help";
+
+    if (this.props.toggle === this.label) {
+      var hiddenClass = "";
+    } else {
+      var hiddenClass = "hidden-dropdown";
+    }
+
     return(
       <div>
-        <div onClick={this.toggleHelpDropdown}
-             className="nav-links">{this.state.label}
+        <div onClick={this.props.onClick}
+             className="nav-links">{this.label}
         </div>
-        <div id={this.state.dropdown}>
+        <div className={hiddenClass}>
           Hiddenstuff
         </div>
       </div>

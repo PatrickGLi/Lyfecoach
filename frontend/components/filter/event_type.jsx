@@ -1,42 +1,22 @@
-var React = require('react'),
-    DropdownStore = require('../../stores/dropdown_store');
+var React = require('react');
 
 var EventTypeFilter = React.createClass({
 
-  getInitialState: function() {
-    return ({
-      dropdown: "dropdown-hidden",
-      label: "EventType"
-    });
-  },
-
-  componentDidMount: function() {
-    this.token = DropdownStore.addListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    this.token.remove();
-  },
-
-  _onChange: function() {
-    if (DropdownStore.fetch() === this.state.label) {
-      this.setState({ dropdown: ""});
-    } else {
-      this.setState({ dropdown: "dropdown-hidden" });
-    }
-  },
-
-  toggleEventTypeDropdown: function(e) {
-    DropdownActions.showDropdown(e.target.innerHTML);
-  },
-
   render: function() {
+    this.label = "Event Type";
+    
+    if (this.props.toggle === this.label) {
+      var hiddenClass = "";
+    } else {
+      var hiddenClass = "hidden-dropdown";
+    }
+
     return (
       <div>
-        <div onClick={this.toggleEventTypeDropdown}>
-          {this.state.label}
+        <div onClick={this.props.onClick}>
+          {this.label}
         </div>
-        <div id={this.state.dropdown}>
+        <div id="event-type-dropdown" className={hiddenClass}>
           Hiddenstuff
         </div>
       </div>

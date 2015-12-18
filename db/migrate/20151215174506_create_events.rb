@@ -5,8 +5,8 @@ class CreateEvents < ActiveRecord::Migration
       t.string :location, null: false
       t.integer :start_time, null: false
       t.integer :end_time, null: false
-      t.date :start_date, null: false
-      t.date :end_date, null: false
+      t.integer :start_date, limit: 8, null: false
+      t.integer :end_date, limit: 8, null: false
       t.text :description, null: false
       t.integer :ticket_max, null: false
       t.integer :view_count, default: 0, null: false

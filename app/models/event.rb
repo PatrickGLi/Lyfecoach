@@ -26,8 +26,20 @@ class Event < ActiveRecord::Base
 
   validates :title, uniqueness: true
   validates :ticket_max, numericality: { greater_than: 20 }
+  validate :end_time_cannot_be_before_start_time
+
+  def end_time_cannot_be_before_start_time
+    end_time_in_milliseconds = end_time * 60 * 60 * 100
+    start_time_in_milliseconds = start_time * 60 * 60 * 100
+
+    total_end_time = end_date + end_time_in_milliseconds
+    total_start_time = start_time + start_time_in_milliseconds
+
+    if total_start_time > total_end_time
+      errors.add(:end_time, "Event cannot end before it starts.")
+    end
+  end
 
   belongs_to :organizer,
   class_name: "User"
-
 end
