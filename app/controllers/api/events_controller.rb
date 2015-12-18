@@ -9,14 +9,17 @@ class Api::EventsController < ApplicationController
   end
 
   def create
+    event = Event.create!(event_params)
     debugger
-    @event = Event.new(event_params)
+    render json: event
   end
 
   private
   def event_params
-    params.require(:event).permit(:location, :title, :startDate,
-                                  :startTime, :endDate, :endTime,
-                                  :description, :lat, :lng)
+    params.require(:event).permit(:location, :title, :start_date,
+                                  :price, :view_count, :start_time,
+                                  :end_date, :end_time, :ticket_max,
+                                  :description, :lat, :lng, :category,
+                                  :url, :organizer_id)
   end
 end
