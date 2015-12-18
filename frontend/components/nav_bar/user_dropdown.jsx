@@ -1,41 +1,23 @@
 var React = require('react'),
-    ReactConstants = require('../../constants/react_constants'),
-    DropdownStore = require('../../stores/dropdown_store');
+    ReactConstants = require('../../constants/react_constants');
 
 var UserDropdown = React.createClass({
-  getInitialState: function() {
-    return({ dropdown: "dropdown-hidden",
-             label: this.props.name
-    });
-  },
-
-  componentDidMount: function() {
-    this.token = DropdownStore.addListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    this.token.remove();
-  },
-
-  _onChange: function() {
-    if (DropdownStore.fetch() === this.state.label) {
-      this.setState({ dropdown: ""});
-    } else {
-      this.setState({ dropdown: "dropdown-hidden" });
-    }
-  },
-
-  toggleUserDropdown: function(e) {
-    DropdownActions.showDropdown(e.target.innerHTML);
-  },
 
   render: function() {
+    this.label = this.props.name;
+
+    if (this.props.toggle === this.label) {
+      var hiddenClass = "";
+    } else {
+      var hiddenClass = "hidden-dropdown";
+    }
+
     return(
       <div>
-        <div onClick={this.toggleUserDropdown}
-             className="nav-links">{this.state.label}
+        <div onClick={this.props.onClick}
+             className="nav-links">{this.props.name}
         </div>
-        <div id={this.state.dropdown}>
+        <div className={hiddenClass}>
           <div>Account Settings</div>
           <div>
             <form method="post" action="session">

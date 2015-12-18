@@ -1,42 +1,22 @@
-var React = require('react'),
-    DropdownStore = require('../../stores/dropdown_store');
+var React = require('react');
 
 var PriceFilter = React.createClass({
 
-  getInitialState: function() {
-    return ({
-      dropdown: "dropdown-hidden",
-      label: "Price"
-    });
-  },
-
-  componentDidMount: function() {
-    this.token = DropdownStore.addListener(this._onChange);
-  },
-
-  componentWillUnmount: function() {
-    this.token.remove();
-  },
-
-  _onChange: function() {
-    if (DropdownStore.fetch() === this.state.label) {
-      this.setState({ dropdown: ""});
-    } else {
-      this.setState({ dropdown: "dropdown-hidden" });
-    }
-  },
-
-  togglePriceDropdown: function(e) {
-    DropdownActions.showDropdown(e.target.innerHTML);
-  },
-
   render: function() {
+    this.label = "Price";
+    
+    if (this.props.toggle === this.label) {
+      var hiddenClass = "";
+    } else {
+      var hiddenClass = "hidden-dropdown";
+    }
+
     return (
       <div>
-        <div onClick={this.togglePriceDropdown}>
-          {this.state.label}
+        <div onClick={this.props.onClick}>
+          {this.label}
         </div>
-        <div id={this.state.dropdown}>
+        <div id="price-dropdown" className={hiddenClass}>
           Hiddenstuff
         </div>
       </div>

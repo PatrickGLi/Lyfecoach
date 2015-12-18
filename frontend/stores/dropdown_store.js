@@ -2,7 +2,7 @@ var Store = require('flux/utils').Store,
     AppDispatcher = require('../dispatcher/dispatcher'),
     DropdownConstants = require('../constants/dropdown_constants');
 
-var shownDropdown = null;
+var _shownDropdown = null;
 
 var DropdownStore = new Store(AppDispatcher);
 
@@ -17,14 +17,14 @@ DropdownStore.__onDispatch = function(payload) {
 };
 
 DropdownStore.fetch = function() {
-  return shownDropdown;
+  return _shownDropdown;
 }
 
 function updateDropdown (labelClicked) {
-  if (shownDropdown === labelClicked) {
-    shownDropdown = null;
+  if (_shownDropdown === labelClicked) {
+    _shownDropdown = null;
   } else {
-    shownDropdown = labelClicked;
+    _shownDropdown = labelClicked;
   }
 }
 

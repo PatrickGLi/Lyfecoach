@@ -21,8 +21,8 @@ var FormActions = {
       lng: parseFloat(newEventData.lng),
       price: parseFloat(newEventData.price),
       ticket_max: parseInt(newEventData.ticketMax),
-      start_date: new Date(newEventData.startDate),
-      end_date: new Date(newEventData.endDate),
+      start_date: new Date(newEventData.startDate).getTime(),
+      end_date: new Date(newEventData.endDate).getTime(),
       start_time: parseInt(newEventData.startTime),
       end_time: parseInt(newEventData.endTime)
     };

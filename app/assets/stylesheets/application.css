@@ -45,8 +45,9 @@
    outline: 1px solid black;
  }
 
- #dropdown-hidden {
-   display: none;
+ .hidden-dropdown {
+   display: none !important;
+   font-size: 50px;
  }
 
   .map {

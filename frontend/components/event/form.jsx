@@ -91,6 +91,10 @@ var EventForm = React.createClass({
     this.navigateToSearch();
   },
 
+  navigateToSearch: function() {
+    this.props.history.pushState(null, 'api/events');
+  },
+
   addImage: function (e) {
     e.preventDefault();
     cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, function(error, results){
@@ -172,9 +176,6 @@ var EventForm = React.createClass({
             <label>Add a Description</label>
             <textarea valueLink={this.linkState('description')}></textarea>
             <br/>
-
-            //Add Tickets if there is time
-
 
             <input type="submit" value="create Event"/>
           </form>
