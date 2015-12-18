@@ -1,6 +1,7 @@
-var ApiActions = require('../actions/api_actions');
+var ApiActions = require('../actions/api_actions'),
+    FormActions = require('../actions/form_actions');
 
-ApiUtil = {
+var ApiUtil = {
   fetchEvents: function(){
     $.getJSON('api/events', {}, function(eventsData) {
       ApiActions.receiveAll(eventsData);
@@ -22,7 +23,7 @@ ApiUtil = {
         debugger
       },
       error: function(errorData) {
-        debugger
+        FormActions.formError(errorData);
       }
     });
   },

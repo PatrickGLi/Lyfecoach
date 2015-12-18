@@ -3,23 +3,30 @@ var React = require('react'),
     LinkedStateMixin = require('react-addons-linked-state-mixin'),
     ReactDOM = require('react-dom'),
     FormActions = require('../../actions/form_actions'),
+    Error = require('./error'),
     EventStore = require('../../stores/event_store');
 
 var EventForm = React.createClass({
   mixins: [LinkedStateMixin],
 
+  blankAttrs: {
+    location: "",
+    title: "",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    description: "",
+    lat: "",
+    lng: "",
+    price: "",
+    url: "https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=&url=https%3A%2F%2Fpixabay.com%2Fen%2Fsilhouette-sunset-landscape-woman-283298%2F&bvm=bv.110151844,d.cGc&psig=AFQjCNEIkN-4xKzQ4jLYazWlpb_cc6p3ug&ust=1450288362611394",
+    ticketMax: "",
+    category: ""
+  },
+
   getInitialState: function(){
-    return {
-      location: "",
-      title: "",
-      startDate: "",
-      startTime: "",
-      endDate: "",
-      endTime: "",
-      description: "",
-      lat: "",
-      lng: ""
-    };
+    return this.blankAttrs;
   },
 
   componentDidMount: function() {
@@ -77,7 +84,7 @@ var EventForm = React.createClass({
   handleSubmit: function(event){
     event.preventDefault();
     FormActions.createEvent(this.state)
-    this.navigateToSearch();
+    // this.navigateToSearch();
   },
 
   navigateToSearch: function(){
@@ -155,11 +162,16 @@ var EventForm = React.createClass({
             </select>
             <br/>
 
-            <label>Latitude</label>
-            <input type="text" disabled="true" value={lat}/>
+            <label>Tickets</label>
+            <input type="text" valueLink={this.linkState('price')}/>
             <br/>
-            <label>Longitude</label>
-            <input type="text" disabled="true" value={lng}/>
+
+            <label>Ticket Max</label>
+            <input type="text" valueLink={this.linkState('ticketMax')}/>
+            <br/>
+
+            <label>Category</label>
+            <input type="text" valueLink={this.linkState('category')}/>
             <br/>
 
             <div className="upload-form">
@@ -176,6 +188,7 @@ var EventForm = React.createClass({
             <input type="submit" value="create Event"/>
           </form>
           <button onClick={this.handleCancel}>Cancel</button>
+          <Error/>
         </div>
     );
   }
