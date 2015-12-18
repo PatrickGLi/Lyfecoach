@@ -54,8 +54,8 @@
 	    App = __webpack_require__(235),
 	    LandingPage = __webpack_require__(244),
 	    EventSearch = __webpack_require__(246),
-	    EventDetail = __webpack_require__(256),
-	    EventForm = __webpack_require__(258);
+	    EventDetail = __webpack_require__(257),
+	    EventForm = __webpack_require__(259);
 	
 	var routes = React.createElement(
 	  Route,
@@ -26423,6 +26423,20 @@
 	    });
 	  },
 	
+	  createEvent: function (eventData) {
+	    $.ajax({
+	      method: "post",
+	      url: "api/events",
+	      data: { event: eventData },
+	      success: function () {
+	        debugger;
+	      },
+	      error: function (errorData) {
+	        debugger;
+	      }
+	    });
+	  },
+	
 	  getCurrentUser: function (currentUserId) {
 	    $.getJSON('api/users/' + currentUserId, {}, function (currentUser) {
 	      ApiActions.getCurrentUser(currentUser);
@@ -31696,9 +31710,9 @@
 	var React = __webpack_require__(1),
 	    Map = __webpack_require__(247),
 	    EventStore = __webpack_require__(159),
-	    EventIndex = __webpack_require__(248),
-	    Filter = __webpack_require__(250),
-	    SearchActions = __webpack_require__(263);
+	    EventIndex = __webpack_require__(249),
+	    Filter = __webpack_require__(251),
+	    SearchActions = __webpack_require__(248);
 	
 	function _getAllEvents() {
 	  return EventStore.all();
@@ -31746,7 +31760,7 @@
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
 	    ReactDOM = __webpack_require__(158),
-	    SearchActions = __webpack_require__(263);
+	    SearchActions = __webpack_require__(248);
 	
 	var Map = React.createClass({
 	  displayName: 'Map',
@@ -31837,9 +31851,23 @@
 /* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var ApiUtil = __webpack_require__(181);
+	
+	SearchActions = {
+	  fetchEvents: function () {
+	    ApiUtil.fetchEvents();
+	  }
+	};
+	
+	module.exports = SearchActions;
+
+/***/ },
+/* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
-	    IndexItem = __webpack_require__(249);
+	    IndexItem = __webpack_require__(250);
 	
 	var EventIndex = React.createClass({
 	  displayName: 'EventIndex',
@@ -31869,7 +31897,7 @@
 	module.exports = EventIndex;
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -31921,15 +31949,15 @@
 	module.exports = IndexItem;
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    DropdownActions = __webpack_require__(251),
-	    PriceFilter = __webpack_require__(252),
-	    CategoryFilter = __webpack_require__(253),
-	    EventTypeFilter = __webpack_require__(254),
-	    DateFilter = __webpack_require__(255);
+	    DropdownActions = __webpack_require__(252),
+	    PriceFilter = __webpack_require__(253),
+	    CategoryFilter = __webpack_require__(254),
+	    EventTypeFilter = __webpack_require__(255),
+	    DateFilter = __webpack_require__(256);
 	
 	var Filter = React.createClass({
 	  displayName: 'Filter',
@@ -31953,7 +31981,7 @@
 	module.exports = Filter;
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(177),
@@ -31971,7 +31999,7 @@
 	module.exports = DropdownActions;
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -32029,7 +32057,7 @@
 	module.exports = PriceFilter;
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -32087,7 +32115,7 @@
 	module.exports = CategoryFilter;
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -32145,7 +32173,7 @@
 	module.exports = EventTypeFilter;
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -32203,12 +32231,12 @@
 	module.exports = DateFilter;
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
-	    DetailActions = __webpack_require__(257);
+	    DetailActions = __webpack_require__(258);
 	
 	var Detail = React.createClass({
 	  displayName: 'Detail',
@@ -32255,7 +32283,7 @@
 	module.exports = Detail;
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(181);
@@ -32269,13 +32297,14 @@
 	module.exports = DetailActions;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    ApiUtil = __webpack_require__(181),
-	    LinkedStateMixin = __webpack_require__(259),
+	    LinkedStateMixin = __webpack_require__(260),
 	    ReactDOM = __webpack_require__(158),
+	    FormActions = __webpack_require__(264),
 	    EventStore = __webpack_require__(159);
 	
 	var EventForm = React.createClass({
@@ -32291,12 +32320,13 @@
 	      startTime: "",
 	      endDate: "",
 	      endTime: "",
-	      description: ""
+	      description: "",
+	      lat: "",
+	      lng: ""
 	    };
 	  },
 	
 	  componentDidMount: function () {
-	    console.log("form mounted");
 	    $(window).keydown(function (event) {
 	      if (event.keyCode == 13) {
 	        event.preventDefault();
@@ -32305,9 +32335,28 @@
 	    });
 	
 	    var autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
-	    console.log(autoCompleteInput);
 	
 	    this.autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, { types: ['geocode'] });
+	    this.geocoder = new google.maps.Geocoder();
+	    this.autocomplete.addListener('place_changed', this.fillInLocation);
+	  },
+	
+	  fillInLocation: function () {
+	    var that = this;
+	    var place = this.autocomplete.getPlace();
+	    address = place.formatted_address;
+	    this.geocoder.geocode({ 'address': address }, function (results, status) {
+	      if (status === google.maps.GeocoderStatus.OK) {
+	        var myLatLng = results[0].geometry.location;
+	        that.setState({
+	          location: address,
+	          lat: myLatLng.lat(),
+	          lng: myLatLng.lng()
+	        });
+	      } else {
+	        alert(status);
+	      }
+	    });
 	  },
 	
 	  geolocate: function () {
@@ -32322,18 +32371,18 @@
 	          center: geolocation,
 	          radius: position.coords.accuracy
 	        });
+	
 	        that.autocomplete.setBounds(circle.getBounds());
 	      });
 	    }
 	  },
 	
 	  handleSubmit: function (event) {
-	    debugger;
 	    event.preventDefault();
-	    var Event = Object.assign({}, this.state, this._coords());
-	    ApiUtil.createEvent(Event);
+	    FormActions.createEvent(this.state);
 	    this.navigateToSearch();
 	  },
+	
 	  navigateToSearch: function () {
 	    this.props.history.pushState(null, "/");
 	  },
@@ -32375,7 +32424,7 @@
 	
 	      times.push(React.createElement(
 	        'option',
-	        { key: i, value: time },
+	        { key: i, value: i },
 	        time
 	      ));
 	    }
@@ -32412,6 +32461,7 @@
 	        React.createElement(
 	          'select',
 	          { valueLink: this.linkState('startTime') },
+	          React.createElement('option', null),
 	          times
 	        ),
 	        React.createElement(
@@ -32423,6 +32473,7 @@
 	        React.createElement(
 	          'select',
 	          { type: 'number', valueLink: this.linkState('endTime') },
+	          React.createElement('option', null),
 	          times
 	        ),
 	        React.createElement('br', null),
@@ -32471,13 +32522,13 @@
 	module.exports = EventForm;
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(260);
+	module.exports = __webpack_require__(261);
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32494,8 +32545,8 @@
 	
 	'use strict';
 	
-	var ReactLink = __webpack_require__(261);
-	var ReactStateSetters = __webpack_require__(262);
+	var ReactLink = __webpack_require__(262);
+	var ReactStateSetters = __webpack_require__(263);
 	
 	/**
 	 * A simple mixin around ReactLink.forState().
@@ -32518,7 +32569,7 @@
 	module.exports = LinkedStateMixin;
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32592,7 +32643,7 @@
 	module.exports = ReactLink;
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports) {
 
 	/**
@@ -32701,18 +32752,18 @@
 	module.exports = ReactStateSetters;
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(181);
 	
-	SearchActions = {
-	  fetchEvents: function () {
-	    ApiUtil.fetchEvents();
+	var FormActions = {
+	  createEvent: function (newEventData) {
+	    ApiUtil.createEvent(newEventData);
 	  }
 	};
 	
-	module.exports = SearchActions;
+	module.exports = FormActions;
 
 /***/ }
 /******/ ]);

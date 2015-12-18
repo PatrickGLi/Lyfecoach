@@ -13,11 +13,25 @@ ApiUtil = {
     });
   },
 
+  createEvent: function(eventData) {
+    $.ajax({
+      method: "post",
+      url: "api/events",
+      data: { event: eventData },
+      success: function() {
+        debugger
+      },
+      error: function(errorData) {
+        debugger
+      }
+    });
+  },
+
   getCurrentUser: function(currentUserId) {
     $.getJSON('api/users/' + currentUserId, {}, function(currentUser) {
       ApiActions.getCurrentUser(currentUser);
     });
   }
-}
+};
 
 module.exports = ApiUtil;

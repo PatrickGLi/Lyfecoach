@@ -2,6 +2,7 @@ var React = require('react'),
     ApiUtil = require('../../util/api_util'),
     LinkedStateMixin = require('react-addons-linked-state-mixin'),
     ReactDOM = require('react-dom'),
+    FormActions = require('../../actions/form_actions'),
     EventStore = require('../../stores/event_store');
 
 var EventForm = React.createClass({
@@ -15,12 +16,13 @@ var EventForm = React.createClass({
       startTime: "",
       endDate: "",
       endTime: "",
-      description: ""
+      description: "",
+      lat: "",
+      lng: ""
     };
   },
 
   componentDidMount: function() {
-    console.log("form mounted");
     $(window).keydown(function(event){
       if(event.keyCode == 13) {
         event.preventDefault();
@@ -29,11 +31,29 @@ var EventForm = React.createClass({
     });
 
     var autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
-    console.log(autoCompleteInput);
 
     this.autocomplete = new google.maps.places.Autocomplete(autoCompleteInput,
       {types: ['geocode']});
+    this.geocoder = new google.maps.Geocoder();
+    this.autocomplete.addListener('place_changed', this.fillInLocation);
+  },
 
+  fillInLocation: function() {
+    var that = this;
+    var place = this.autocomplete.getPlace();
+        address = place.formatted_address;
+    this.geocoder.geocode({ 'address' : address}, function(results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
+        var myLatLng = results[0].geometry.location;
+        that.setState({
+          location: address,
+          lat: myLatLng.lat(),
+          lng: myLatLng.lng()
+        });
+      } else {
+        alert(status);
+      }
+    });
   },
 
   geolocate: function() {
@@ -48,18 +68,18 @@ var EventForm = React.createClass({
           center: geolocation,
           radius: position.coords.accuracy
         });
+
         that.autocomplete.setBounds(circle.getBounds());
       });
     }
   },
 
   handleSubmit: function(event){
-    debugger
     event.preventDefault();
-    var Event = Object.assign({}, this.state, this._coords());
-    ApiUtil.createEvent(Event);
+    FormActions.createEvent(this.state)
     this.navigateToSearch();
   },
+
   navigateToSearch: function(){
     this.props.history.pushState(null, "/");
   },
@@ -98,7 +118,7 @@ var EventForm = React.createClass({
         time = (i - 12).toString() + ":00 PM"
       }
 
-      times.push(<option key={i} value={time}>{time}</option>);
+      times.push(<option key={i} value={i}>{time}</option>);
     }
 
     return (
@@ -121,6 +141,7 @@ var EventForm = React.createClass({
            <input type="date" valueLink={this.linkState('startDate')}/>
 
            <select valueLink={this.linkState('startTime')}>
+             <option></option>
              {times}
             </select>
 
@@ -129,6 +150,7 @@ var EventForm = React.createClass({
 
 
             <select type="number" valueLink={this.linkState('endTime')}>
+              <option></option>
               {times}
             </select>
             <br/>
