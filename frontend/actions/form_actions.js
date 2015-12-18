@@ -9,6 +9,7 @@ setTimeout(function () {
 
 var FormActions = {
   createEvent: function(newEventData) {
+
     convertedEventData = {
       category: newEventData.category,
       description: newEventData.description,
@@ -16,15 +17,17 @@ var FormActions = {
       title: newEventData.title,
       url: newEventData.url,
       organizer_id: ReactConstants.CURRENT_USER,
-      lat: parseInt(newEventData.lat),
-      lng: parseInt(newEventData.lng),
-      price: parseInt(newEventData.price),
-      ticket_max: parseInt(newEventData.ticketMax)
+      lat: parseFloat(newEventData.lat),
+      lng: parseFloat(newEventData.lng),
+      price: parseFloat(newEventData.price),
+      ticket_max: parseInt(newEventData.ticketMax),
+      start_date: new Date(newEventData.startDate),
+      end_date: new Date(newEventData.endDate),
+      start_time: parseInt(newEventData.startTime),
+      end_time: parseInt(newEventData.endTime)
     };
-    debugger
 
-
-    ApiUtil.createEvent(newEventData);
+    ApiUtil.createEvent(convertedEventData);
   },
 
   formError: function(errorData) {

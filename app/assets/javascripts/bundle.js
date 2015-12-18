@@ -26429,7 +26429,8 @@
 	      method: "post",
 	      url: "api/events",
 	      data: { event: eventData },
-	      success: function () {
+	      success: function (successData) {
+	        console.log("IT WORKED");
 	        debugger;
 	      },
 	      error: function (errorData) {
@@ -26504,6 +26505,7 @@
 	
 	var FormActions = {
 	  createEvent: function (newEventData) {
+	
 	    convertedEventData = {
 	      category: newEventData.category,
 	      description: newEventData.description,
@@ -26511,14 +26513,17 @@
 	      title: newEventData.title,
 	      url: newEventData.url,
 	      organizer_id: ReactConstants.CURRENT_USER,
-	      lat: parseInt(newEventData.lat),
-	      lng: parseInt(newEventData.lng),
-	      price: parseInt(newEventData.price),
-	      ticket_max: parseInt(newEventData.ticketMax)
+	      lat: parseFloat(newEventData.lat),
+	      lng: parseFloat(newEventData.lng),
+	      price: parseFloat(newEventData.price),
+	      ticket_max: parseInt(newEventData.ticketMax),
+	      start_date: new Date(newEventData.startDate),
+	      end_date: new Date(newEventData.endDate),
+	      start_time: parseInt(newEventData.startTime),
+	      end_time: parseInt(newEventData.endTime)
 	    };
-	    debugger;
 	
-	    ApiUtil.createEvent(newEventData);
+	    ApiUtil.createEvent(convertedEventData);
 	  },
 	
 	  formError: function (errorData) {
@@ -31982,8 +31987,16 @@
 	        'div',
 	        null,
 	        'Start Time: ',
-	        this.props.event.start_time,
-	        ', End Time: ',
+	        this.props.event.start_date,
+	        ' ',
+	        this.props.event.start_time
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'End Time: ',
+	        this.props.event.end_date,
+	        ' ',
 	        this.props.event.end_time
 	      ),
 	      React.createElement(
@@ -32440,18 +32453,11 @@
 	  handleSubmit: function (event) {
 	    event.preventDefault();
 	    FormActions.createEvent(this.state);
-	    // this.navigateToSearch();
 	  },
 	
-	  navigateToSearch: function () {
-	    this.props.history.pushState(null, "/");
-	  },
 	  handleCancel: function (event) {
 	    event.preventDefault();
 	    this.navigateToSearch();
-	  },
-	  _coords: function () {
-	    return this.props.location.query;
 	  },
 	
 	  addImage: function (e) {
@@ -32465,9 +32471,6 @@
 	  },
 	
 	  render: function () {
-	    var lat = this._coords().lat,
-	        lng = this._coords().lng;
-	
 	    var times = [],
 	        time;
 	
@@ -32843,8 +32846,9 @@
 	  },
 	
 	  _onChange: function () {
+	
 	    if (ErrorStore.fetch()) {
-	      this.setState({ error: "All fields must be completed." });
+	      this.setState({ error: "All inputs must be valid." });
 	    }
 	  },
 	
@@ -32869,7 +32873,7 @@
 	
 	var ErrorStore = new Store(AppDispatcher);
 	
-	var _error = false;
+	var _error = null;
 	
 	ErrorStore.fetch = function () {
 	  return _error;
@@ -32878,18 +32882,19 @@
 	ErrorStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case "FORM_ERROR":
-	      handleError(payload.errorData);
+	      handleError(payload.data);
 	      break;
 	  }
+	
+	  ErrorStore.__emitChange();
 	};
 	
-	function handleError(errorData) {
-	  _error = true;
-	  ErrorStore.__emitChange();
+	function handleError(data) {
+	  _error = data;
 	}
 	
 	ErrorStore.resetError = function () {
-	  return _error = false;
+	  return _error = null;
 	};
 	
 	module.exports = ErrorStore;

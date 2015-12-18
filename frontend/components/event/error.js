@@ -16,8 +16,9 @@ var Error = React.createClass({
   },
 
   _onChange: function () {
+
     if (ErrorStore.fetch()) {
-      this.setState({ error: "All fields must be completed."});
+      this.setState({ error: "All inputs must be valid."});
     }
   },
 

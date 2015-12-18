@@ -84,18 +84,11 @@ var EventForm = React.createClass({
   handleSubmit: function(event){
     event.preventDefault();
     FormActions.createEvent(this.state)
-    // this.navigateToSearch();
   },
 
-  navigateToSearch: function(){
-    this.props.history.pushState(null, "/");
-  },
   handleCancel: function(event){
     event.preventDefault();
     this.navigateToSearch();
-  },
-  _coords: function(){
-    return this.props.location.query;
   },
 
   addImage: function (e) {
@@ -109,8 +102,6 @@ var EventForm = React.createClass({
   },
 
   render: function(){
-    var lat = this._coords().lat, lng = this._coords().lng;
-
     var times = [],
         time;
 

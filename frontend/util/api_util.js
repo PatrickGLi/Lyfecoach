@@ -19,7 +19,8 @@ var ApiUtil = {
       method: "post",
       url: "api/events",
       data: { event: eventData },
-      success: function() {
+      success: function(successData) {
+        console.log("IT WORKED");
         debugger
       },
       error: function(errorData) {
