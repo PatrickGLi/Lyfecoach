@@ -18,6 +18,8 @@ gem 'figaro'
 
 gem 'pry-rails'
 
+gem 'bootstrap-sass', '~>3.3.6'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 

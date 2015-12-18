@@ -7,14 +7,14 @@ var React = require('react'),
     IndexRoute = require('react-router').IndexRoute,
     App = require('./components/app'),
     LandingPage = require('./components/landing_page/landing_page'),
-    EventSearch = require('./components/event/search'),
+    EventPage = require('./components/event/event_page'),
     EventDetail = require('./components/event/detail'),
     EventForm = require('./components/event/form');
 
 var routes = (
   <Route path="/" component={App}>
     <IndexRoute component={LandingPage}/>
-    <Route path="api/events" component={EventSearch}/>
+    <Route path="api/events" component={EventPage}/>
     <Route path="api/events/new" component={EventForm}/>
     <Route path="api/events/:eventId" component={EventDetail}/>
   </Route>
