@@ -14,12 +14,12 @@ event_type = %w(Attraction Appearance Concert Screening Seminar
   lat_coordinate = 37.7758 + variancelat
   lng_coordinate = -122.435 + variancelng
 
-  Event.create(title: "#{Faker::Book.title} #{index}",
+  Event.create!(title: "#{Faker::Book.title} #{index}",
                location: Faker::Address.street_address,
                start_date: Faker::Date.between(20.days.ago, 10.days.ago),
                end_date: Faker::Date.between(10.days.ago, Date.today),
-               start_time: "5:00 PM",
-               end_time: "9:00 PM",
+               start_time: 5,
+               end_time: 8,
                description: Faker::Lorem.paragraph,
                ticket_max: rand(100..10000),
                price: rand(10..100),
@@ -33,7 +33,7 @@ event_type = %w(Attraction Appearance Concert Screening Seminar
 end
 
 5.times do
-  User.create(email: Faker::Internet.user_name,
+  User.create!(email: Faker::Internet.user_name,
               fname: Faker::Name.first_name,
               lname: Faker::Name.last_name,
               password: "password",

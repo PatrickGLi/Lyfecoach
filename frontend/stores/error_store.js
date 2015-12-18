@@ -3,7 +3,7 @@ var AppDispatcher = require('../dispatcher/dispatcher'),
 
     var ErrorStore = new Store(AppDispatcher);
 
-    var _error = false;
+    var _error = null;
 
     ErrorStore.fetch = function () {
       return _error;
@@ -12,18 +12,19 @@ var AppDispatcher = require('../dispatcher/dispatcher'),
     ErrorStore.__onDispatch = function (payload) {
       switch (payload.actionType) {
         case "FORM_ERROR":
-          handleError(payload.errorData);
+          handleError(payload.data);
           break;
       }
+
+      ErrorStore.__emitChange();
     };
 
-    function handleError (errorData) {
-      _error = true;
-      ErrorStore.__emitChange();
+    function handleError (data) {
+      _error = data;
     }
 
     ErrorStore.resetError = function() {
-      return _error = false;
+      return _error = null;
     }
 
 
