@@ -1,8 +1,7 @@
 var React = require('react'),
     EventStore = require('../../stores/event_store'),
-    ReactDOM = require('react-dom'),
-    SearchActions = require('../../actions/search_actions');
-
+    ReactDOM = require('react-dom');
+    
 var Map = React.createClass({
 
   componentDidMount: function() {

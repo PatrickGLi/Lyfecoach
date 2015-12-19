@@ -1,15 +1,19 @@
 var ApiActions = require('../actions/api_actions'),
-    FormActions = require('../actions/form_actions');
+    FormActions = require('../actions/form_actions'),
+    FilterParamsStore = require('../stores/filter_params_store');
 
 var ApiUtil = {
   fetchEvents: function(){
-    $.getJSON('api/events', {}, function(eventsData) {
+    var filter = FilterParamsStore.params();
+    debugger
+
+    $.get('api/events', filter, function(eventsData) {
       ApiActions.receiveAll(eventsData);
     });
   },
 
   fetchSingleEvent: function(eventId) {
-    $.getJSON('api/events/' + eventId, {}, function(eventData) {
+    $.get('api/events/' + eventId, {}, function(eventData) {
       ApiActions.receiveSingleEvent(eventData);
     });
   },
