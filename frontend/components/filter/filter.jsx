@@ -22,7 +22,7 @@ var Filter = React.createClass({
   },
 
   handleClick: function(e) {
-    DropdownActions.showDropdown(e.target.innerHTML);
+    DropdownActions.showDropdown(e.target.innerText);
   },
 
   _onChange: function() {

@@ -33,7 +33,7 @@ var EventPage = React.createClass({
   componentWillUnmount: function() {
     this.eventsChanged.remove();
     this.filterListener.remove();
-    FilterParamsStore.resetTitle();
+    FilterParamsStore.resetFilters();
   },
 
   _filtersChanged: function () {

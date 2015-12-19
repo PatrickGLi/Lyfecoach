@@ -44,7 +44,7 @@ var NavBar = React.createClass({
   },
 
   handleClick: function(e) {
-    DropdownActions.showDropdown(e.target.innerHTML);
+    DropdownActions.showDropdown(e.target.innerText);
   },
 
   render: function() {

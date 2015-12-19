@@ -15,7 +15,21 @@ var FilterActions = {
       actionType: FilterConstants.UPDATE_PRICE,
       price: priceData
     })
-  }
+  },
+
+  updateCategory: function(categoryData) {
+    AppDispatcher.dispatch({
+      actionType: FilterConstants.UPDATE_CATEGORY,
+      category: categoryData
+    })
+  },
+
+  updateDate: function(dateData) {
+    AppDispatcher.dispatch({
+      actionType: FilterConstants.UPDATE_DATE,
+      date: dateData
+    })
+  },
 };
 
 module.exports = FilterActions;

@@ -1,11 +1,15 @@
-var React = require('react');
+var React = require('react'),
+    FilterActions = require('../../actions/filter_actions'),
+    DropdownConstants = require('../../constants/dropdown_constants'),
+    DateConstants = require('../../constants/date_constants');
 
 var DateFilter = React.createClass({
+  filterByDate: function(e) {
+    FilterActions.updateDate(e.target.innerText);
+  },
 
   render: function() {
-    this.label = "Date";
-
-    if (this.props.toggle === this.label) {
+    if (this.props.toggle === DropdownConstants.DATE) {
       var hiddenClass = "";
     } else {
       var hiddenClass = "hidden-dropdown";
@@ -14,17 +18,17 @@ var DateFilter = React.createClass({
     return (
       <div>
         <div onClick={this.props.onClick}>
-          {this.label}
+          {DropdownConstants.DATE}
         </div>
         <div id="date-dropdown" className={hiddenClass}>
-          <div>
-            This Week
+          <div onClick={this.filterByDate}>
+            {DateConstants.THIS_WEEK}
           </div>
-          <div>
-            This Month
+          <div onClick={this.filterByDate}>
+            {DateConstants.THIS_MONTH}
           </div>
-          <div>
-            This Year
+          <div onClick={this.filterByDate}>
+            {DateConstants.THIS_YEAR}
           </div>
         </div>
       </div>

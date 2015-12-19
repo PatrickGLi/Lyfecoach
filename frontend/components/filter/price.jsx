@@ -1,5 +1,6 @@
 var React = require('react'),
-    FilterActions = require('../../actions/filter_actions');
+    FilterActions = require('../../actions/filter_actions'),
+    DropdownConstants = require('../../constants/dropdown_constants');
 
 var PriceFilter = React.createClass({
 
@@ -8,9 +9,7 @@ var PriceFilter = React.createClass({
   },
 
   render: function() {
-    this.label = "Price";
-
-    if (this.props.toggle === this.label) {
+    if (this.props.toggle === DropdownConstants.PRICE) {
       var hiddenClass = "";
     } else {
       var hiddenClass = "hidden-dropdown";
@@ -19,7 +18,7 @@ var PriceFilter = React.createClass({
     return (
       <div>
         <div onClick={this.props.onClick}>
-          {this.label}
+          {DropdownConstants.PRICE}
         </div>
         <div id="price-dropdown" className={hiddenClass}>
           <div id="10" onClick={this.filterByPrice}>
