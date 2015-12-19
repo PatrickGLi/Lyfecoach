@@ -26571,7 +26571,7 @@
 	    FilterConstants = __webpack_require__(188);
 	
 	var _filter_params = {};
-	var _filter_title = "you.";
+	var _filter_title = { location: 'you.' };
 	
 	var FilterParamsStore = new Store(AppDispatcher);
 	
@@ -26580,11 +26580,11 @@
 	};
 	
 	FilterParamsStore.getTitle = function () {
-	  return _filter_title;
+	  return Object.assign({}, _filter_title);
 	};
 	
 	FilterParamsStore.resetTitle = function () {
-	  _filter_title = "you.";
+	  _filter_title = { location: 'you' };
 	};
 	
 	FilterParamsStore.__onDispatch = function (payload) {
@@ -26592,12 +26592,21 @@
 	    case FilterConstants.UPDATE_LOCATION:
 	      handleLocation(payload.location);
 	      break;
+	    case FilterConstants.UPDATE_PRICE:
+	      handlePrice(payload.price);
+	      break;
 	  }
 	};
 	
 	var handleLocation = function (locationData) {
 	  _filter_params.location = locationData;
-	  _filter_title = locationData.address.split(',')[0];
+	  _filter_title.location = locationData.address.split(',')[0];
+	  FilterParamsStore.__emitChange();
+	};
+	
+	var handlePrice = function (priceData) {
+	  _filter_params.price = priceData;
+	  _filter_title.price = priceData;
 	  FilterParamsStore.__emitChange();
 	};
 	
@@ -26608,7 +26617,8 @@
 /***/ function(module, exports) {
 
 	FilterConstants = {
-	  UPDATE_LOCATION: "UPDATE_LOCATION"
+	  UPDATE_LOCATION: "UPDATE_LOCATION",
+	  UPDATE_PRICE: "UPDATE_PRICE"
 	};
 	
 	module.exports = FilterConstants;
@@ -31818,7 +31828,7 @@
 	    EventSearch = __webpack_require__(255),
 	    EventIndex = __webpack_require__(256),
 	    FilterParamsStore = __webpack_require__(187),
-	    FilterActions = __webpack_require__(258),
+	    EventPageActions = __webpack_require__(273),
 	    Filter = __webpack_require__(259);
 	
 	function _getAllEvents() {
@@ -31853,7 +31863,7 @@
 	  _filtersChanged: function () {
 	    var newParams = _getFilterParams();
 	    this.setState({ filterParams: newParams });
-	    FilterActions.fetchEvents();
+	    EventPageActions.fetchEvents();
 	  },
 	
 	  _eventsChanged: function () {
@@ -31916,7 +31926,10 @@
 	  },
 	
 	  componentWillReceiveProps: function (newProps) {
-	    // debugger
+	    if (typeof this.map === 'undefined') {
+	      return;
+	    } //component receives props before geolocation
+	
 	    if (this.props.events !== newProps.events) {
 	      this._onChange(newProps.events);
 	    } else if (this.props.filterParams !== newProps.filterParams) {
@@ -31933,10 +31946,6 @@
 	  },
 	
 	  _onChange: function (events) {
-	    if (typeof this.map === 'undefined') {
-	      return;
-	    } //component receives first event props before geolocation
-	
 	    var currentMarkers = this.markers.slice(0);
 	    var eventsToAddMarkers = [];
 	
@@ -31956,9 +31965,6 @@
 	        currentMarkers.splice(index, 1);
 	      }
 	    });
-	
-	    //
-	    // var newCenter = eventsToAddMarkers[0]
 	
 	    eventsToAddMarkers.forEach(this.addMarker);
 	    currentMarkers.forEach(this.removeMarker);
@@ -32043,11 +32049,20 @@
 	  },
 	
 	  render: function () {
+	    // var title;
+	    //
+	    // for (var key in this.state.title) {
+	    //   var title =
+	    // }
+	    console.log(this.state.title);
+	
 	    return React.createElement(
 	      'div',
 	      null,
 	      'Events near ',
-	      this.state.title
+	      this.state.title.location,
+	      ' for $',
+	      this.state.title.price
 	    );
 	  }
 	
@@ -32186,8 +32201,11 @@
 	    });
 	  },
 	
-	  fetchEvents: function () {
-	    ApiUtil.fetchEvents();
+	  updatePrice: function (priceData) {
+	    AppDispatcher.dispatch({
+	      actionType: FilterConstants.UPDATE_PRICE,
+	      price: priceData
+	    });
 	  }
 	};
 	
@@ -32270,10 +32288,10 @@
 	
 	    this.autocomplete = new google.maps.places.Autocomplete(this.autoCompleteInput, { types: ['geocode'] });
 	    this.geocoder = new google.maps.Geocoder();
-	    this.autocomplete.addListener('place_changed', this.searchByLocation);
+	    this.autocomplete.addListener('place_changed', this.filterByLocation);
 	  },
 	
-	  searchByLocation: function () {
+	  filterByLocation: function () {
 	    var that = this;
 	    var place = this.autocomplete.getPlace();
 	    address = place.formatted_address;
@@ -32344,10 +32362,15 @@
 /* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
+	var React = __webpack_require__(1),
+	    FilterActions = __webpack_require__(258);
 	
 	var PriceFilter = React.createClass({
-	  displayName: "PriceFilter",
+	  displayName: 'PriceFilter',
+	
+	  filterByPrice: function (e) {
+	    FilterActions.updatePrice(e.target.id);
+	  },
 	
 	  render: function () {
 	    this.label = "Price";
@@ -32359,35 +32382,35 @@
 	    }
 	
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
+	        'div',
 	        { onClick: this.props.onClick },
 	        this.label
 	      ),
 	      React.createElement(
-	        "div",
-	        { id: "price-dropdown", className: hiddenClass },
+	        'div',
+	        { id: 'price-dropdown', className: hiddenClass },
 	        React.createElement(
-	          "div",
-	          null,
-	          "0 - 10"
+	          'div',
+	          { id: '10', onClick: this.filterByPrice },
+	          'Under 10'
 	        ),
 	        React.createElement(
-	          "div",
-	          null,
-	          "10 - 29"
+	          'div',
+	          { id: '30', onClick: this.filterByPrice },
+	          'Under 30'
 	        ),
 	        React.createElement(
-	          "div",
-	          null,
-	          "30 - 49"
+	          'div',
+	          { id: '50', onClick: this.filterByPrice },
+	          'Under 50'
 	        ),
 	        React.createElement(
-	          "div",
-	          null,
-	          "50 +"
+	          'div',
+	          { id: '51', onClick: this.filterByPrice },
+	          '50 +'
 	        )
 	      )
 	    );
@@ -33111,6 +33134,20 @@
 	};
 	
 	module.exports = ErrorStore;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(181);
+	
+	var EventPageActions = {
+	  fetchEvents: function () {
+	    ApiUtil.fetchEvents();
+	  }
+	};
+	
+	module.exports = EventPageActions;
 
 /***/ }
 /******/ ]);

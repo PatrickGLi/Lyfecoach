@@ -10,8 +10,11 @@ var FilterActions = {
     });
   },
 
-  fetchEvents: function() {
-    ApiUtil.fetchEvents();
+  updatePrice: function(priceData) {
+    AppDispatcher.dispatch({
+      actionType: FilterConstants.UPDATE_PRICE,
+      price: priceData
+    })
   }
 };
 

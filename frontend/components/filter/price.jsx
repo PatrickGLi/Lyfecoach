@@ -1,6 +1,11 @@
-var React = require('react');
+var React = require('react'),
+    FilterActions = require('../../actions/filter_actions');
 
 var PriceFilter = React.createClass({
+
+  filterByPrice: function(e) {
+    FilterActions.updatePrice(e.target.id);
+  },
 
   render: function() {
     this.label = "Price";
@@ -17,16 +22,16 @@ var PriceFilter = React.createClass({
           {this.label}
         </div>
         <div id="price-dropdown" className={hiddenClass}>
-          <div>
-            0 - 10
+          <div id="10" onClick={this.filterByPrice}>
+            Under 10
           </div>
-          <div>
-            10 - 29
+          <div id="30" onClick={this.filterByPrice}>
+            Under 30
           </div>
-          <div>
-            30 - 49
+          <div id="50" onClick={this.filterByPrice}>
+            Under 50
           </div>
-          <div>
+          <div id="51" onClick={this.filterByPrice}>
             50 +
           </div>
         </div>

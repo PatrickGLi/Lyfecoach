@@ -5,7 +5,7 @@ var React = require('react'),
     EventSearch = require('./search'),
     EventIndex = require('./index'),
     FilterParamsStore = require('../../stores/filter_params_store'),
-    FilterActions = require('../../actions/filter_actions'),
+    EventPageActions = require('../../actions/event_page_actions'),
     Filter = require('../filter/filter');
 
 function _getAllEvents() {
@@ -39,7 +39,7 @@ var EventPage = React.createClass({
   _filtersChanged: function () {
     var newParams = _getFilterParams();
     this.setState({ filterParams: newParams });
-    FilterActions.fetchEvents();
+    EventPageActions.fetchEvents();
   },
 
   _eventsChanged: function() {

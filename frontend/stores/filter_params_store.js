@@ -3,7 +3,7 @@ var Store = require('flux/utils').Store,
     FilterConstants = require('../constants/filter_constants');
 
 var _filter_params = {};
-var _filter_title = "you.";
+var _filter_title = { location: 'you.' };
 
 var FilterParamsStore = new Store(AppDispatcher);
 
@@ -12,11 +12,11 @@ FilterParamsStore.params = function() {
 };
 
 FilterParamsStore.getTitle = function() {
-  return _filter_title;
+  return Object.assign({}, _filter_title);
 };
 
 FilterParamsStore.resetTitle = function() {
-  _filter_title = "you.";
+  _filter_title = { location: 'you' };
 }
 
 FilterParamsStore.__onDispatch = function(payload) {
@@ -24,12 +24,21 @@ FilterParamsStore.__onDispatch = function(payload) {
     case FilterConstants.UPDATE_LOCATION:
       handleLocation(payload.location);
       break;
+    case FilterConstants.UPDATE_PRICE:
+      handlePrice(payload.price);
+      break;
   }
 };
 
 var handleLocation = function(locationData) {
   _filter_params.location = locationData;
-  _filter_title = locationData.address.split(',')[0];
+  _filter_title.location = locationData.address.split(',')[0];
+  FilterParamsStore.__emitChange();
+};
+
+var handlePrice = function(priceData) {
+  _filter_params.price = priceData;
+  _filter_title.price = priceData;
   FilterParamsStore.__emitChange();
 };
 

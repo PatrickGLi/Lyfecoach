@@ -13,10 +13,10 @@ var SearchFilter = React.createClass({
     this.autocomplete = new google.maps.places.Autocomplete(this.autoCompleteInput,
       {types: ['geocode']});
     this.geocoder = new google.maps.Geocoder();
-    this.autocomplete.addListener('place_changed', this.searchByLocation);
+    this.autocomplete.addListener('place_changed', this.filterByLocation);
   },
 
-  searchByLocation: function() {
+  filterByLocation: function() {
     var that = this;
     var place = this.autocomplete.getPlace();
         address = place.formatted_address;
