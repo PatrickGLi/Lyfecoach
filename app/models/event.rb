@@ -43,8 +43,13 @@ class Event < ActiveRecord::Base
   belongs_to :organizer,
   class_name: "User"
 
-  def self.in_bounds(bounds)
-    Event.where(lat: bounds[:westBound]..bounds[:eastBound],
-                lng: bounds[:southBound]..bounds[:northBound])
+  def self.near_location(location)
+    search_radius = 0.05
+
+    self.where("lat < ?", location[:nearLat] + search_radius)
+        .where("lat > ?", location[:nearLat] - search_radius)
+        .where("lng > ?", location[:nearLng] - search_radius)
+        .where("lng < ?", location[:nearLng] + search_radius)
   end
+
 end

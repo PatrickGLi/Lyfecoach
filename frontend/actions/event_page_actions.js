@@ -1,9 +1,9 @@
 var ApiUtil = require('../util/api_util');
 
-SearchActions = {
+EventPageActions = {
   fetchEvents: function() {
     ApiUtil.fetchEvents();
   },
 }
 
-module.exports = SearchActions;
+module.exports = EventPageActions;

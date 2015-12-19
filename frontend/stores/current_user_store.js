@@ -14,7 +14,7 @@ CurrentUserStore.__onDispatch = function(payload){
   switch (payload.actionType) {
     case NavBarActions.GET_CURRENT_USER:
       resetCurrentUser(payload.currentUser);
-    break;
+      break;
   }
 
   CurrentUserStore.__emitChange();

@@ -1,12 +1,8 @@
 class Api::EventsController < ApplicationController
   def index
     events = Event.all
-    # 
-    # if params[:nearLat] && params[:nearLng]
-    #   events = events.where()
-    # end
-    #
 
+    debugger
     @events = events
     render :index
   end
@@ -28,5 +24,9 @@ class Api::EventsController < ApplicationController
                                   :end_date, :end_time, :ticket_max,
                                   :description, :lat, :lng, :category,
                                   :url, :organizer_id)
+  end
+
+  def location
+    params[:location]
   end
 end

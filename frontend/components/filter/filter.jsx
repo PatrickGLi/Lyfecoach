@@ -1,6 +1,4 @@
 var React = require('react'),
-    ReactDOM = require('react-dom'),
-    _ = require('underscore-node'),
     DropdownActions = require('../../actions/dropdown_actions'),
     FilterParamsStore = require('../../stores/filter_params_store'),
     FilterActions = require('../../actions/filter_actions'),
@@ -24,60 +22,20 @@ var Filter = React.createClass({
   },
 
   componentDidMount: function() {
-    var autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
-
-    this.autocomplete = new google.maps.places.Autocomplete(autoCompleteInput,
-      {types: ['geocode']});
-    this.geocoder = new google.maps.Geocoder();
-    this.autocomplete.addListener('place_changed', this.searchByLocation);
-
-    this.token = DropdownStore.addListener(this._onChange);
+    this.dropdownStoreListener = DropdownStore.addListener(this._onChange);
+    this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
   },
 
   componentWillUnmount: function() {
-    this.token.remove();
+    this.dropdownStoreListener.remove();
+    this.filterListener.remove();
   },
 
-  searchByLocation: function() {
-    var that = this;
-    var place = this.autocomplete.getPlace();
-        address = place.formatted_address;
-        debugger
-    this.geocoder.geocode({ 'address' : address}, function(results, status) {
-      if (status === google.maps.GeocoderStatus.OK) {
-        var myLatLng = results[0].geometry.location;
-        this.lat = myLatLng.lat();
-        this.lng = myLatLng.lng();
-
-        FilterActions.fetchEventByLocation(locationData);
-      } else {
-        alert(status);
-      }
-    });
-  },
-
-  geolocate: function() {
-    var that = this;
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var geolocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        var circle = new google.maps.Circle({
-          center: geolocation,
-          radius: position.coords.accuracy
-        });
-
-        that.autocomplete.setBounds(circle.getBounds());
-      });
-    }
-  },
-
-  handleSubmit: function(event){
-      debugger
-    event.preventDefault();
-
+  _filtersChanged: function () {
+    debugger
+    var newParams = _getFilterParams();
+    this.setState({ filterParams: newParams });
+    FilterActions.fetchEvents();
   },
 
   handleClick: function(e) {
@@ -88,14 +46,10 @@ var Filter = React.createClass({
     this.setState({ shown: DropdownStore.fetch() });
   },
 
-  handleChange: function(e) {
-    this.setState({ location: e.target.value})
-  },
-
   render: function() {
     return (
       <div>
-        <SearchFilter filterParams={this.state.filterParams}/>
+        <SearchFilter/>
         <PriceFilter toggle={this.state.shown}
                      onClick={this.handleClick}
                      filterParams={this.state.filterParams}/><br/>

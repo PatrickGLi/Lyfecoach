@@ -5,7 +5,7 @@ var React = require('react'),
     EventSearch = require('./search'),
     EventIndex = require('./index'),
     Filter = require('../filter/filter'),
-    SearchActions = require('../../actions/search_actions');
+    EventPageActions = require('../../actions/event_page_actions');
 
 
 function _getAllEvents() {
@@ -21,7 +21,7 @@ var EventPage = React.createClass({
 
   componentDidMount: function() {
     this.eventsChanged = EventStore.addListener(this._eventsChanged);
-    SearchActions.fetchEvents();
+    EventPageActions.fetchEvents();
   },
 
   _eventsChanged: function() {
