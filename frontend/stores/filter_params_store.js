@@ -3,7 +3,7 @@ var Store = require('flux/utils').Store,
     FilterConstants = require('../constants/filter_constants');
 
 var _filter_params = {};
-var _filter_title = "All Events";
+var _filter_title = "you.";
 
 var FilterParamsStore = new Store(AppDispatcher);
 
@@ -15,22 +15,23 @@ FilterParamsStore.getTitle = function() {
   return _filter_title;
 };
 
+FilterParamsStore.resetTitle = function() {
+  _filter_title = "you.";
+}
+
 FilterParamsStore.__onDispatch = function(payload) {
   switch (payload.actionType) {
     case FilterConstants.UPDATE_LOCATION:
       handleLocation(payload.location);
       break;
   }
-  debugger
-//if i put filter paramsstore.emit change here,
-//why does it keep triggering that the filter changed?
 };
 
 var handleLocation = function(locationData) {
   _filter_params.location = locationData;
-  _filter_title = locationData.address;
+  _filter_title = locationData.address.split(',')[0];
   FilterParamsStore.__emitChange();
-}
+};
 
 
 

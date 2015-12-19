@@ -4,7 +4,7 @@ var PriceFilter = React.createClass({
 
   render: function() {
     this.label = "Price";
-    
+
     if (this.props.toggle === this.label) {
       var hiddenClass = "";
     } else {
@@ -17,7 +17,18 @@ var PriceFilter = React.createClass({
           {this.label}
         </div>
         <div id="price-dropdown" className={hiddenClass}>
-          Hiddenstuff
+          <div>
+            0 - 10
+          </div>
+          <div>
+            10 - 29
+          </div>
+          <div>
+            30 - 49
+          </div>
+          <div>
+            50 +
+          </div>
         </div>
       </div>
     );

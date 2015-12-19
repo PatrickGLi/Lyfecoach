@@ -45,11 +45,13 @@ class Event < ActiveRecord::Base
 
   def self.near_location(location)
     search_radius = 0.05
+    converted_lat = location[:nearLat].to_f
+    converted_lng = location[:nearLng].to_f
 
-    self.where("lat < ?", location[:nearLat] + search_radius)
-        .where("lat > ?", location[:nearLat] - search_radius)
-        .where("lng > ?", location[:nearLng] - search_radius)
-        .where("lng < ?", location[:nearLng] + search_radius)
+    self.where("lat < ?", converted_lat + search_radius)
+        .where("lat > ?", converted_lat - search_radius)
+        .where("lng > ?", converted_lng - search_radius)
+        .where("lng < ?", converted_lng + search_radius)
   end
 
 end

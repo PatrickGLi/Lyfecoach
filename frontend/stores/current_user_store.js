@@ -16,13 +16,12 @@ CurrentUserStore.__onDispatch = function(payload){
       resetCurrentUser(payload.currentUser);
       break;
   }
-
-  CurrentUserStore.__emitChange();
 };
 
 var resetCurrentUser = function(currentUser) {
   _currentUser = null;
   _currentUser = currentUser;
+  CurrentUserStore.__emitChange();
 };
 
 module.exports = CurrentUserStore;

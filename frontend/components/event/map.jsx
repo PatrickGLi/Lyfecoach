@@ -1,11 +1,12 @@
 var React = require('react'),
     EventStore = require('../../stores/event_store'),
-    ReactDOM = require('react-dom');
-    
+    ReactDOM = require('react-dom'),
+    FilterParamsStore = require('../../stores/filter_params_store'),
+    MapActions = require('../../actions/map_actions');
+
 var Map = React.createClass({
 
   componentDidMount: function() {
-    var that = this;
     this.markers = [];
     navigator.geolocation.getCurrentPosition(this.getMap);
   },
@@ -20,19 +21,28 @@ var Map = React.createClass({
    };
 
    this.map = new google.maps.Map(map, mapOptions);
-   this.mapLoaded();
+   this.props.events.forEach(this.addMarker);
+
+   var locationData = { nearLat: lat,
+                        nearLng: lng,
+                        address: "you." };
+                        
+   MapActions.updateLocation(locationData);
+   //when the map mounts, update location parameters and fetch
+   MapActions.fetchEvents();
   },
 
-  mapLoaded: function() {
-    this._onChange();
+  componentWillReceiveProps: function(newProps) {
+    this._onChange(newProps);
   },
 
-  componentWillReceiveProps: function() {
-    this._onChange();
-  },
+  _onChange: function(newProps) {
+    if (typeof this.map === 'undefined') {
+      return
+    } //component receives first event props before geolocation
 
-  _onChange: function() {
-    var events = this.props.events;
+    var events = newProps.events;
+
     var currentMarkers = this.markers.slice(0);
     var eventsToAddMarkers = [];
 
@@ -66,6 +76,8 @@ var Map = React.createClass({
       eventId: event.id,
       animation: null
     });
+
+    this.markers.push(marker);
   },
 
   removeMarker: function(marker) {

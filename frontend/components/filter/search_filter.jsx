@@ -8,9 +8,9 @@ var SearchFilter = React.createClass({
   },
 
   componentDidMount: function() {
-    var autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
+    this.autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
 
-    this.autocomplete = new google.maps.places.Autocomplete(autoCompleteInput,
+    this.autocomplete = new google.maps.places.Autocomplete(this.autoCompleteInput,
       {types: ['geocode']});
     this.geocoder = new google.maps.Geocoder();
     this.autocomplete.addListener('place_changed', this.searchByLocation);
@@ -41,6 +41,8 @@ var SearchFilter = React.createClass({
   },
 
   geolocate: function() {
+    this.autoCompleteInput.value="";
+    this.setState({ location: "" });
     var that = this;
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -65,10 +67,11 @@ var SearchFilter = React.createClass({
   render: function() {
     return(
       <div>
-        <input onChange={this.handleChange}
+        <input id="test"
+          onChange={this.handleChange}
           ref="autocomplete"
           placeholder="X"
-          onFocus={this.geolocate}
+          onClick={this.geolocate}
           type="text">
         </input>
       </div>

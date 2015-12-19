@@ -23,10 +23,14 @@ var resetEvents = function(events){
   events.forEach(function(event) {
     _events[event.id] = event;
   });
+
+  EventStore.__emitChange();
 };
 
 var resetSingleEvent = function(event) {
   _events[event.id] = event;
+
+  EventStore.__emitChange();
 };
 
 EventStore.__onDispatch = function(payload) {
@@ -38,8 +42,6 @@ EventStore.__onDispatch = function(payload) {
       resetSingleEvent(payload.event);
       break;
   }
-
-  EventStore.__emitChange();
 };
 
 module.exports = EventStore
