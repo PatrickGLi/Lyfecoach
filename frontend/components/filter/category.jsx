@@ -1,11 +1,17 @@
-var React = require('react');
+var React = require('react'),
+    FilterActions = require('../../actions/filter_actions'),
+    DropdownConstants = require('../../constants/dropdown_constants');
 
 var CategoryFilter = React.createClass({
+
+  filterByCategory: function(e) {
+    FilterActions.updateCategory(e.target.innerText);
+  },
 
   render: function() {
     this.label = "Category";
 
-    if (this.props.toggle === this.label) {
+    if (this.props.toggle === DropdownConstants.CATEGORY) {
       var hiddenClass = "";
     } else {
       var hiddenClass = "hidden-dropdown";
@@ -14,22 +20,22 @@ var CategoryFilter = React.createClass({
     return (
       <div>
         <div onClick={this.props.onClick}>
-          {this.label}
+          {DropdownConstants.CATEGORY}
         </div>
         <div id="category-dropdown" className={hiddenClass}>
-          <div>
+          <div onClick={this.filterByCategory}>
             Cuisine
           </div>
-          <div>
+          <div onClick={this.filterByCategory}>
             Arts
           </div>
-          <div>
+          <div onClick={this.filterByCategory}>
             Music
           </div>
-          <div>
+          <div onClick={this.filterByCategory}>
             Nightlife
           </div>
-          <div>
+          <div onClick={this.filterByCategory}>
             Sports & Fitness
           </div>
         </div>

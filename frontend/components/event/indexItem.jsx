@@ -5,6 +5,9 @@ var React = require('react'),
 var IndexItem = React.createClass({
 
   render: function() {
+    var startDate = new Date(this.props.event.start_date).toString()
+    var endDate = new Date(this.props.event.end_date).toString()
+
     return(
       <div className="col-xs-4 test">
         <img onClick={this.props.onClick}
@@ -14,9 +17,10 @@ var IndexItem = React.createClass({
         </img>
         <div>{this.props.event.title}</div>
         <div>Location: {this.props.event.location}</div>
-        <div>Start Time: {this.props.event.start_date} {this.props.event.start_time}</div>
-        <div>End Time: {this.props.event.end_date} {this.props.event.end_time}</div>
+        <div>Start Time: {startDate} {this.props.event.start_time}</div>
+        <div>End Time: {endDate} {this.props.event.end_time}</div>
         <div>${this.props.event.price} Hosted by: {this.props.event.organizer}</div>
+        <div>{this.props.event.category}</div>
       </div>
     );
 

@@ -26568,7 +26568,9 @@
 
 	var Store = __webpack_require__(160).Store,
 	    AppDispatcher = __webpack_require__(177),
-	    FilterConstants = __webpack_require__(188);
+	    FilterConstants = __webpack_require__(188),
+	    DropdownConstants = __webpack_require__(245),
+	    DateConstants = __webpack_require__(274);
 	
 	var _filter_params = {};
 	var _filter_title = { location: 'you.' };
@@ -26583,7 +26585,8 @@
 	  return Object.assign({}, _filter_title);
 	};
 	
-	FilterParamsStore.resetTitle = function () {
+	FilterParamsStore.resetFilters = function () {
+	  _filter_params = {};
 	  _filter_title = { location: 'you' };
 	};
 	
@@ -26594,6 +26597,12 @@
 	      break;
 	    case FilterConstants.UPDATE_PRICE:
 	      handlePrice(payload.price);
+	      break;
+	    case FilterConstants.UPDATE_CATEGORY:
+	      handleCategory(payload.category);
+	      break;
+	    case FilterConstants.UPDATE_DATE:
+	      handleDate(payload.date);
 	      break;
 	  }
 	};
@@ -26610,6 +26619,33 @@
 	  FilterParamsStore.__emitChange();
 	};
 	
+	var handleCategory = function (categoryData) {
+	  _filter_params.category = categoryData;
+	  _filter_title.category = categoryData;
+	  FilterParamsStore.__emitChange();
+	};
+	
+	var handleDate = function (dateData) {
+	  var currentTime = new Date().getTime();
+	  var newDate;
+	
+	  switch (dateData) {
+	    case DateConstants.THIS_WEEK:
+	      newDate = currentTime + 6.048 * Math.pow(10, 8);
+	      break;
+	    case DateConstants.THIS_MONTH:
+	      newDate = currentTime + 2.628 * Math.pow(10, 9);
+	      break;
+	    case DateConstants.THIS_YEAR:
+	      newDate = currentTime + 3.154 * Math.pow(10, 10);
+	      break;
+	  }
+	
+	  _filter_params.date = newDate;
+	  _filter_title.date = newDate;
+	  FilterParamsStore.__emitChange();
+	};
+	
 	module.exports = FilterParamsStore;
 
 /***/ },
@@ -26618,7 +26654,9 @@
 
 	FilterConstants = {
 	  UPDATE_LOCATION: "UPDATE_LOCATION",
-	  UPDATE_PRICE: "UPDATE_PRICE"
+	  UPDATE_PRICE: "UPDATE_PRICE",
+	  UPDATE_CATEGORY: "UPDATE_CATEGORY",
+	  UPDATE_DATE: "UPDATE_DATE"
 	};
 	
 	module.exports = FilterConstants;
@@ -31462,7 +31500,7 @@
 	  },
 	
 	  handleClick: function (e) {
-	    DropdownActions.showDropdown(e.target.innerHTML);
+	    DropdownActions.showDropdown(e.target.innerText);
 	  },
 	
 	  render: function () {
@@ -31587,7 +31625,11 @@
 /***/ function(module, exports) {
 
 	DropdownConstants = {
-	  DROPDOWN_CLICKED: "DROPDOWN_CLICKED"
+	  DROPDOWN_CLICKED: "DROPDOWN_CLICKED",
+	  PRICE: "Price",
+	  CATEGORY: "Category",
+	  DATE: "Date",
+	  HELP: "Help"
 	};
 	
 	module.exports = DropdownConstants;
@@ -31687,33 +31729,32 @@
 /* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
+	var React = __webpack_require__(1),
+	    DropdownConstants = __webpack_require__(245);
 	
 	var HelpDropdown = React.createClass({
-	  displayName: "HelpDropdown",
+	  displayName: 'HelpDropdown',
 	
 	  render: function () {
-	    this.label = "Help";
-	
-	    if (this.props.toggle === this.label) {
+	    if (this.props.toggle === DropdownConstants.HELP) {
 	      var hiddenClass = "";
 	    } else {
 	      var hiddenClass = "hidden-dropdown";
 	    }
 	
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
+	        'div',
 	        { onClick: this.props.onClick,
-	          className: "nav-links" },
-	        this.label
+	          className: 'nav-links' },
+	        DropdownConstants.HELP
 	      ),
 	      React.createElement(
-	        "div",
+	        'div',
 	        { className: hiddenClass },
-	        "Hiddenstuff"
+	        'Hiddenstuff'
 	      )
 	    );
 	  }
@@ -31857,7 +31898,7 @@
 	  componentWillUnmount: function () {
 	    this.eventsChanged.remove();
 	    this.filterListener.remove();
-	    FilterParamsStore.resetTitle();
+	    FilterParamsStore.resetFilters();
 	  },
 	
 	  _filtersChanged: function () {
@@ -32136,6 +32177,9 @@
 	  displayName: 'IndexItem',
 	
 	  render: function () {
+	    var startDate = new Date(this.props.event.start_date).toString();
+	    var endDate = new Date(this.props.event.end_date).toString();
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'col-xs-4 test' },
@@ -32158,7 +32202,7 @@
 	        'div',
 	        null,
 	        'Start Time: ',
-	        this.props.event.start_date,
+	        startDate,
 	        ' ',
 	        this.props.event.start_time
 	      ),
@@ -32166,7 +32210,7 @@
 	        'div',
 	        null,
 	        'End Time: ',
-	        this.props.event.end_date,
+	        endDate,
 	        ' ',
 	        this.props.event.end_time
 	      ),
@@ -32177,6 +32221,11 @@
 	        this.props.event.price,
 	        ' Hosted by: ',
 	        this.props.event.organizer
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        this.props.event.category
 	      )
 	    );
 	  }
@@ -32205,6 +32254,20 @@
 	    AppDispatcher.dispatch({
 	      actionType: FilterConstants.UPDATE_PRICE,
 	      price: priceData
+	    });
+	  },
+	
+	  updateCategory: function (categoryData) {
+	    AppDispatcher.dispatch({
+	      actionType: FilterConstants.UPDATE_CATEGORY,
+	      category: categoryData
+	    });
+	  },
+	
+	  updateDate: function (dateData) {
+	    AppDispatcher.dispatch({
+	      actionType: FilterConstants.UPDATE_DATE,
+	      date: dateData
 	    });
 	  }
 	};
@@ -32239,7 +32302,7 @@
 	  },
 	
 	  handleClick: function (e) {
-	    DropdownActions.showDropdown(e.target.innerHTML);
+	    DropdownActions.showDropdown(e.target.innerText);
 	  },
 	
 	  _onChange: function () {
@@ -32363,7 +32426,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    FilterActions = __webpack_require__(258);
+	    FilterActions = __webpack_require__(258),
+	    DropdownConstants = __webpack_require__(245);
 	
 	var PriceFilter = React.createClass({
 	  displayName: 'PriceFilter',
@@ -32373,9 +32437,7 @@
 	  },
 	
 	  render: function () {
-	    this.label = "Price";
-	
-	    if (this.props.toggle === this.label) {
+	    if (this.props.toggle === DropdownConstants.PRICE) {
 	      var hiddenClass = "";
 	    } else {
 	      var hiddenClass = "hidden-dropdown";
@@ -32387,7 +32449,7 @@
 	      React.createElement(
 	        'div',
 	        { onClick: this.props.onClick },
-	        this.label
+	        DropdownConstants.PRICE
 	      ),
 	      React.createElement(
 	        'div',
@@ -32424,55 +32486,61 @@
 /* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
+	var React = __webpack_require__(1),
+	    FilterActions = __webpack_require__(258),
+	    DropdownConstants = __webpack_require__(245);
 	
 	var CategoryFilter = React.createClass({
-	  displayName: "CategoryFilter",
+	  displayName: 'CategoryFilter',
+	
+	  filterByCategory: function (e) {
+	    FilterActions.updateCategory(e.target.innerText);
+	  },
 	
 	  render: function () {
 	    this.label = "Category";
 	
-	    if (this.props.toggle === this.label) {
+	    if (this.props.toggle === DropdownConstants.CATEGORY) {
 	      var hiddenClass = "";
 	    } else {
 	      var hiddenClass = "hidden-dropdown";
 	    }
 	
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
+	        'div',
 	        { onClick: this.props.onClick },
-	        this.label
+	        DropdownConstants.CATEGORY
 	      ),
 	      React.createElement(
-	        "div",
-	        { id: "category-dropdown", className: hiddenClass },
+	        'div',
+	        { id: 'category-dropdown', className: hiddenClass },
 	        React.createElement(
-	          "div",
-	          null,
-	          "Cuisine"
+	          'div',
+	          { onClick: this.filterByCategory },
+	          'Cuisine'
 	        ),
 	        React.createElement(
-	          "div",
-	          null,
-	          "Arts"
+	          'div',
+	          { onClick: this.filterByCategory },
+	          'Arts'
 	        ),
 	        React.createElement(
-	          "div",
-	          null,
-	          "Music"
+	          'div',
+	          { onClick: this.filterByCategory },
+	          'Music'
 	        ),
 	        React.createElement(
-	          "div",
-	          null,
-	          "Nightlife"
+	          'div',
+	          { onClick: this.filterByCategory },
+	          'Nightlife'
 	        ),
 	        React.createElement(
-	          "div",
-	          null,
-	          "Sports & Fitness"
+	          'div',
+	          { onClick: this.filterByCategory },
+	          'Sports & Fitness'
 	        )
 	      )
 	    );
@@ -32486,45 +32554,50 @@
 /* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
+	var React = __webpack_require__(1),
+	    FilterActions = __webpack_require__(258),
+	    DropdownConstants = __webpack_require__(245),
+	    DateConstants = __webpack_require__(274);
 	
 	var DateFilter = React.createClass({
-	  displayName: "DateFilter",
+	  displayName: 'DateFilter',
+	
+	  filterByDate: function (e) {
+	    FilterActions.updateDate(e.target.innerText);
+	  },
 	
 	  render: function () {
-	    this.label = "Date";
-	
-	    if (this.props.toggle === this.label) {
+	    if (this.props.toggle === DropdownConstants.DATE) {
 	      var hiddenClass = "";
 	    } else {
 	      var hiddenClass = "hidden-dropdown";
 	    }
 	
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
+	        'div',
 	        { onClick: this.props.onClick },
-	        this.label
+	        DropdownConstants.DATE
 	      ),
 	      React.createElement(
-	        "div",
-	        { id: "date-dropdown", className: hiddenClass },
+	        'div',
+	        { id: 'date-dropdown', className: hiddenClass },
 	        React.createElement(
-	          "div",
-	          null,
-	          "This Week"
+	          'div',
+	          { onClick: this.filterByDate },
+	          DateConstants.THIS_WEEK
 	        ),
 	        React.createElement(
-	          "div",
-	          null,
-	          "This Month"
+	          'div',
+	          { onClick: this.filterByDate },
+	          DateConstants.THIS_MONTH
 	        ),
 	        React.createElement(
-	          "div",
-	          null,
-	          "This Year"
+	          'div',
+	          { onClick: this.filterByDate },
+	          DateConstants.THIS_YEAR
 	        )
 	      )
 	    );
@@ -33148,6 +33221,18 @@
 	};
 	
 	module.exports = EventPageActions;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports) {
+
+	var DateConstants = {
+	  THIS_WEEK: "This Week",
+	  THIS_MONTH: "This Month",
+	  THIS_YEAR: "This Year"
+	};
+	
+	module.exports = DateConstants;
 
 /***/ }
 /******/ ]);

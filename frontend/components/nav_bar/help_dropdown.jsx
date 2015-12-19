@@ -1,11 +1,10 @@
-var React = require('react');
+var React = require('react'),
+    DropdownConstants = require('../../constants/dropdown_constants');
 
 var HelpDropdown = React.createClass({
 
   render: function() {
-    this.label = "Help";
-
-    if (this.props.toggle === this.label) {
+    if (this.props.toggle === DropdownConstants.HELP) {
       var hiddenClass = "";
     } else {
       var hiddenClass = "hidden-dropdown";
@@ -14,7 +13,7 @@ var HelpDropdown = React.createClass({
     return(
       <div>
         <div onClick={this.props.onClick}
-             className="nav-links">{this.label}
+             className="nav-links">{DropdownConstants.HELP}
         </div>
         <div className={hiddenClass}>
           Hiddenstuff

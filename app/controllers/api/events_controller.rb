@@ -10,6 +10,14 @@ class Api::EventsController < ApplicationController
       events = events.where("price < ?", price)
     end
 
+    if category
+      events = events.where("category = ?", category)
+    end
+
+    if date
+      events = events.where("start_date < ?", date)
+    end
+
     @events = events
     render :index
   end
@@ -39,5 +47,13 @@ class Api::EventsController < ApplicationController
 
   def price
     params[:price]
+  end
+
+  def category
+    params[:category]
+  end
+
+  def date
+    params[:date]
   end
 end
