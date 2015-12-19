@@ -44,7 +44,7 @@ class Event < ActiveRecord::Base
   class_name: "User"
 
   def self.near_location(location)
-    search_radius = 0.05
+    search_radius = 0.03
     converted_lat = location[:nearLat].to_f
     converted_lng = location[:nearLng].to_f
 

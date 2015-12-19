@@ -34,7 +34,10 @@ var Map = React.createClass({
   },
 
   componentWillReceiveProps: function(newProps) {
-    // debugger
+    if (typeof this.map === 'undefined') {
+      return
+    } //component receives props before geolocation
+
     if (this.props.events !== newProps.events) {
       this._onChange(newProps.events);
     } else if (this.props.filterParams !== newProps.filterParams) {
@@ -52,10 +55,6 @@ var Map = React.createClass({
   },
 
   _onChange: function(events) {
-    if (typeof this.map === 'undefined') {
-      return
-    } //component receives first event props before geolocation
-
     var currentMarkers = this.markers.slice(0);
     var eventsToAddMarkers = [];
 
@@ -75,11 +74,6 @@ var Map = React.createClass({
         currentMarkers.splice(index, 1);
       }
     });
-
-
-    //
-    // var newCenter = eventsToAddMarkers[0]
-
 
     eventsToAddMarkers.forEach(this.addMarker);
     currentMarkers.forEach(this.removeMarker);
@@ -113,7 +107,6 @@ var Map = React.createClass({
       <div className="map" ref="map"></div>
     );
   }
-
 
 });
 

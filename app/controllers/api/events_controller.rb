@@ -6,6 +6,10 @@ class Api::EventsController < ApplicationController
       events = Event.near_location(location)
     end
 
+    if price
+      events = events.where("price < ?", price)
+    end
+
     @events = events
     render :index
   end
@@ -31,5 +35,9 @@ class Api::EventsController < ApplicationController
 
   def location
     params[:location]
+  end
+
+  def price
+    params[:price]
   end
 end
