@@ -20,28 +20,41 @@ var Map = React.createClass({
      zoom: 13
    };
 
+   console.log("set center");
    this.map = new google.maps.Map(map, mapOptions);
    this.props.events.forEach(this.addMarker);
 
    var locationData = { nearLat: lat,
                         nearLng: lng,
                         address: "you." };
-                        
+
    MapActions.updateLocation(locationData);
    //when the map mounts, update location parameters and fetch
    MapActions.fetchEvents();
   },
 
   componentWillReceiveProps: function(newProps) {
-    this._onChange(newProps);
+    // debugger
+    if (this.props.events !== newProps.events) {
+      this._onChange(newProps.events);
+    } else if (this.props.filterParams !== newProps.filterParams) {
+      this.setMapCenter(newProps.filterParams)
+    }
   },
 
-  _onChange: function(newProps) {
+  setMapCenter: function(filterParams) {
+    if (this.map.center.lat() !== filterParams.location.nearLat
+     && this.map.center.lng() !== filterParams.location.nearLng) {
+       this.map.setCenter({ lat: filterParams.location.nearLat,
+                            lng: filterParams.location.nearLng,
+                         });
+     }
+  },
+
+  _onChange: function(events) {
     if (typeof this.map === 'undefined') {
       return
     } //component receives first event props before geolocation
-
-    var events = newProps.events;
 
     var currentMarkers = this.markers.slice(0);
     var eventsToAddMarkers = [];
@@ -62,6 +75,11 @@ var Map = React.createClass({
         currentMarkers.splice(index, 1);
       }
     });
+
+
+    //
+    // var newCenter = eventsToAddMarkers[0]
+
 
     eventsToAddMarkers.forEach(this.addMarker);
     currentMarkers.forEach(this.removeMarker);

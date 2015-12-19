@@ -27,12 +27,13 @@ var EventPage = React.createClass({
   componentDidMount: function() {
     this.eventsChanged = EventStore.addListener(this._eventsChanged);
     this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
-    FilterParamsStore.resetTitle();
+
   },
 
   componentWillUnmount: function() {
     this.eventsChanged.remove();
     this.filterListener.remove();
+    FilterParamsStore.resetTitle();
   },
 
   _filtersChanged: function () {
@@ -48,7 +49,7 @@ var EventPage = React.createClass({
   render: function() {
     return (
             <div>
-              <Map events={this.state.events}/>
+              <Map events={this.state.events} filterParams={this.state.filterParams}/>
               <EventTitle/>
               <Filter filterParams={this.state.filterParams}/>
               <EventSearch/>
