@@ -4,32 +4,45 @@ var React = require('react'),
     EventTitle = require('./title'),
     EventSearch = require('./search'),
     EventIndex = require('./index'),
-    Filter = require('../filter/filter'),
-    EventPageActions = require('../../actions/event_page_actions');
-
+    FilterParamsStore = require('../../stores/filter_params_store'),
+    FilterActions = require('../../actions/filter_actions'),
+    Filter = require('../filter/filter');
 
 function _getAllEvents() {
   return EventStore.all();
 }
 
+function _getFilterParams() {
+  return FilterParamsStore.params();
+}
+
 var EventPage = React.createClass({
   getInitialState: function() {
     return({
-      events: _getAllEvents()
+      events: _getAllEvents(),
+      filterParams: _getFilterParams()
     });
   },
 
   componentDidMount: function() {
     this.eventsChanged = EventStore.addListener(this._eventsChanged);
-    EventPageActions.fetchEvents();
-  },
-
-  _eventsChanged: function() {
-    this.setState({ events: _getAllEvents() });
+    this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
+    FilterParamsStore.resetTitle();
   },
 
   componentWillUnmount: function() {
     this.eventsChanged.remove();
+    this.filterListener.remove();
+  },
+
+  _filtersChanged: function () {
+    var newParams = _getFilterParams();
+    this.setState({ filterParams: newParams });
+    FilterActions.fetchEvents();
+  },
+
+  _eventsChanged: function() {
+    this.setState({ events: _getAllEvents() });
   },
 
   render: function() {
@@ -37,7 +50,7 @@ var EventPage = React.createClass({
             <div>
               <Map events={this.state.events}/>
               <EventTitle/>
-              <Filter/>
+              <Filter filterParams={this.state.filterParams}/>
               <EventSearch/>
               <EventIndex events={this.state.events} history={this.props.history}/>
             </div>

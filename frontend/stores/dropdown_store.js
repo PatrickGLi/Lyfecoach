@@ -13,7 +13,6 @@ DropdownStore.__onDispatch = function(payload) {
       break;
   }
 
-  DropdownStore.__emitChange();
 };
 
 DropdownStore.fetch = function() {
@@ -26,6 +25,8 @@ function updateDropdown (labelClicked) {
   } else {
     _shownDropdown = labelClicked;
   }
+
+  DropdownStore.__emitChange();
 }
 
 module.exports = DropdownStore;

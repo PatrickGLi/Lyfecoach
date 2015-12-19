@@ -16,7 +16,7 @@ var AppDispatcher = require('../dispatcher/dispatcher'),
           break;
       }
 
-      ErrorStore.__emitChange();
+
     };
 
     function handleError (data) {
@@ -25,6 +25,8 @@ var AppDispatcher = require('../dispatcher/dispatcher'),
 
     ErrorStore.resetError = function() {
       return _error = null;
+
+      ErrorStore.__emitChange();
     }
 
 

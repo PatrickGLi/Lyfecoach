@@ -20,7 +20,7 @@ var Title = React.createClass({
 
   render: function() {
     return (
-      <div>{this.state.title} This is the title.</div>
+      <div>Events near {this.state.title}</div>
     );
   }
 

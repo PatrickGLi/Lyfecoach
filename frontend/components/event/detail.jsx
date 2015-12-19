@@ -7,8 +7,8 @@ var Detail = React.createClass({
     return ({ event: this.getStateFromStore() });
   },
 
-  showEventDetail: function() {
-    this.setState({ event: this.getStateFromStore() });
+  getStateFromStore: function() {
+    return EventStore.find(parseInt(this.props.params.eventId));
   },
 
   componentDidMount: function() {
@@ -16,16 +16,12 @@ var Detail = React.createClass({
     DetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
   },
 
-  componentWillReceiveProps: function() {
-    DetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
-  },
-
   componentWillUnmount: function() {
     this.token.remove();
   },
 
-  getStateFromStore: function() {
-    return EventStore.find(parseInt(this.props.params.eventId));
+  showEventDetail: function() {
+    this.setState({ event: this.getStateFromStore() });
   },
 
   render: function() {

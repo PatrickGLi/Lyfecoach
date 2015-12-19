@@ -5,7 +5,6 @@ var ApiActions = require('../actions/api_actions'),
 var ApiUtil = {
   fetchEvents: function(){
     var filter = FilterParamsStore.params();
-    debugger
 
     $.get('api/events', filter, function(eventsData) {
       ApiActions.receiveAll(eventsData);

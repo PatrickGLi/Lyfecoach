@@ -19690,10 +19690,14 @@
 	  events.forEach(function (event) {
 	    _events[event.id] = event;
 	  });
+	
+	  EventStore.__emitChange();
 	};
 	
 	var resetSingleEvent = function (event) {
 	  _events[event.id] = event;
+	
+	  EventStore.__emitChange();
 	};
 	
 	EventStore.__onDispatch = function (payload) {
@@ -19705,8 +19709,6 @@
 	      resetSingleEvent(payload.event);
 	      break;
 	  }
-	
-	  EventStore.__emitChange();
 	};
 	
 	module.exports = EventStore;
@@ -26415,7 +26417,6 @@
 	var ApiUtil = {
 	  fetchEvents: function () {
 	    var filter = FilterParamsStore.params();
-	    debugger;
 	
 	    $.get('api/events', filter, function (eventsData) {
 	      ApiActions.receiveAll(eventsData);
@@ -31492,13 +31493,12 @@
 	      resetCurrentUser(payload.currentUser);
 	      break;
 	  }
-	
-	  CurrentUserStore.__emitChange();
 	};
 	
 	var resetCurrentUser = function (currentUser) {
 	  _currentUser = null;
 	  _currentUser = currentUser;
+	  CurrentUserStore.__emitChange();
 	};
 	
 	module.exports = CurrentUserStore;
@@ -31549,8 +31549,6 @@
 	      updateDropdown(payload.dropdownLabel);
 	      break;
 	  }
-	
-	  DropdownStore.__emitChange();
 	};
 	
 	DropdownStore.fetch = function () {
@@ -31563,6 +31561,8 @@
 	  } else {
 	    _shownDropdown = labelClicked;
 	  }
+	
+	  DropdownStore.__emitChange();
 	}
 	
 	module.exports = DropdownStore;
@@ -31766,11 +31766,16 @@
 	    EventTitle = __webpack_require__(252),
 	    EventSearch = __webpack_require__(253),
 	    EventIndex = __webpack_require__(254),
-	    Filter = __webpack_require__(256),
-	    EventPageActions = __webpack_require__(275);
+	    FilterParamsStore = __webpack_require__(273),
+	    FilterActions = __webpack_require__(258),
+	    Filter = __webpack_require__(256);
 	
 	function _getAllEvents() {
 	  return EventStore.all();
+	}
+	
+	function _getFilterParams() {
+	  return FilterParamsStore.params();
 	}
 	
 	var EventPage = React.createClass({
@@ -31778,21 +31783,30 @@
 	
 	  getInitialState: function () {
 	    return {
-	      events: _getAllEvents()
+	      events: _getAllEvents(),
+	      filterParams: _getFilterParams()
 	    };
 	  },
 	
 	  componentDidMount: function () {
 	    this.eventsChanged = EventStore.addListener(this._eventsChanged);
-	    EventPageActions.fetchEvents();
-	  },
-	
-	  _eventsChanged: function () {
-	    this.setState({ events: _getAllEvents() });
+	    this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
+	    FilterParamsStore.resetTitle();
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.eventsChanged.remove();
+	    this.filterListener.remove();
+	  },
+	
+	  _filtersChanged: function () {
+	    var newParams = _getFilterParams();
+	    this.setState({ filterParams: newParams });
+	    FilterActions.fetchEvents();
+	  },
+	
+	  _eventsChanged: function () {
+	    this.setState({ events: _getAllEvents() });
 	  },
 	
 	  render: function () {
@@ -31801,7 +31815,7 @@
 	      null,
 	      React.createElement(Map, { events: this.state.events }),
 	      React.createElement(EventTitle, null),
-	      React.createElement(Filter, null),
+	      React.createElement(Filter, { filterParams: this.state.filterParams }),
 	      React.createElement(EventSearch, null),
 	      React.createElement(EventIndex, { events: this.state.events, history: this.props.history })
 	    );
@@ -31816,13 +31830,14 @@
 
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
-	    ReactDOM = __webpack_require__(158);
+	    ReactDOM = __webpack_require__(158),
+	    FilterParamsStore = __webpack_require__(273),
+	    MapActions = __webpack_require__(276);
 	
 	var Map = React.createClass({
 	  displayName: 'Map',
 	
 	  componentDidMount: function () {
-	    var that = this;
 	    this.markers = [];
 	    navigator.geolocation.getCurrentPosition(this.getMap);
 	  },
@@ -31837,19 +31852,28 @@
 	    };
 	
 	    this.map = new google.maps.Map(map, mapOptions);
-	    this.mapLoaded();
+	    this.props.events.forEach(this.addMarker);
+	
+	    var locationData = { nearLat: lat,
+	      nearLng: lng,
+	      address: "you." };
+	
+	    MapActions.updateLocation(locationData);
+	    //when the map mounts, update location parameters and fetch
+	    MapActions.fetchEvents();
 	  },
 	
-	  mapLoaded: function () {
-	    this._onChange();
+	  componentWillReceiveProps: function (newProps) {
+	    this._onChange(newProps);
 	  },
 	
-	  componentWillReceiveProps: function () {
-	    this._onChange();
-	  },
+	  _onChange: function (newProps) {
+	    if (typeof this.map === 'undefined') {
+	      return;
+	    } //component receives first event props before geolocation
 	
-	  _onChange: function () {
-	    var events = this.props.events;
+	    var events = newProps.events;
+	
 	    var currentMarkers = this.markers.slice(0);
 	    var eventsToAddMarkers = [];
 	
@@ -31883,6 +31907,8 @@
 	      eventId: event.id,
 	      animation: null
 	    });
+	
+	    this.markers.push(marker);
 	  },
 	
 	  removeMarker: function (marker) {
@@ -31934,8 +31960,8 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      this.state.title,
-	      ' This is the title.'
+	      'Events near ',
+	      this.state.title
 	    );
 	  }
 	
@@ -32064,44 +32090,25 @@
 
 	var React = __webpack_require__(1),
 	    DropdownActions = __webpack_require__(242),
-	    FilterParamsStore = __webpack_require__(273),
-	    FilterActions = __webpack_require__(258),
 	    DropdownStore = __webpack_require__(244),
 	    SearchFilter = __webpack_require__(272),
 	    PriceFilter = __webpack_require__(259),
 	    CategoryFilter = __webpack_require__(260),
-	    EventTypeFilter = __webpack_require__(261),
 	    DateFilter = __webpack_require__(262);
-	
-	function _getFilterParams() {
-	  return FilterParamsStore.params();
-	}
 	
 	var Filter = React.createClass({
 	  displayName: 'Filter',
 	
 	  getInitialState: function () {
-	    return {
-	      shown: "",
-	      filterParams: _getFilterParams()
-	    };
+	    return { shown: "" };
 	  },
 	
 	  componentDidMount: function () {
 	    this.dropdownStoreListener = DropdownStore.addListener(this._onChange);
-	    this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.dropdownStoreListener.remove();
-	    this.filterListener.remove();
-	  },
-	
-	  _filtersChanged: function () {
-	    debugger;
-	    var newParams = _getFilterParams();
-	    this.setState({ filterParams: newParams });
-	    FilterActions.fetchEvents();
 	  },
 	
 	  handleClick: function (e) {
@@ -32119,19 +32126,15 @@
 	      React.createElement(SearchFilter, null),
 	      React.createElement(PriceFilter, { toggle: this.state.shown,
 	        onClick: this.handleClick,
-	        filterParams: this.state.filterParams }),
+	        filterParams: this.props.filterParams }),
 	      React.createElement('br', null),
 	      React.createElement(CategoryFilter, { toggle: this.state.shown,
 	        onClick: this.handleClick,
-	        filterParams: this.state.filterParams }),
-	      React.createElement('br', null),
-	      React.createElement(EventTypeFilter, { toggle: this.state.shown,
-	        onClick: this.handleClick,
-	        filterParams: this.state.filterParams }),
+	        filterParams: this.props.filterParams }),
 	      React.createElement('br', null),
 	      React.createElement(DateFilter, { toggle: this.state.shown,
 	        onClick: this.handleClick,
-	        filterParams: this.state.filterParams })
+	        filterParams: this.props.filterParams })
 	    );
 	  }
 	});
@@ -32191,7 +32194,26 @@
 	      React.createElement(
 	        "div",
 	        { id: "price-dropdown", className: hiddenClass },
-	        "Hiddenstuff"
+	        React.createElement(
+	          "div",
+	          null,
+	          "0 - 10"
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          "10 - 29"
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          "30 - 49"
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          "50 +"
+	        )
 	      )
 	    );
 	  }
@@ -32229,7 +32251,31 @@
 	      React.createElement(
 	        "div",
 	        { id: "category-dropdown", className: hiddenClass },
-	        "Hiddenstuff"
+	        React.createElement(
+	          "div",
+	          null,
+	          "Cuisine"
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          "Arts"
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          "Music"
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          "Nightlife"
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          "Sports & Fitness"
+	        )
 	      )
 	    );
 	  }
@@ -32239,44 +32285,7 @@
 	module.exports = CategoryFilter;
 
 /***/ },
-/* 261 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var EventTypeFilter = React.createClass({
-	  displayName: "EventTypeFilter",
-	
-	  render: function () {
-	    this.label = "Event Type";
-	
-	    if (this.props.toggle === this.label) {
-	      var hiddenClass = "";
-	    } else {
-	      var hiddenClass = "hidden-dropdown";
-	    }
-	
-	    return React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "div",
-	        { onClick: this.props.onClick },
-	        this.label
-	      ),
-	      React.createElement(
-	        "div",
-	        { id: "event-type-dropdown", className: hiddenClass },
-	        "Hiddenstuff"
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = EventTypeFilter;
-
-/***/ },
+/* 261 */,
 /* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32305,7 +32314,21 @@
 	      React.createElement(
 	        "div",
 	        { id: "date-dropdown", className: hiddenClass },
-	        "Hiddenstuff"
+	        React.createElement(
+	          "div",
+	          null,
+	          "This Week"
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          "This Month"
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          "This Year"
+	        )
 	      )
 	    );
 	  }
@@ -32329,8 +32352,8 @@
 	    return { event: this.getStateFromStore() };
 	  },
 	
-	  showEventDetail: function () {
-	    this.setState({ event: this.getStateFromStore() });
+	  getStateFromStore: function () {
+	    return EventStore.find(parseInt(this.props.params.eventId));
 	  },
 	
 	  componentDidMount: function () {
@@ -32338,16 +32361,12 @@
 	    DetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
 	  },
 	
-	  componentWillReceiveProps: function () {
-	    DetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
-	  },
-	
 	  componentWillUnmount: function () {
 	    this.token.remove();
 	  },
 	
-	  getStateFromStore: function () {
-	    return EventStore.find(parseInt(this.props.params.eventId));
+	  showEventDetail: function () {
+	    this.setState({ event: this.getStateFromStore() });
 	  },
 	
 	  render: function () {
@@ -32905,8 +32924,6 @@
 	      handleError(payload.data);
 	      break;
 	  }
-	
-	  ErrorStore.__emitChange();
 	};
 	
 	function handleError(data) {
@@ -32915,6 +32932,8 @@
 	
 	ErrorStore.resetError = function () {
 	  return _error = null;
+	
+	  ErrorStore.__emitChange();
 	};
 	
 	module.exports = ErrorStore;
@@ -32935,9 +32954,9 @@
 	  },
 	
 	  componentDidMount: function () {
-	    var autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
+	    this.autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
 	
-	    this.autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, { types: ['geocode'] });
+	    this.autocomplete = new google.maps.places.Autocomplete(this.autoCompleteInput, { types: ['geocode'] });
 	    this.geocoder = new google.maps.Geocoder();
 	    this.autocomplete.addListener('place_changed', this.searchByLocation);
 	  },
@@ -32967,6 +32986,8 @@
 	  },
 	
 	  geolocate: function () {
+	    this.autoCompleteInput.value = "";
+	    this.setState({ location: "" });
 	    var that = this;
 	    if (navigator.geolocation) {
 	      navigator.geolocation.getCurrentPosition(function (position) {
@@ -32992,10 +33013,11 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement('input', { onChange: this.handleChange,
+	      React.createElement('input', { id: 'test',
+	        onChange: this.handleChange,
 	        ref: 'autocomplete',
 	        placeholder: 'X',
-	        onFocus: this.geolocate,
+	        onClick: this.geolocate,
 	        type: 'text' })
 	    );
 	  }
@@ -33015,7 +33037,7 @@
 	    FilterConstants = __webpack_require__(274);
 	
 	var _filter_params = {};
-	var _filter_title = "All Events";
+	var _filter_title = "you.";
 	
 	var FilterParamsStore = new Store(AppDispatcher);
 	
@@ -33027,20 +33049,21 @@
 	  return _filter_title;
 	};
 	
+	FilterParamsStore.resetTitle = function () {
+	  _filter_title = "you.";
+	};
+	
 	FilterParamsStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case FilterConstants.UPDATE_LOCATION:
 	      handleLocation(payload.location);
 	      break;
 	  }
-	  debugger;
-	  //if i put filter paramsstore.emit change here,
-	  //why does it keep triggering that the filter changed?
 	};
 	
 	var handleLocation = function (locationData) {
 	  _filter_params.location = locationData;
-	  _filter_title = locationData.address;
+	  _filter_title = locationData.address.split(',')[0];
 	  FilterParamsStore.__emitChange();
 	};
 	
@@ -33057,18 +33080,26 @@
 	module.exports = FilterConstants;
 
 /***/ },
-/* 275 */
+/* 275 */,
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(181);
 	
-	EventPageActions = {
+	MapActions = {
 	  fetchEvents: function () {
 	    ApiUtil.fetchEvents();
+	  },
+	
+	  updateLocation: function (locationData) {
+	    AppDispatcher.dispatch({
+	      actionType: FilterConstants.UPDATE_LOCATION,
+	      location: locationData
+	    });
 	  }
 	};
 	
-	module.exports = EventPageActions;
+	module.exports = MapActions;
 
 /***/ }
 /******/ ]);

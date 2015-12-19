@@ -2,7 +2,10 @@ class Api::EventsController < ApplicationController
   def index
     events = Event.all
 
-    debugger
+    if location
+      events = Event.near_location(location)
+    end
+
     @events = events
     render :index
   end
