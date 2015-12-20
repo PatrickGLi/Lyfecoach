@@ -22,7 +22,10 @@ var FilterForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    FilterFormActions.filterByTitle(this.state.title);
+    if (this.state.title.length !== 0) {
+      FilterFormActions.filterByTitle(this.state.title);
+    }
+    
     this.props.history.pushState(null, "api/events");
   },
 

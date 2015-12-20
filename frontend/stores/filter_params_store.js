@@ -5,7 +5,7 @@ var Store = require('flux/utils').Store,
     DateConstants = require('../constants/date_constants');
 
 var _filter_params = {};
-var _filter_title = { location: 'you.' };
+var _filter_title = { location: 'unknown.' };
 
 var FilterParamsStore = new Store(AppDispatcher);
 
@@ -19,7 +19,7 @@ FilterParamsStore.getTitle = function() {
 
 FilterParamsStore.resetFilters = function() {
   _filter_params = {};
-  _filter_title = { location: 'you.' };
+  _filter_title = { location: 'unknown.' };
 }
 
 FilterParamsStore.__onDispatch = function(payload) {
