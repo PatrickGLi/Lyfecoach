@@ -20,7 +20,6 @@ var Map = React.createClass({
      zoom: 13
    };
 
-   console.log("set center");
    this.map = new google.maps.Map(map, mapOptions);
    this.props.events.forEach(this.addMarker);
 

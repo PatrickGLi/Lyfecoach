@@ -26578,7 +26578,7 @@
 	    DateConstants = __webpack_require__(274);
 	
 	var _filter_params = {};
-	var _filter_title = { location: 'you.' };
+	var _filter_title = { location: 'unknown.' };
 	
 	var FilterParamsStore = new Store(AppDispatcher);
 	
@@ -26592,7 +26592,7 @@
 	
 	FilterParamsStore.resetFilters = function () {
 	  _filter_params = {};
-	  _filter_title = { location: 'you.' };
+	  _filter_title = { location: 'unknown.' };
 	};
 	
 	FilterParamsStore.__onDispatch = function (payload) {
@@ -31788,10 +31788,6 @@
 	    };
 	  },
 	
-	  searchEvents: function (e) {
-	    this.props.history.pushState(null, 'api/events', {});
-	  },
-	
 	  componentDidMount: function () {
 	    this.eventListener = EventStore.addListener(this.eventsChanged);
 	    LandingPageActions.fetchPopularEvents();
@@ -31974,7 +31970,6 @@
 	      zoom: 13
 	    };
 	
-	    console.log("set center");
 	    this.map = new google.maps.Map(map, mapOptions);
 	    this.props.events.forEach(this.addMarker);
 	
@@ -32119,6 +32114,8 @@
 	    // for (var key in this.state.title) {
 	    //   var title =
 	    // }
+	
+	    console.log(this.state.title);
 	
 	    return React.createElement(
 	      'div',
@@ -33333,7 +33330,10 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    FilterFormActions.filterByTitle(this.state.title);
+	    if (this.state.title.length !== 0) {
+	      FilterFormActions.filterByTitle(this.state.title);
+	    }
+	
 	    this.props.history.pushState(null, "api/events");
 	  },
 	

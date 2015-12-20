@@ -25,6 +25,8 @@ var Title = React.createClass({
     //   var title =
     // }
 
+    console.log(this.state.title)
+
     return (
       <div>Events near {this.state.title.location} for ${this.state.title.price}</div>
     );

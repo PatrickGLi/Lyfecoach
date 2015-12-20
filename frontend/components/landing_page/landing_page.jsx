@@ -17,10 +17,6 @@ LandingPage = React.createClass({
     })
   },
 
-  searchEvents: function(e) {
-    this.props.history.pushState(null, 'api/events', {});
-  },
-
   componentDidMount: function() {
     this.eventListener = EventStore.addListener(this.eventsChanged);
     LandingPageActions.fetchPopularEvents();
