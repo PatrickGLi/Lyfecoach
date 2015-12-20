@@ -26418,6 +26418,7 @@
 	  fetchEvents: function () {
 	    var filter = FilterParamsStore.params();
 	
+	    console.log(filter);
 	    $.get('api/events', filter, function (eventsData) {
 	      ApiActions.receiveAll(eventsData);
 	    });
@@ -26608,6 +26609,9 @@
 	    case FilterConstants.UPDATE_DATE:
 	      handleDate(payload.date);
 	      break;
+	    case FilterConstants.UPDATE_TITLE:
+	      handleTitle(payload.title);
+	      break;
 	  }
 	};
 	
@@ -26650,6 +26654,11 @@
 	  FilterParamsStore.__emitChange();
 	};
 	
+	var handleTitle = function (titleData) {
+	  _filter_params.title = titleData;
+	  FilterParamsStore.__emitChange();
+	};
+	
 	module.exports = FilterParamsStore;
 
 /***/ },
@@ -26661,7 +26670,7 @@
 	  UPDATE_PRICE: "UPDATE_PRICE",
 	  UPDATE_CATEGORY: "UPDATE_CATEGORY",
 	  UPDATE_DATE: "UPDATE_DATE",
-	  UPDATE_FROM_SEARCH: "UPDATE_FROM_SEARCH"
+	  UPDATE_TITLE: "UPDATE_TITLE"
 	};
 	
 	module.exports = FilterConstants;
@@ -31798,11 +31807,6 @@
 	      null,
 	      React.createElement(Jumbotron, null),
 	      React.createElement(FilterForm, { history: this.props.history }),
-	      React.createElement(
-	        'button',
-	        { onClick: this.searchEvents },
-	        'Search Events'
-	      ),
 	      React.createElement(PopularEventsIndex, null)
 	    );
 	  }
@@ -32115,7 +32119,6 @@
 	    // for (var key in this.state.title) {
 	    //   var title =
 	    // }
-	    console.log(this.state.title);
 	
 	    return React.createElement(
 	      'div',
@@ -32449,8 +32452,7 @@
 	  },
 	
 	  render: function () {
-	    return React.createElement('input', { id: 'test',
-	      onChange: this.handleChange,
+	    return React.createElement('input', { onChange: this.handleChange,
 	      ref: 'autocomplete',
 	      placeholder: 'X',
 	      onClick: this.geolocate,
@@ -33317,43 +33319,33 @@
 	  mixins: [LinkedStateMixin],
 	
 	  getInitialState: function () {
-	    return {};
+	    return { title: "" };
 	  },
 	
 	  componentDidMount: function () {
-	    this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.filterListener.remove();
-	  },
-	
-	  _filtersChanged: function () {
-	    this.props.history.pushState(null, "api/events");
+	    $(window).keydown(function (event) {
+	      if (event.keyCode == 13) {
+	        event.preventDefault();
+	        return false;
+	      }
+	    });
 	  },
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    FilterFormActions.fetchFilteredEvents();
+	    FilterFormActions.filterByTitle(this.state.title);
+	    this.props.history.pushState(null, "api/events");
 	  },
 	
 	  render: function () {
 	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'form',
-	        { onSubmit: this.handleSubmit },
-	        React.createElement('input', { type: 'text',
-	          valueLink: this.linkState('title'),
-	          placeholder: 'Search for events or categories' }),
-	        React.createElement('br', null),
-	        React.createElement('input', { type: 'text',
-	          valueLink: this.linkState('title'),
-	          placeholder: 'Search for events or categories' }),
-	        React.createElement('br', null),
-	        React.createElement(SearchFilter, null)
-	      )
+	      'form',
+	      { onSubmit: this.handleSubmit },
+	      React.createElement('input', { type: 'text',
+	        valueLink: this.linkState('title'),
+	        placeholder: 'Search by Event or Category' }),
+	      React.createElement(SearchFilter, null),
+	      React.createElement('input', { type: 'submit', value: 'Search' })
 	    );
 	  }
 	
@@ -33390,10 +33382,10 @@
 	    FilterConstants = __webpack_require__(188);
 	
 	FilterFormActions = {
-	  fetchFilteredEvents: function (filterData) {
+	  filterByTitle: function (titleData) {
 	    AppDispatcher.dispatch({
-	      actionType: FilterConstants.UPDATE_FROM_SEARCH,
-	      filters: filterData
+	      actionType: FilterConstants.UPDATE_TITLE,
+	      title: titleData
 	    });
 	  }
 	};

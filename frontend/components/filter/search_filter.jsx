@@ -66,12 +66,11 @@ var SearchFilter = React.createClass({
 
   render: function() {
     return(
-      <input id="test"
-        onChange={this.handleChange}
-        ref="autocomplete"
-        placeholder="X"
-        onClick={this.geolocate}
-        type="text">
+      <input onChange={this.handleChange}
+             ref="autocomplete"
+             placeholder="X"
+             onClick={this.geolocate}
+             type="text">
       </input>
     );
   }

@@ -6,6 +6,7 @@ var ApiUtil = {
   fetchEvents: function(){
     var filter = FilterParamsStore.params();
 
+    console.log(filter);
     $.get('api/events', filter, function(eventsData) {
       ApiActions.receiveAll(eventsData);
     });
