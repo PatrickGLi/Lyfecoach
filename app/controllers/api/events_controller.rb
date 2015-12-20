@@ -18,6 +18,11 @@ class Api::EventsController < ApplicationController
       events = events.where("start_date < ?", date)
     end
 
+    if title
+      events = events.where("LOWER(category) LIKE ? OR LOWER(title) LIKE ?",
+                            "%#{title.downcase}%", "%#{title.downcase}%")
+    end
+
     @events = events.order(view_count: :desc)
     render :index
   end
@@ -55,5 +60,9 @@ class Api::EventsController < ApplicationController
 
   def date
     params[:date]
+  end
+
+  def title
+    params[:title]
   end
 end

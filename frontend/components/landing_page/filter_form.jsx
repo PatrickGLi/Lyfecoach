@@ -8,48 +8,34 @@ var FilterForm = React.createClass({
   mixins: [LinkedStateMixin],
 
   getInitialState: function() {
-    return({
-
-    })
+    return({ title: "" });
   },
 
   componentDidMount: function() {
-    this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
-  },
-
-  componentWillUnmount: function() {
-    this.filterListener.remove();
-  },
-
-  _filtersChanged: function() {
-    this.props.history.pushState(null, "api/events");
+    $(window).keydown(function(event){
+      if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+      }
+    });
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    FilterFormActions.fetchFilteredEvents();
+    FilterFormActions.filterByTitle(this.state.title);
+    this.props.history.pushState(null, "api/events");
   },
 
 
   render: function() {
     return(
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text"
-                 valueLink={this.linkState('title')}
-                 placeholder="Search for events or categories"/>
-          <br/>
-
-          <input type="text"
-                 valueLink={this.linkState('title')}
-                 placeholder="Search for events or categories"/>
-          <br/>
-
-          <SearchFilter/>
-
-
-        </form>
-      </div>
+      <form onSubmit={this.handleSubmit}>
+        <input type="text"
+               valueLink={this.linkState('title')}
+               placeholder="Search by Event or Category"/>
+        <SearchFilter/>
+        <input type="submit" value="Search"/>
+      </form>
     );
   }
 

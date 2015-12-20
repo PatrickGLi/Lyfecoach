@@ -35,7 +35,6 @@ LandingPage = React.createClass({
       <div>
         <Jumbotron/>
         <FilterForm history={this.props.history}/>
-        <button onClick={this.searchEvents}>Search Events</button>
         <PopularEventsIndex/>
       </div>
     );

@@ -36,6 +36,9 @@ FilterParamsStore.__onDispatch = function(payload) {
     case FilterConstants.UPDATE_DATE:
       handleDate(payload.date);
       break;
+    case FilterConstants.UPDATE_TITLE:
+      handleTitle(payload.title);
+      break;
   }
 };
 
@@ -75,6 +78,11 @@ var handleDate = function(dateData) {
 
   _filter_params.date = newDate;
   _filter_title.date = newDate;
+  FilterParamsStore.__emitChange();
+};
+
+var handleTitle = function(titleData) {
+  _filter_params.title = titleData;
   FilterParamsStore.__emitChange();
 };
 
