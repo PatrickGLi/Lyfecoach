@@ -2,6 +2,8 @@ var React = require('react'),
     History = require('react-router').History,
     LandingPageActions = require('../../actions/landing_page_actions'),
     EventStore = require('../../stores/event_store'),
+    FilterForm = require('./filter_form'),
+    PopularEventsIndex = require('./popular_events_index'),
     Jumbotron = require('./jumbotron');
 
 function _getAllEvents() {

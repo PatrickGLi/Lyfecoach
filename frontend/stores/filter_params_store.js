@@ -19,7 +19,7 @@ FilterParamsStore.getTitle = function() {
 
 FilterParamsStore.resetFilters = function() {
   _filter_params = {};
-  _filter_title = { location: 'you' };
+  _filter_title = { location: 'you.' };
 }
 
 FilterParamsStore.__onDispatch = function(payload) {

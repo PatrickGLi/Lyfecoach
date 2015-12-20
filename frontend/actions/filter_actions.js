@@ -1,5 +1,4 @@
-var ApiUtil = require('../util/api_util'),
-    AppDispatcher = require('../dispatcher/dispatcher'),
+var AppDispatcher = require('../dispatcher/dispatcher'),
     FilterConstants = require('../constants/filter_constants');
 
 var FilterActions = {

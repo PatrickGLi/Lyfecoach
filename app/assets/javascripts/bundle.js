@@ -26419,7 +26419,6 @@
 	    var filter = FilterParamsStore.params();
 	
 	    $.get('api/events', filter, function (eventsData) {
-	      debugger;
 	      ApiActions.receiveAll(eventsData);
 	    });
 	  },
@@ -26592,7 +26591,7 @@
 	
 	FilterParamsStore.resetFilters = function () {
 	  _filter_params = {};
-	  _filter_title = { location: 'you' };
+	  _filter_title = { location: 'you.' };
 	};
 	
 	FilterParamsStore.__onDispatch = function (payload) {
@@ -26661,7 +26660,8 @@
 	  UPDATE_LOCATION: "UPDATE_LOCATION",
 	  UPDATE_PRICE: "UPDATE_PRICE",
 	  UPDATE_CATEGORY: "UPDATE_CATEGORY",
-	  UPDATE_DATE: "UPDATE_DATE"
+	  UPDATE_DATE: "UPDATE_DATE",
+	  UPDATE_FROM_SEARCH: "UPDATE_FROM_SEARCH"
 	};
 	
 	module.exports = FilterConstants;
@@ -31762,6 +31762,8 @@
 	    History = __webpack_require__(189).History,
 	    LandingPageActions = __webpack_require__(276),
 	    EventStore = __webpack_require__(159),
+	    FilterForm = __webpack_require__(277),
+	    PopularEventsIndex = __webpack_require__(278),
 	    Jumbotron = __webpack_require__(250);
 	
 	function _getAllEvents() {
@@ -31976,7 +31978,10 @@
 	      nearLng: lng,
 	      address: "you." };
 	
-	    MapActions.updateLocation(locationData);
+	    if (Object.keys(FilterParamsStore.params()).length === 0) {
+	      MapActions.updateLocation(locationData);
+	    }
+	
 	    //when the map mounts, update location parameters and fetch
 	    MapActions.fetchEvents();
 	  },
@@ -32218,7 +32223,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'col-xs-4 test' },
+	      { className: 'col-xs-4' },
 	      React.createElement('img', { onClick: this.props.onClick,
 	        src: this.props.event.url,
 	        className: 'img-circle img-responsive',
@@ -32280,8 +32285,7 @@
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ApiUtil = __webpack_require__(181),
-	    AppDispatcher = __webpack_require__(177),
+	var AppDispatcher = __webpack_require__(177),
 	    FilterConstants = __webpack_require__(188);
 	
 	var FilterActions = {
@@ -32445,21 +32449,15 @@
 	  },
 	
 	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement('input', { id: 'test',
-	        onChange: this.handleChange,
-	        ref: 'autocomplete',
-	        placeholder: 'X',
-	        onClick: this.geolocate,
-	        type: 'text' })
-	    );
+	    return React.createElement('input', { id: 'test',
+	      onChange: this.handleChange,
+	      ref: 'autocomplete',
+	      placeholder: 'X',
+	      onClick: this.geolocate,
+	      type: 'text' });
 	  }
 	
 	});
-	
-	// value={this.props.filterParams.
 	
 	module.exports = SearchFilter;
 
@@ -32716,7 +32714,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ApiUtil = __webpack_require__(181),
 	    LinkedStateMixin = __webpack_require__(267),
 	    ReactDOM = __webpack_require__(158),
 	    FormActions = __webpack_require__(184),
@@ -33303,6 +33300,105 @@
 	};
 	
 	module.exports = LandingPageActions;
+
+/***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    LinkedStateMixin = __webpack_require__(267),
+	    FilterParamsStore = __webpack_require__(187),
+	    SearchFilter = __webpack_require__(260),
+	    FilterFormActions = __webpack_require__(279);
+	
+	var FilterForm = React.createClass({
+	  displayName: 'FilterForm',
+	
+	  mixins: [LinkedStateMixin],
+	
+	  getInitialState: function () {
+	    return {};
+	  },
+	
+	  componentDidMount: function () {
+	    this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.filterListener.remove();
+	  },
+	
+	  _filtersChanged: function () {
+	    this.props.history.pushState(null, "api/events");
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    FilterFormActions.fetchFilteredEvents();
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement('input', { type: 'text',
+	          valueLink: this.linkState('title'),
+	          placeholder: 'Search for events or categories' }),
+	        React.createElement('br', null),
+	        React.createElement('input', { type: 'text',
+	          valueLink: this.linkState('title'),
+	          placeholder: 'Search for events or categories' }),
+	        React.createElement('br', null),
+	        React.createElement(SearchFilter, null)
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = FilterForm;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var PopularEventsIndex = React.createClass({
+	  displayName: 'PopularEventsIndex',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'Popular events'
+	    );
+	  }
+	
+	});
+	
+	module.exports = PopularEventsIndex;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(177),
+	    FilterConstants = __webpack_require__(188);
+	
+	FilterFormActions = {
+	  fetchFilteredEvents: function (filterData) {
+	    AppDispatcher.dispatch({
+	      actionType: FilterConstants.UPDATE_FROM_SEARCH,
+	      filters: filterData
+	    });
+	  }
+	};
+	
+	module.exports = FilterFormActions;
 
 /***/ }
 /******/ ]);
