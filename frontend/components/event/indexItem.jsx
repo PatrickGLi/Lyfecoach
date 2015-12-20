@@ -1,7 +1,6 @@
 var React = require('react'),
     EventStore = require('../../stores/event_store');
 
-
 var IndexItem = React.createClass({
 
   convertTime: function(time) {
@@ -30,7 +29,7 @@ var IndexItem = React.createClass({
     endTime = this.convertTime(endTime);
 
     return(
-      <div className="col-xs-4 test">
+      <div className="col-xs-4">
         <img onClick={this.props.onClick}
              src={this.props.event.url}
              className="img-circle img-responsive"

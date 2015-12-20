@@ -66,20 +66,16 @@ var SearchFilter = React.createClass({
 
   render: function() {
     return(
-      <div>
-        <input id="test"
-          onChange={this.handleChange}
-          ref="autocomplete"
-          placeholder="X"
-          onClick={this.geolocate}
-          type="text">
-        </input>
-      </div>
+      <input id="test"
+        onChange={this.handleChange}
+        ref="autocomplete"
+        placeholder="X"
+        onClick={this.geolocate}
+        type="text">
+      </input>
     );
   }
 
 });
-
-// value={this.props.filterParams.
 
 module.exports = SearchFilter;

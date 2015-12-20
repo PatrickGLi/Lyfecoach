@@ -1,5 +1,4 @@
 var React = require('react'),
-    ApiUtil = require('../../util/api_util'),
     LinkedStateMixin = require('react-addons-linked-state-mixin'),
     ReactDOM = require('react-dom'),
     FormActions = require('../../actions/form_actions'),
