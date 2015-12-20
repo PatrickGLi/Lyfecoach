@@ -1,5 +1,5 @@
 var React = require('react'),
-    NavBarActions = require('../../actions/nav_bar/nav_bar_actions'),
+    NavBarActions = require('../../actions/nav_bar_actions'),
     CurrentUserStore = require('../../stores/current_user_store'),
     ReactConstants = require('../../constants/react_constants'),
     DropdownActions = require('../../actions/dropdown_actions'),

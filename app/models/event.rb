@@ -29,6 +29,8 @@ class Event < ActiveRecord::Base
   validates :category, inclusion: { in: event_type }
   validates :title, uniqueness: true
   validates :ticket_max, numericality: { greater_than: 20 }
+  validates :start_time, :end_time,
+            numericality: { greater_than_or_equal_to: 0, less_than: 24 }
   validate :end_time_cannot_be_before_start_time
 
   def end_time_cannot_be_before_start_time

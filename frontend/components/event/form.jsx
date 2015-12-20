@@ -81,13 +81,13 @@ var EventForm = React.createClass({
     }
   },
 
-  handleSubmit: function(event){
-    event.preventDefault();
+  handleSubmit: function(e){
+    e.preventDefault();
     FormActions.createEvent(this.state)
   },
 
-  handleCancel: function(event){
-    event.preventDefault();
+  handleCancel: function(e){
+    e.preventDefault();
     this.navigateToSearch();
   },
 

@@ -1,18 +1,40 @@
 var React = require('react'),
     History = require('react-router').History,
+    LandingPageActions = require('../../actions/landing_page_actions'),
+    EventStore = require('../../stores/event_store'),
     Jumbotron = require('./jumbotron');
 
+function _getAllEvents() {
+  return EventStore.all();
+}
+
 LandingPage = React.createClass({
+  getInitialState: function() {
+    return({
+      events: _getAllEvents()
+    })
+  },
 
   searchEvents: function(e) {
     this.props.history.pushState(null, 'api/events', {});
+  },
+
+  componentDidMount: function() {
+    this.eventListener = EventStore.addListener(this.eventsChanged);
+    LandingPageActions.fetchPopularEvents();
+  },
+
+  componentWillUnmount: function() {
+    this.eventListener.remove();
   },
 
   render: function() {
     return (
       <div>
         <Jumbotron/>
+        <FilterForm history={this.props.history}/>
         <button onClick={this.searchEvents}>Search Events</button>
+        <PopularEventsIndex/>
       </div>
     );
   }

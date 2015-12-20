@@ -7,8 +7,13 @@ var ApiUtil = {
     var filter = FilterParamsStore.params();
 
     $.get('api/events', filter, function(eventsData) {
+      debugger
       ApiActions.receiveAll(eventsData);
     });
+  },
+
+  fetchPopularEvents: function() {
+    console.log("fetching popular events");
   },
 
   fetchSingleEvent: function(eventId) {
