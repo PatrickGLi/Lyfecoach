@@ -25,13 +25,12 @@ var EventPage = React.createClass({
   },
 
   componentDidMount: function() {
-    this.eventsChanged = EventStore.addListener(this._eventsChanged);
+    this.eventListener = EventStore.addListener(this._eventsChanged);
     this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
-
   },
 
   componentWillUnmount: function() {
-    this.eventsChanged.remove();
+    this.eventListener.remove();
     this.filterListener.remove();
     FilterParamsStore.resetFilters();
   },

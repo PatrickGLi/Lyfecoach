@@ -18,7 +18,7 @@ class Api::EventsController < ApplicationController
       events = events.where("start_date < ?", date)
     end
 
-    @events = events
+    @events = events.order(view_count: :desc)
     render :index
   end
 

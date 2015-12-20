@@ -26419,8 +26419,13 @@
 	    var filter = FilterParamsStore.params();
 	
 	    $.get('api/events', filter, function (eventsData) {
+	      debugger;
 	      ApiActions.receiveAll(eventsData);
 	    });
+	  },
+	
+	  fetchPopularEvents: function () {
+	    console.log("fetching popular events");
 	  },
 	
 	  fetchSingleEvent: function (eventId) {
@@ -31454,7 +31459,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    NavBarActions = __webpack_require__(242),
+	    NavBarActions = __webpack_require__(275),
 	    CurrentUserStore = __webpack_require__(243),
 	    ReactConstants = __webpack_require__(186),
 	    DropdownActions = __webpack_require__(244),
@@ -31558,20 +31563,7 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 242 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(181);
-	
-	NavBarActions = {
-	  fetchCurrentUser: function (currentUserId) {
-	    ApiUtil.getCurrentUser(currentUserId);
-	  }
-	};
-	
-	module.exports = NavBarActions;
-
-/***/ },
+/* 242 */,
 /* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31768,13 +31760,34 @@
 
 	var React = __webpack_require__(1),
 	    History = __webpack_require__(189).History,
+	    LandingPageActions = __webpack_require__(276),
+	    EventStore = __webpack_require__(159),
 	    Jumbotron = __webpack_require__(250);
+	
+	function _getAllEvents() {
+	  return EventStore.all();
+	}
 	
 	LandingPage = React.createClass({
 	  displayName: 'LandingPage',
 	
+	  getInitialState: function () {
+	    return {
+	      events: _getAllEvents()
+	    };
+	  },
+	
 	  searchEvents: function (e) {
 	    this.props.history.pushState(null, 'api/events', {});
+	  },
+	
+	  componentDidMount: function () {
+	    this.eventListener = EventStore.addListener(this.eventsChanged);
+	    LandingPageActions.fetchPopularEvents();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.eventListener.remove();
 	  },
 	
 	  render: function () {
@@ -31782,11 +31795,13 @@
 	      'div',
 	      null,
 	      React.createElement(Jumbotron, null),
+	      React.createElement(FilterForm, { history: this.props.history }),
 	      React.createElement(
 	        'button',
 	        { onClick: this.searchEvents },
 	        'Search Events'
-	      )
+	      ),
+	      React.createElement(PopularEventsIndex, null)
 	    );
 	  }
 	
@@ -31891,12 +31906,12 @@
 	  },
 	
 	  componentDidMount: function () {
-	    this.eventsChanged = EventStore.addListener(this._eventsChanged);
+	    this.eventListener = EventStore.addListener(this._eventsChanged);
 	    this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.eventsChanged.remove();
+	    this.eventListener.remove();
 	    this.filterListener.remove();
 	    FilterParamsStore.resetFilters();
 	  },
@@ -32176,9 +32191,30 @@
 	var IndexItem = React.createClass({
 	  displayName: 'IndexItem',
 	
+	  convertTime: function (time) {
+	    if (time === 0) {
+	      return "12:00 AM";
+	    } else if (time === 12) {
+	      return "12:00 PM";
+	    }
+	
+	    if (time < 12) {
+	      time = time.toString() + ":00 AM";
+	    } else {
+	      time = (time - 12).toString() + ":00 PM";
+	    }
+	
+	    return time;
+	  },
+	
 	  render: function () {
 	    var startDate = new Date(this.props.event.start_date).toString();
 	    var endDate = new Date(this.props.event.end_date).toString();
+	    var startTime = this.props.event.start_time;
+	    endTime = this.props.event.end_time;
+	
+	    startTime = this.convertTime(startTime);
+	    endTime = this.convertTime(endTime);
 	
 	    return React.createElement(
 	      'div',
@@ -32204,7 +32240,7 @@
 	        'Start Time: ',
 	        startDate,
 	        ' ',
-	        this.props.event.start_time
+	        startTime
 	      ),
 	      React.createElement(
 	        'div',
@@ -32212,7 +32248,7 @@
 	        'End Time: ',
 	        endDate,
 	        ' ',
-	        this.props.event.end_time
+	        endTime
 	      ),
 	      React.createElement(
 	        'div',
@@ -32226,6 +32262,12 @@
 	        'div',
 	        null,
 	        this.props.event.category
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'View Count: ',
+	        this.props.event.view_count
 	      )
 	    );
 	  }
@@ -32757,13 +32799,13 @@
 	    }
 	  },
 	
-	  handleSubmit: function (event) {
-	    event.preventDefault();
+	  handleSubmit: function (e) {
+	    e.preventDefault();
 	    FormActions.createEvent(this.state);
 	  },
 	
-	  handleCancel: function (event) {
-	    event.preventDefault();
+	  handleCancel: function (e) {
+	    e.preventDefault();
 	    this.navigateToSearch();
 	  },
 	
@@ -33233,6 +33275,34 @@
 	};
 	
 	module.exports = DateConstants;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(181);
+	
+	NavBarActions = {
+	  fetchCurrentUser: function (currentUserId) {
+	    ApiUtil.getCurrentUser(currentUserId);
+	  }
+	};
+	
+	module.exports = NavBarActions;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(181);
+	
+	var LandingPageActions = {
+	  fetchPopularEvents: function () {
+	    ApiUtil.fetchPopularEvents();
+	  }
+	};
+	
+	module.exports = LandingPageActions;
 
 /***/ }
 /******/ ]);

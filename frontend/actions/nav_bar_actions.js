@@ -1,4 +1,4 @@
-var ApiUtil = require('../../util/api_util');
+var ApiUtil = require('../util/api_util');
 
 NavBarActions = {
   fetchCurrentUser: function(currentUserId) {
