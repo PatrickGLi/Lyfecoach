@@ -6,21 +6,30 @@
       <%= auth_token %>
 
       <div class="form-group">
-        <label for="fname">First Name</label>
+        <label for="first_name">First Name</label>
         <input class="form-control"
-               id="fname"
+               id="first_name"
                type="text"
-               name="user[fname]"
-               value="<%=@user.fname%>"/>
+               name="user[first_name]"
+               value="<%=@user.first_name%>"/>
       </div>
 
       <div class="form-group">
-        <label for="lname">Last Name</label>
+        <label for="last_name">Last Name</label>
         <input class="form-control"
-               id="lname"
+               id="last_name"
                type="text"
-               name="user[lname]"
-               value="<%=@user.lname%>"/>
+               name="user[last_name]"
+               value="<%=@user.last_name%>"/>
+      </div>
+
+      <div class="form-group">
+        <label for="host_name">Alias</label>
+        <input class="form-control"
+               id="host_name"
+               type="text"
+               name="user[host_name]"
+               value="<%=@user.host_name%>"/>
       </div>
 
       <div class="form-group">

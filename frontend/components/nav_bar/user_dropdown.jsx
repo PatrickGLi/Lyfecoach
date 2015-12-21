@@ -1,10 +1,20 @@
 var React = require('react'),
-    ReactConstants = require('../../constants/react_constants');
+    ReactConstants = require('../../constants/react_constants'),
+    History = require('react-router').History;
 
 var UserDropdown = React.createClass({
+  mixins: [History],
+
+  newSession: function() {
+    this.history.pushState(null, 'session/new');
+  },
 
   render: function() {
-    this.label = this.props.name;
+    if (this.props.currentUser === "Guest") {
+      return (<div><a href="session/new">Sign In</a></div>);
+    }
+
+    this.label = this.props.currentUser.first_name;
 
     if (this.props.toggle === this.label) {
       var hiddenClass = "";
@@ -15,7 +25,7 @@ var UserDropdown = React.createClass({
     return(
       <div>
         <div onClick={this.props.onClick}
-             className="nav-links">{this.props.name}
+             className="nav-links">{this.props.currentUser.first_name}
         </div>
         <div className={hiddenClass}>
           <div>Account Settings</div>

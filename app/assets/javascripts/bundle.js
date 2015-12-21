@@ -31481,7 +31481,7 @@
 	
 	  getInitialState: function () {
 	    return {
-	      currentUser: CurrentUserStore.fetch(),
+	      currentUser: "Guest",
 	      shown: ""
 	    };
 	  },
@@ -31489,7 +31489,10 @@
 	  componentDidMount: function () {
 	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
 	    this.currentDropdownListener = DropdownStore.addListener(this._onChange);
-	    NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
+	
+	    if (ReactConstants.CURRENT_USER !== -1) {
+	      NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
+	    }
 	  },
 	
 	  _onChange: function () {
@@ -31518,8 +31521,24 @@
 	  },
 	
 	  render: function () {
-	    if (this.state.currentUser === null) {
-	      return React.createElement('div', null);
+	    var events;
+	    if (ReactConstants.CURRENT_USER !== -1) {
+	      events = React.createElement(
+	        'div',
+	        { onClick: this.goToEventForm,
+	          id: 'create-event-link' },
+	        'Be a host.'
+	      );
+	    } else {
+	      events = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: 'users/new' },
+	          'Sign Up'
+	        )
+	      );
 	    }
 	
 	    return React.createElement(
@@ -31554,13 +31573,8 @@
 	          React.createElement(
 	            'div',
 	            { className: 'nav navbar-nav pull-right user-settings' },
-	            React.createElement(
-	              'div',
-	              { onClick: this.goToEventForm,
-	                id: 'create-event-link' },
-	              'Be a host.'
-	            ),
-	            React.createElement(UserDropdown, { toggle: this.state.shown, onClick: this.handleClick, name: this.state.currentUser.fname }),
+	            events,
+	            React.createElement(UserDropdown, { toggle: this.state.shown, onClick: this.handleClick, currentUser: this.state.currentUser }),
 	            React.createElement(HelpDropdown, { toggle: this.state.shown, onClick: this.handleClick })
 	          )
 	        )
@@ -31676,13 +31690,32 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ReactConstants = __webpack_require__(186);
+	    ReactConstants = __webpack_require__(186),
+	    History = __webpack_require__(189).History;
 	
 	var UserDropdown = React.createClass({
 	  displayName: 'UserDropdown',
 	
+	  mixins: [History],
+	
+	  newSession: function () {
+	    this.history.pushState(null, 'session/new');
+	  },
+	
 	  render: function () {
-	    this.label = this.props.name;
+	    if (this.props.currentUser === "Guest") {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: 'session/new' },
+	          'Sign In'
+	        )
+	      );
+	    }
+	
+	    this.label = this.props.currentUser.first_name;
 	
 	    if (this.props.toggle === this.label) {
 	      var hiddenClass = "";
@@ -31697,7 +31730,7 @@
 	        'div',
 	        { onClick: this.props.onClick,
 	          className: 'nav-links' },
-	        this.props.name
+	        this.props.currentUser.first_name
 	      ),
 	      React.createElement(
 	        'div',
@@ -31768,7 +31801,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    History = __webpack_require__(189).History,
 	    LandingPageActions = __webpack_require__(276),
 	    EventStore = __webpack_require__(159),
 	    FilterForm = __webpack_require__(277),
@@ -32221,12 +32253,14 @@
 	    startTime = this.convertTime(startTime);
 	    endTime = this.convertTime(endTime);
 	
+	    var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_400" + this.props.event.url;
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'col-xs-4' },
 	      React.createElement('img', { onClick: this.props.onClick,
-	        src: this.props.event.url,
-	        className: 'img-circle img-responsive',
+	        src: image,
+	        className: 'img-responsive',
 	        alt: 'Responsive image' }),
 	      React.createElement(
 	        'div',
@@ -32495,8 +32529,8 @@
 	        { id: 'price-dropdown', className: hiddenClass },
 	        React.createElement(
 	          'div',
-	          { id: '10', onClick: this.filterByPrice },
-	          'Under 10'
+	          { id: '15', onClick: this.filterByPrice },
+	          'Under 15'
 	        ),
 	        React.createElement(
 	          'div',
@@ -32510,8 +32544,8 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { id: '51', onClick: this.filterByPrice },
-	          '50 +'
+	          { id: '1000', onClick: this.filterByPrice },
+	          'All'
 	        )
 	      )
 	    );

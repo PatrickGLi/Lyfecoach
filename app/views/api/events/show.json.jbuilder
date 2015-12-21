@@ -3,7 +3,9 @@ json.title @event.title
 json.location @event.location
 json.description @event.description
 json.category @event.category
+json.start_date @event.start_date
 json.start_time @event.start_time
+json.end_date @event.end_date
 json.end_time @event.end_time
 json.price @event.price
 json.url @event.url

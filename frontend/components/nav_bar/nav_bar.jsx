@@ -11,7 +11,7 @@ var NavBar = React.createClass({
 
   getInitialState: function() {
     return ({
-      currentUser: CurrentUserStore.fetch(),
+      currentUser: "Guest",
       shown: ""
     });
   },
@@ -19,7 +19,10 @@ var NavBar = React.createClass({
   componentDidMount: function() {
     this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
     this.currentDropdownListener = DropdownStore.addListener(this._onChange);
-    NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
+
+    if (ReactConstants.CURRENT_USER !== -1) {
+      NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
+    }
   },
 
   _onChange: function() {
@@ -48,7 +51,14 @@ var NavBar = React.createClass({
   },
 
   render: function() {
-    if (this.state.currentUser === null) { return <div></div>; }
+    var events;
+    if (ReactConstants.CURRENT_USER !== -1) {
+      events = <div onClick={this.goToEventForm}
+                    id="create-event-link">Be a host.
+                </div>;
+    } else {
+      events = <div><a href="users/new">Sign Up</a></div>;
+    }
 
     return (
       <nav className="navbar navbar-default">
@@ -72,10 +82,8 @@ var NavBar = React.createClass({
             </div>
 
             <div className="nav navbar-nav pull-right user-settings">
-              <div onClick={this.goToEventForm}
-                   id="create-event-link">Be a host.
-              </div>
-              <UserDropdown toggle={this.state.shown} onClick={this.handleClick} name={this.state.currentUser.fname}/>
+              {events}
+              <UserDropdown toggle={this.state.shown} onClick={this.handleClick} currentUser={this.state.currentUser}/>
               <HelpDropdown toggle={this.state.shown} onClick={this.handleClick}/>
             </div>
           </div>
