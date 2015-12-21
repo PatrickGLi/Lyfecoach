@@ -10,20 +10,19 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require bootstrap.min
  *= require_tree .
  *= require_self
  */
- 
-  @import 'bootstrap-sprockets';
-  @import 'bootstrap';
 
   body {
-    font-family: 'Raleway', sans-serif;
-   }
+   font-family: 'Raleway', sans-serif;
+  }
 
- #logo {
-   height: 70px;
-   width: 70px;
+ .logo {
+   font-weight: 100 !important;
+   font-size: 30px;
+   letter-spacing: 6px;
  }
 
  .user-settings div {
@@ -42,13 +41,17 @@
    line-height: 50px;
  }
 
-
- #create-event-link {
-   width: 100px;
-   height: 70px;
-   line-height: 70px;
-   outline: 1px solid black;
- }
+.nav-items {
+  color: white;
+}
+ // 
+ // #create-event-link {
+ //  //  width: 100px;
+ //  color: gray;
+ //  //  height: 70px;
+ //  //  line-height: 70px;
+ //  //  outline: 1px solid black;
+ // }
 
  .hidden-dropdown {
    display: none !important;

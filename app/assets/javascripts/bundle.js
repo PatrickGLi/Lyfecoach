@@ -31513,6 +31513,7 @@
 	  },
 	
 	  goToEventForm: function (e) {
+	    e.preventDefault();
 	    this.props.history.pushState(null, 'api/events/new');
 	  },
 	
@@ -31523,15 +31524,22 @@
 	  render: function () {
 	    var events;
 	    if (ReactConstants.CURRENT_USER !== -1) {
+	      // events = <li className="active"
+	      //              onClick={this.goToEventForm}
+	      //              id="create-event-link">Be a host.
+	      //           <span className="sr-only">(current)</span></li>;
 	      events = React.createElement(
-	        'div',
-	        { onClick: this.goToEventForm,
-	          id: 'create-event-link' },
-	        'Be a host.'
+	        'li',
+	        { onClick: this.goToEventForm },
+	        React.createElement(
+	          'a',
+	          { href: '#' },
+	          'Be a host.'
+	        )
 	      );
 	    } else {
 	      events = React.createElement(
-	        'div',
+	        'li',
 	        null,
 	        React.createElement(
 	          'a',
@@ -31543,7 +31551,7 @@
 	
 	    return React.createElement(
 	      'nav',
-	      { className: 'navbar navbar-default' },
+	      { className: 'navbar navbar-default nav-items' },
 	      React.createElement(
 	        'div',
 	        { className: 'container-fluid' },
@@ -31559,23 +31567,95 @@
 	            React.createElement('span', { className: 'icon-bar' }),
 	            React.createElement('span', { className: 'icon-bar' }),
 	            React.createElement('span', { className: 'icon-bar' })
+	          ),
+	          React.createElement(
+	            'div',
+	            { onClick: this.returnToHomepage },
+	            React.createElement(
+	              'a',
+	              { className: 'navbar-brand logo', href: '#' },
+	              'lyfecoach'
+	            )
 	          )
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'collapse navbar-collapse', id: 'collapse-menu' },
+	          { className: 'collapse navbar-collapse pull-right', id: 'collapse-menu' },
 	          React.createElement(
-	            'div',
-	            { className: 'nav navbar-nav pull-left' },
-	            React.createElement('img', { id: 'logo', src: 'http://static4.wikia.nocookie.net/__cb20131121214007/destinypedia/images/7/71/Information_Icon.svg',
-	              onClick: this.returnToHomepage })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'nav navbar-nav pull-right user-settings' },
+	            'ul',
+	            { className: 'nav navbar-nav' },
 	            events,
-	            React.createElement(UserDropdown, { toggle: this.state.shown, onClick: this.handleClick, currentUser: this.state.currentUser }),
-	            React.createElement(HelpDropdown, { toggle: this.state.shown, onClick: this.handleClick })
+	            React.createElement(
+	              'li',
+	              { className: 'dropdown' },
+	              React.createElement(
+	                'a',
+	                { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
+	                this.state.currentUser.first_name,
+	                ' ',
+	                React.createElement('span', { className: 'caret' })
+	              ),
+	              React.createElement(
+	                'ul',
+	                { className: 'dropdown-menu', role: 'menu' },
+	                React.createElement(
+	                  'li',
+	                  null,
+	                  React.createElement(
+	                    'a',
+	                    { href: '#' },
+	                    'Account Settings'
+	                  )
+	                ),
+	                React.createElement('li', { className: 'divider' }),
+	                React.createElement(
+	                  'li',
+	                  null,
+	                  React.createElement(
+	                    'form',
+	                    { method: 'post', action: 'session' },
+	                    React.createElement('input', { type: 'hidden', name: '_method', value: 'delete' }),
+	                    React.createElement('input', { name: 'authenticity_token',
+	                      type: 'hidden',
+	                      value: ReactConstants.AUTH_TOKEN }),
+	                    React.createElement('input', { type: 'submit', value: 'Sign Out' })
+	                  )
+	                )
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              { className: 'dropdown' },
+	              React.createElement(
+	                'a',
+	                { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
+	                'Help ',
+	                React.createElement('span', { className: 'caret' })
+	              ),
+	              React.createElement(
+	                'ul',
+	                { className: 'dropdown-menu', role: 'menu' },
+	                React.createElement(
+	                  'li',
+	                  null,
+	                  React.createElement(
+	                    'a',
+	                    { href: '#' },
+	                    'Hidden Stuff'
+	                  )
+	                ),
+	                React.createElement('li', { className: 'divider' }),
+	                React.createElement(
+	                  'li',
+	                  null,
+	                  React.createElement(
+	                    'a',
+	                    { href: '#' },
+	                    'Separated link'
+	                  )
+	                )
+	              )
+	            )
 	          )
 	        )
 	      )
@@ -32245,8 +32325,8 @@
 	  },
 	
 	  render: function () {
-	    var startDate = new Date(this.props.event.start_date).toString();
-	    var endDate = new Date(this.props.event.end_date).toString();
+	    var startDate = new Date(this.props.event.start_date).toString().split(' ').slice(0, 4).join(' ');
+	    var endDate = new Date(this.props.event.end_date).toString().split(' ').slice(0, 4).join(' ');
 	    var startTime = this.props.event.start_time;
 	    endTime = this.props.event.end_time;
 	
@@ -32712,15 +32792,85 @@
 	    this.setState({ event: this.getStateFromStore() });
 	  },
 	
+	  convertTime: function (time) {
+	    if (time === 0) {
+	      return "12:00 AM";
+	    } else if (time === 12) {
+	      return "12:00 PM";
+	    }
+	
+	    if (time < 12) {
+	      time = time.toString() + ":00 AM";
+	    } else {
+	      time = (time - 12).toString() + ":00 PM";
+	    }
+	
+	    return time;
+	  },
+	
 	  render: function () {
 	    if (typeof this.state.event === 'undefined') {
 	      return React.createElement('div', null);
 	    }
 	
+	    var event = this.state.event;
+	    var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_200,w_300" + event.url;
+	
+	    var startDate = new Date(event.start_date).toString().split(' ').slice(0, 4).join(' ');
+	    var endDate = new Date(event.end_date).toString().split(' ').slice(0, 4).join(' ');
+	    var startTime = event.start_time;
+	    endTime = event.end_time;
+	
+	    startTime = this.convertTime(startTime);
+	    endTime = this.convertTime(endTime);
+	
 	    return React.createElement(
 	      'div',
 	      null,
-	      this.state.event.title
+	      React.createElement(
+	        'div',
+	        null,
+	        event.title
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        React.createElement('img', { src: image })
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        event.location
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        event.description
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        startDate,
+	        ' ',
+	        startTime
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        endDate,
+	        ' ',
+	        endTime
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        event.price
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        event.organizer
+	      )
 	    );
 	  }
 	
