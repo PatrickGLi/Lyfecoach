@@ -25,7 +25,7 @@ var FilterForm = React.createClass({
     if (this.state.title.length !== 0) {
       FilterFormActions.filterByTitle(this.state.title);
     }
-    
+  
     this.props.history.pushState(null, "api/events");
   },
 

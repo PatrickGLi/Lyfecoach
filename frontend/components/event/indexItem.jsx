@@ -28,11 +28,13 @@ var IndexItem = React.createClass({
     startTime = this.convertTime(startTime);
     endTime = this.convertTime(endTime);
 
+    var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_400" + this.props.event.url;
+
     return(
       <div className="col-xs-4">
         <img onClick={this.props.onClick}
-             src={this.props.event.url}
-             className="img-circle img-responsive"
+             src={image}
+             className="img-responsive"
              alt="Responsive image">
         </img>
         <div>{this.props.event.title}</div>

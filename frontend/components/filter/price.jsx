@@ -21,8 +21,8 @@ var PriceFilter = React.createClass({
           {DropdownConstants.PRICE}
         </div>
         <div id="price-dropdown" className={hiddenClass}>
-          <div id="10" onClick={this.filterByPrice}>
-            Under 10
+          <div id="15" onClick={this.filterByPrice}>
+            Under 15
           </div>
           <div id="30" onClick={this.filterByPrice}>
             Under 30
@@ -30,8 +30,8 @@ var PriceFilter = React.createClass({
           <div id="50" onClick={this.filterByPrice}>
             Under 50
           </div>
-          <div id="51" onClick={this.filterByPrice}>
-            50 +
+          <div id="1000" onClick={this.filterByPrice}>
+            All
           </div>
         </div>
       </div>
