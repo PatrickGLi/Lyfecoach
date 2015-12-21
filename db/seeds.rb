@@ -75,7 +75,7 @@ Also involved in film (ATL, OutKast’s Idlewild,Who’s Your Caddy?) and even t
 Event.create!(title: "Metro Boomin with Special Guest Twrk",
               location: "1015 Folsom St, San Francisco, CA 94103",
               start_date: 1422518400000,
-              end_date: 1422604700000,
+              end_date: 1422604800000,
               start_time: 22,
               end_time: 2,
               description: "At only 21 years old, Metro Boomin has become one of hip-hop’s most sought after producers and DJ’s, working with some of the genre’s biggest stars, a list of names that includes Future, Drake, Kanye West, Nicki Minaj 2 Chainz, Gucci Mane, YG, Ludacris, Wiz Khalifa, Travi$ Scott, Young Thug, Meek Mill, and more.

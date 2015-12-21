@@ -20,8 +20,8 @@ var IndexItem = React.createClass({
   },
 
   render: function() {
-    var startDate = new Date(this.props.event.start_date).toString();
-    var endDate = new Date(this.props.event.end_date).toString();
+    var startDate = new Date(this.props.event.start_date).toString().split(' ').slice(0,4).join(' ');
+    var endDate = new Date(this.props.event.end_date).toString().split(' ').slice(0,4).join(' ');
     var startTime = this.props.event.start_time;
         endTime = this.props.event.end_time;
 

@@ -43,6 +43,7 @@ var NavBar = React.createClass({
   },
 
   goToEventForm: function(e) {
+    e.preventDefault();
     this.props.history.pushState(null,'api/events/new');
   },
 
@@ -53,17 +54,18 @@ var NavBar = React.createClass({
   render: function() {
     var events;
     if (ReactConstants.CURRENT_USER !== -1) {
-      events = <div onClick={this.goToEventForm}
-                    id="create-event-link">Be a host.
-                </div>;
+      // events = <li className="active"
+      //              onClick={this.goToEventForm}
+      //              id="create-event-link">Be a host.
+      //           <span className="sr-only">(current)</span></li>;
+      events = <li onClick={this.goToEventForm}><a href="#">Be a host.</a></li>
     } else {
-      events = <div><a href="users/new">Sign Up</a></div>;
+      events = <li><a href="users/new">Sign Up</a></li>;
     }
 
     return (
-      <nav className="navbar navbar-default">
+      <nav className="navbar navbar-default nav-items">
         <div className="container-fluid">
-
           <div className="navbar-header">
             <button type="button" className="navbar-toggle collapsed"
                     data-toggle="collapse"
@@ -73,21 +75,40 @@ var NavBar = React.createClass({
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
+            <div onClick={this.returnToHomepage}>
+              <a className="navbar-brand logo" href="#">lyfecoach</a>
+            </div>
           </div>
 
-          <div className="collapse navbar-collapse" id="collapse-menu">
-            <div className="nav navbar-nav pull-left">
-              <img id="logo" src="http://static4.wikia.nocookie.net/__cb20131121214007/destinypedia/images/7/71/Information_Icon.svg"
-                   onClick={this.returnToHomepage}/>
-            </div>
-
-            <div className="nav navbar-nav pull-right user-settings">
+          <div className="collapse navbar-collapse pull-right" id="collapse-menu">
+            <ul className="nav navbar-nav">
               {events}
-              <UserDropdown toggle={this.state.shown} onClick={this.handleClick} currentUser={this.state.currentUser}/>
-              <HelpDropdown toggle={this.state.shown} onClick={this.handleClick}/>
-            </div>
+              <li className="dropdown">
+                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.state.currentUser.first_name} <span className="caret"></span></a>
+                <ul className="dropdown-menu" role="menu">
+                  <li><a href="#">Account Settings</a></li>
+                  <li className="divider"></li>
+                  <li>
+                    <form method="post" action="session">
+                      <input type="hidden" name="_method" value="delete"/>
+                      <input name="authenticity_token"
+                             type="hidden"
+                             value={ReactConstants.AUTH_TOKEN} />
+                      <input type="submit" value="Sign Out"></input>
+                    </form>
+                  </li>
+                </ul>
+              </li>
+              <li className="dropdown">
+                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <span className="caret"></span></a>
+                  <ul className="dropdown-menu" role="menu">
+                    <li><a href="#">Hidden Stuff</a></li>
+                    <li className="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                  </ul>
+              </li>
+            </ul>
           </div>
-
         </div>
       </nav>
     );
