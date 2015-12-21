@@ -14,6 +14,12 @@
  *= require_tree .
  *= require_self
  */
+ input.empty {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+}
 
   body {
    font-family: 'Raleway', sans-serif;
@@ -44,7 +50,7 @@
 .nav-items {
   color: white;
 }
- // 
+ //
  // #create-event-link {
  //  //  width: 100px;
  //  color: gray;

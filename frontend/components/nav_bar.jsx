@@ -1,11 +1,9 @@
 var React = require('react'),
-    NavBarActions = require('../../actions/nav_bar_actions'),
-    CurrentUserStore = require('../../stores/current_user_store'),
-    ReactConstants = require('../../constants/react_constants'),
-    DropdownActions = require('../../actions/dropdown_actions'),
-    DropdownStore = require('../../stores/dropdown_store'),
-    UserDropdown = require('./user_dropdown'),
-    HelpDropdown = require('./help_dropdown');
+    NavBarActions = require('../actions/nav_bar_actions'),
+    CurrentUserStore = require('../stores/current_user_store'),
+    ReactConstants = require('../constants/react_constants'),
+    DropdownActions = require('../actions/dropdown_actions'),
+    DropdownStore = require('../stores/dropdown_store');
 
 var NavBar = React.createClass({
 
@@ -54,13 +52,26 @@ var NavBar = React.createClass({
   render: function() {
     var events;
     if (ReactConstants.CURRENT_USER !== -1) {
-      // events = <li className="active"
-      //              onClick={this.goToEventForm}
-      //              id="create-event-link">Be a host.
-      //           <span className="sr-only">(current)</span></li>;
       events = <li onClick={this.goToEventForm}><a href="#">Be a host.</a></li>
+      user = <li className="dropdown">
+        <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.state.currentUser.first_name} <span className="caret"></span></a>
+        <ul className="dropdown-menu" role="menu">
+          <li><a href="#">Account Settings</a></li>
+          <li className="divider"></li>
+          <li>
+            <form method="post" action="session">
+              <input type="hidden" name="_method" value="delete"/>
+              <input name="authenticity_token"
+                     type="hidden"
+                     value={ReactConstants.AUTH_TOKEN} />
+              <input type="submit" value="Sign Out"></input>
+            </form>
+          </li>
+        </ul>
+      </li>
     } else {
       events = <li><a href="users/new">Sign Up</a></li>;
+      user = <li><a href="session/new">Sign In</a></li>;
     }
 
     return (
@@ -80,25 +91,17 @@ var NavBar = React.createClass({
             </div>
           </div>
 
-          <div className="collapse navbar-collapse pull-right" id="collapse-menu">
+          <div className="collapse navbar-collapse navbar-right" id="collapse-menu">
+            <form className="navbar-form navbar-left" role="search">
+              <div className="form-group">
+                <input type="text" className="form-control" placeholder="Search"/>
+              </div>
+              <button type="submit" className="btn btn-default">Submit</button>
+            </form>
+
             <ul className="nav navbar-nav">
               {events}
-              <li className="dropdown">
-                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.state.currentUser.first_name} <span className="caret"></span></a>
-                <ul className="dropdown-menu" role="menu">
-                  <li><a href="#">Account Settings</a></li>
-                  <li className="divider"></li>
-                  <li>
-                    <form method="post" action="session">
-                      <input type="hidden" name="_method" value="delete"/>
-                      <input name="authenticity_token"
-                             type="hidden"
-                             value={ReactConstants.AUTH_TOKEN} />
-                      <input type="submit" value="Sign Out"></input>
-                    </form>
-                  </li>
-                </ul>
-              </li>
+              {user}
               <li className="dropdown">
                 <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <span className="caret"></span></a>
                   <ul className="dropdown-menu" role="menu">
