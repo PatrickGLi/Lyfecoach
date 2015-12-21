@@ -31446,7 +31446,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    NavBar = __webpack_require__(241);
+	    NavBar = __webpack_require__(280);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -31464,208 +31464,7 @@
 	module.exports = App;
 
 /***/ },
-/* 241 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    NavBarActions = __webpack_require__(275),
-	    CurrentUserStore = __webpack_require__(243),
-	    ReactConstants = __webpack_require__(186),
-	    DropdownActions = __webpack_require__(244),
-	    DropdownStore = __webpack_require__(246),
-	    UserDropdown = __webpack_require__(247),
-	    HelpDropdown = __webpack_require__(248);
-	
-	var NavBar = React.createClass({
-	  displayName: 'NavBar',
-	
-	  getInitialState: function () {
-	    return {
-	      currentUser: "Guest",
-	      shown: ""
-	    };
-	  },
-	
-	  componentDidMount: function () {
-	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
-	    this.currentDropdownListener = DropdownStore.addListener(this._onChange);
-	
-	    if (ReactConstants.CURRENT_USER !== -1) {
-	      NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
-	    }
-	  },
-	
-	  _onChange: function () {
-	    this.setState({ shown: DropdownStore.fetch() });
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.currentUserListener.remove();
-	    this.currentDropdownListener.remove();
-	  },
-	
-	  getCurrentUser: function () {
-	    this.setState({ currentUser: CurrentUserStore.fetch() });
-	  },
-	
-	  returnToHomepage: function (e) {
-	    this.props.history.pushState(null, '/', {});
-	  },
-	
-	  goToEventForm: function (e) {
-	    e.preventDefault();
-	    this.props.history.pushState(null, 'api/events/new');
-	  },
-	
-	  handleClick: function (e) {
-	    DropdownActions.showDropdown(e.target.innerText);
-	  },
-	
-	  render: function () {
-	    var events;
-	    if (ReactConstants.CURRENT_USER !== -1) {
-	      // events = <li className="active"
-	      //              onClick={this.goToEventForm}
-	      //              id="create-event-link">Be a host.
-	      //           <span className="sr-only">(current)</span></li>;
-	      events = React.createElement(
-	        'li',
-	        { onClick: this.goToEventForm },
-	        React.createElement(
-	          'a',
-	          { href: '#' },
-	          'Be a host.'
-	        )
-	      );
-	    } else {
-	      events = React.createElement(
-	        'li',
-	        null,
-	        React.createElement(
-	          'a',
-	          { href: 'users/new' },
-	          'Sign Up'
-	        )
-	      );
-	    }
-	
-	    return React.createElement(
-	      'nav',
-	      { className: 'navbar navbar-default nav-items' },
-	      React.createElement(
-	        'div',
-	        { className: 'container-fluid' },
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-header' },
-	          React.createElement(
-	            'button',
-	            { type: 'button', className: 'navbar-toggle collapsed',
-	              'data-toggle': 'collapse',
-	              'data-target': '#collapse-menu',
-	              'aria-expanded': 'false' },
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' })
-	          ),
-	          React.createElement(
-	            'div',
-	            { onClick: this.returnToHomepage },
-	            React.createElement(
-	              'a',
-	              { className: 'navbar-brand logo', href: '#' },
-	              'lyfecoach'
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'collapse navbar-collapse pull-right', id: 'collapse-menu' },
-	          React.createElement(
-	            'ul',
-	            { className: 'nav navbar-nav' },
-	            events,
-	            React.createElement(
-	              'li',
-	              { className: 'dropdown' },
-	              React.createElement(
-	                'a',
-	                { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
-	                this.state.currentUser.first_name,
-	                ' ',
-	                React.createElement('span', { className: 'caret' })
-	              ),
-	              React.createElement(
-	                'ul',
-	                { className: 'dropdown-menu', role: 'menu' },
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  React.createElement(
-	                    'a',
-	                    { href: '#' },
-	                    'Account Settings'
-	                  )
-	                ),
-	                React.createElement('li', { className: 'divider' }),
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  React.createElement(
-	                    'form',
-	                    { method: 'post', action: 'session' },
-	                    React.createElement('input', { type: 'hidden', name: '_method', value: 'delete' }),
-	                    React.createElement('input', { name: 'authenticity_token',
-	                      type: 'hidden',
-	                      value: ReactConstants.AUTH_TOKEN }),
-	                    React.createElement('input', { type: 'submit', value: 'Sign Out' })
-	                  )
-	                )
-	              )
-	            ),
-	            React.createElement(
-	              'li',
-	              { className: 'dropdown' },
-	              React.createElement(
-	                'a',
-	                { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
-	                'Help ',
-	                React.createElement('span', { className: 'caret' })
-	              ),
-	              React.createElement(
-	                'ul',
-	                { className: 'dropdown-menu', role: 'menu' },
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  React.createElement(
-	                    'a',
-	                    { href: '#' },
-	                    'Hidden Stuff'
-	                  )
-	                ),
-	                React.createElement('li', { className: 'divider' }),
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  React.createElement(
-	                    'a',
-	                    { href: '#' },
-	                    'Separated link'
-	                  )
-	                )
-	              )
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = NavBar;
-
-/***/ },
+/* 241 */,
 /* 242 */,
 /* 243 */
 /***/ function(module, exports, __webpack_require__) {
@@ -31766,117 +31565,8 @@
 	module.exports = DropdownStore;
 
 /***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactConstants = __webpack_require__(186),
-	    History = __webpack_require__(189).History;
-	
-	var UserDropdown = React.createClass({
-	  displayName: 'UserDropdown',
-	
-	  mixins: [History],
-	
-	  newSession: function () {
-	    this.history.pushState(null, 'session/new');
-	  },
-	
-	  render: function () {
-	    if (this.props.currentUser === "Guest") {
-	      return React.createElement(
-	        'div',
-	        null,
-	        React.createElement(
-	          'a',
-	          { href: 'session/new' },
-	          'Sign In'
-	        )
-	      );
-	    }
-	
-	    this.label = this.props.currentUser.first_name;
-	
-	    if (this.props.toggle === this.label) {
-	      var hiddenClass = "";
-	    } else {
-	      var hiddenClass = "hidden-dropdown";
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { onClick: this.props.onClick,
-	          className: 'nav-links' },
-	        this.props.currentUser.first_name
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: hiddenClass },
-	        React.createElement(
-	          'div',
-	          null,
-	          'Account Settings'
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          React.createElement(
-	            'form',
-	            { method: 'post', action: 'session' },
-	            React.createElement('input', { type: 'hidden', name: '_method', value: 'delete' }),
-	            React.createElement('input', { name: 'authenticity_token',
-	              type: 'hidden', value: ReactConstants.AUTH_TOKEN }),
-	            React.createElement('input', { type: 'submit', value: 'Sign Out' })
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = UserDropdown;
-
-/***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    DropdownConstants = __webpack_require__(245);
-	
-	var HelpDropdown = React.createClass({
-	  displayName: 'HelpDropdown',
-	
-	  render: function () {
-	    if (this.props.toggle === DropdownConstants.HELP) {
-	      var hiddenClass = "";
-	    } else {
-	      var hiddenClass = "hidden-dropdown";
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { onClick: this.props.onClick,
-	          className: 'nav-links' },
-	        DropdownConstants.HELP
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: hiddenClass },
-	        'Hiddenstuff'
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = HelpDropdown;
-
-/***/ },
+/* 247 */,
+/* 248 */,
 /* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32145,14 +31835,25 @@
 	  addMarker: function (event) {
 	    var myLatLng = { lat: event.lat, lng: event.lng };
 	
+	    // var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+	    //                                           new google.maps.Size(21, 34),
+	    //                                           new google.maps.Point(0, 0),
+	    //                                           new google.maps.Point(10, 34));
+	    var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow", new google.maps.Size(40, 37), new google.maps.Point(0, 0), new google.maps.Point(12, 35));
 	    var marker = new google.maps.Marker({
 	      position: myLatLng,
 	      map: this.map,
-	      eventId: event.id,
-	      animation: null
+	      title: "hello world",
+	      eventId: event.id
 	    });
 	
+	    marker.addListener('mouseover', this.showInfo);
+	
 	    this.markers.push(marker);
+	  },
+	
+	  showInfo: function () {
+	    console.log("hi!");
 	  },
 	
 	  removeMarker: function (marker) {
@@ -32563,9 +32264,10 @@
 	  },
 	
 	  render: function () {
-	    return React.createElement('input', { onChange: this.handleChange,
+	    return React.createElement('input', { className: 'form-control',
+	      onChange: this.handleChange,
 	      ref: 'autocomplete',
-	      placeholder: 'X',
+	      placeholder: '➤',
 	      onClick: this.geolocate,
 	      type: 'text' });
 	  }
@@ -33524,12 +33226,23 @@
 	  render: function () {
 	    return React.createElement(
 	      'form',
-	      { onSubmit: this.handleSubmit },
-	      React.createElement('input', { type: 'text',
-	        valueLink: this.linkState('title'),
-	        placeholder: 'Search by Event or Category' }),
-	      React.createElement(SearchFilter, null),
-	      React.createElement('input', { type: 'submit', value: 'Search' })
+	      { onSubmit: this.handleSubmit,
+	        className: 'navbar-form navbar-left',
+	        role: 'search' },
+	      React.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        React.createElement('input', { type: 'text',
+	          className: 'form-control',
+	          placeholder: 'Search by Event or Category',
+	          valueLink: this.linkState('title') }),
+	        React.createElement(SearchFilter, null)
+	      ),
+	      React.createElement(
+	        'button',
+	        { type: 'submit', className: 'btn btn-default' },
+	        'Search'
+	      )
 	    );
 	  }
 	
@@ -33575,6 +33288,226 @@
 	};
 	
 	module.exports = FilterFormActions;
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    NavBarActions = __webpack_require__(275),
+	    CurrentUserStore = __webpack_require__(243),
+	    ReactConstants = __webpack_require__(186),
+	    DropdownActions = __webpack_require__(244),
+	    DropdownStore = __webpack_require__(246);
+	
+	var NavBar = React.createClass({
+	  displayName: 'NavBar',
+	
+	  getInitialState: function () {
+	    return {
+	      currentUser: "Guest",
+	      shown: ""
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
+	    this.currentDropdownListener = DropdownStore.addListener(this._onChange);
+	
+	    if (ReactConstants.CURRENT_USER !== -1) {
+	      NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
+	    }
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ shown: DropdownStore.fetch() });
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.currentUserListener.remove();
+	    this.currentDropdownListener.remove();
+	  },
+	
+	  getCurrentUser: function () {
+	    this.setState({ currentUser: CurrentUserStore.fetch() });
+	  },
+	
+	  returnToHomepage: function (e) {
+	    this.props.history.pushState(null, '/', {});
+	  },
+	
+	  goToEventForm: function (e) {
+	    e.preventDefault();
+	    this.props.history.pushState(null, 'api/events/new');
+	  },
+	
+	  handleClick: function (e) {
+	    DropdownActions.showDropdown(e.target.innerText);
+	  },
+	
+	  render: function () {
+	    var events;
+	    if (ReactConstants.CURRENT_USER !== -1) {
+	      events = React.createElement(
+	        'li',
+	        { onClick: this.goToEventForm },
+	        React.createElement(
+	          'a',
+	          { href: '#' },
+	          'Be a host.'
+	        )
+	      );
+	      user = React.createElement(
+	        'li',
+	        { className: 'dropdown' },
+	        React.createElement(
+	          'a',
+	          { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
+	          this.state.currentUser.first_name,
+	          ' ',
+	          React.createElement('span', { className: 'caret' })
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'dropdown-menu', role: 'menu' },
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              'a',
+	              { href: '#' },
+	              'Account Settings'
+	            )
+	          ),
+	          React.createElement('li', { className: 'divider' }),
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              'form',
+	              { method: 'post', action: 'session' },
+	              React.createElement('input', { type: 'hidden', name: '_method', value: 'delete' }),
+	              React.createElement('input', { name: 'authenticity_token',
+	                type: 'hidden',
+	                value: ReactConstants.AUTH_TOKEN }),
+	              React.createElement('input', { type: 'submit', value: 'Sign Out' })
+	            )
+	          )
+	        )
+	      );
+	    } else {
+	      events = React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: 'users/new' },
+	          'Sign Up'
+	        )
+	      );
+	      user = React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: 'session/new' },
+	          'Sign In'
+	        )
+	      );
+	    }
+	
+	    return React.createElement(
+	      'nav',
+	      { className: 'navbar navbar-default nav-items' },
+	      React.createElement(
+	        'div',
+	        { className: 'container-fluid' },
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-header' },
+	          React.createElement(
+	            'button',
+	            { type: 'button', className: 'navbar-toggle collapsed',
+	              'data-toggle': 'collapse',
+	              'data-target': '#collapse-menu',
+	              'aria-expanded': 'false' },
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' })
+	          ),
+	          React.createElement(
+	            'div',
+	            { onClick: this.returnToHomepage },
+	            React.createElement(
+	              'a',
+	              { className: 'navbar-brand logo', href: '#' },
+	              'lyfecoach'
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'collapse navbar-collapse navbar-right', id: 'collapse-menu' },
+	          React.createElement(
+	            'form',
+	            { className: 'navbar-form navbar-left', role: 'search' },
+	            React.createElement(
+	              'div',
+	              { className: 'form-group' },
+	              React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Search' })
+	            ),
+	            React.createElement(
+	              'button',
+	              { type: 'submit', className: 'btn btn-default' },
+	              'Submit'
+	            )
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'nav navbar-nav' },
+	            events,
+	            user,
+	            React.createElement(
+	              'li',
+	              { className: 'dropdown' },
+	              React.createElement(
+	                'a',
+	                { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
+	                'Help ',
+	                React.createElement('span', { className: 'caret' })
+	              ),
+	              React.createElement(
+	                'ul',
+	                { className: 'dropdown-menu', role: 'menu' },
+	                React.createElement(
+	                  'li',
+	                  null,
+	                  React.createElement(
+	                    'a',
+	                    { href: '#' },
+	                    'Hidden Stuff'
+	                  )
+	                ),
+	                React.createElement('li', { className: 'divider' }),
+	                React.createElement(
+	                  'li',
+	                  null,
+	                  React.createElement(
+	                    'a',
+	                    { href: '#' },
+	                    'Separated link'
+	                  )
+	                )
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = NavBar;
 
 /***/ }
 /******/ ]);

@@ -1,5 +1,5 @@
 var React = require('react'),
-    NavBar = require('./nav_bar/nav_bar');
+    NavBar = require('./nav_bar');
 
 var App = React.createClass({
 

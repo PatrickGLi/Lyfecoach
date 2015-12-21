@@ -25,19 +25,24 @@ var FilterForm = React.createClass({
     if (this.state.title.length !== 0) {
       FilterFormActions.filterByTitle(this.state.title);
     }
-  
+
     this.props.history.pushState(null, "api/events");
   },
 
 
   render: function() {
     return(
-      <form onSubmit={this.handleSubmit}>
-        <input type="text"
-               valueLink={this.linkState('title')}
-               placeholder="Search by Event or Category"/>
-        <SearchFilter/>
-        <input type="submit" value="Search"/>
+      <form onSubmit={this.handleSubmit}
+            className="navbar-form navbar-left"
+            role="search">
+        <div className="form-group">
+          <input type="text"
+                 className="form-control"
+                 placeholder="Search by Event or Category"
+                 valueLink={this.linkState('title')}/>
+          <SearchFilter/>
+        </div>
+        <button type="submit" className="btn btn-default">Search</button>
       </form>
     );
   }

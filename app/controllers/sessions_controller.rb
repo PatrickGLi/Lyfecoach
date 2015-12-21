@@ -16,7 +16,6 @@ class SessionsController < ApplicationController
       render :new
     else
       login!(user)
-      flash[:notice] = "Signed in!"
       redirect_to root_url
     end
   end
