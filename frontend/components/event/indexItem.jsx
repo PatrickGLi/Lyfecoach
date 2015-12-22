@@ -20,6 +20,8 @@ var IndexItem = React.createClass({
   },
 
   render: function() {
+    debugger
+
     var startDate = new Date(this.props.event.start_date).toString().split(' ').slice(0,4).join(' ');
     var endDate = new Date(this.props.event.end_date).toString().split(' ').slice(0,4).join(' ');
     var startTime = this.props.event.start_time;
@@ -31,19 +33,20 @@ var IndexItem = React.createClass({
     var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_400" + this.props.event.url;
 
     return(
-      <div className="col-xs-3 icons">
-        <img onClick={this.props.onClick}
-             src={image}
+      <div onClick={this.props.onClick}
+           className="col-xs-3 icons">
+        <br/>
+        <img src={image}
              className="img-responsive"
              alt="Responsive image">
         </img>
-        <div>{this.props.event.title}</div>
-        <div>Location: {this.props.event.location}</div>
-        <div>Start Time: {this.props.event.start_date} {startDate} {startTime}</div>
-        <div>End Time: {this.props.event.end_date} {endDate} {endTime}</div>
-        <div>${this.props.event.price} Hosted by: {this.props.event.organizer}</div>
-        <div>{this.props.event.category}</div>
-        <div>View Count: {this.props.event.view_count}</div>
+        <div className="index-item-title">{this.props.event.organizer.host_name}</div>
+        <br/>
+        <div className="index-item-title">{this.props.event.title}</div>
+        <div>{this.props.event.location}</div>
+        <br/>
+        <div>{startDate} {startTime} to {endDate} {endTime}</div>
+        <div><b>${this.props.event.price}</b></div>
       </div>
     );
 

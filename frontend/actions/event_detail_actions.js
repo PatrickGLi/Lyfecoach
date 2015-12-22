@@ -1,9 +1,9 @@
 var ApiUtil = require('../util/api_util');
 
-var DetailActions = {
+var EventDetailActions = {
   fetchSingleEvent: function(eventId) {
     ApiUtil.fetchSingleEvent(eventId);
   }
 };
 
-module.exports = DetailActions;
+module.exports = EventDetailActions;

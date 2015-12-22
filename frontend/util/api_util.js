@@ -40,8 +40,14 @@ var ApiUtil = {
   },
 
   getCurrentUser: function(currentUserId) {
-    $.getJSON('api/users/' + currentUserId, {}, function(currentUser) {
+    $.get('api/users/' + currentUserId, {}, function(currentUser) {
       ApiActions.getCurrentUser(currentUser);
+    });
+  },
+
+  fetchSingleUser: function(userId) {
+    $.get('api/users/' + userId, {}, function(user) {
+      ApiActions.getSingleUser(user);
     });
   }
 };

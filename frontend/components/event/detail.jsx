@@ -1,6 +1,6 @@
 var React = require('react'),
     EventStore = require('../../stores/event_store'),
-    DetailActions = require('../../actions/detail_actions');
+    EventDetailActions = require('../../actions/event_detail_actions');
 
 var Detail = React.createClass({
   getInitialState: function() {
@@ -13,7 +13,7 @@ var Detail = React.createClass({
 
   componentDidMount: function() {
     this.token = EventStore.addListener(this.showEventDetail);
-    DetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
+    EventDetailActions.fetchSingleEvent(parseInt(this.props.params.eventId));
   },
 
   componentWillUnmount: function() {
@@ -63,7 +63,7 @@ var Detail = React.createClass({
         <div>{startDate} {startTime}</div>
         <div>{endDate} {endTime}</div>
         <div>{event.price}</div>
-        <div>{event.organizer}</div>
+        <div>{event.organizer.host_name}</div>
       </div>
 
 

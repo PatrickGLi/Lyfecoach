@@ -1,3 +1,94 @@
 // Place all the styles related to the api::events controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.event-page {
+  background-color: #f2f2f2;
+  padding-bottom: 20px;
+}
+
+
+.map {
+  width: 300px;
+  height: 100%;
+  float:left;
+}
+
+.map-and-filters-container {
+  height: 300px;
+}
+
+.event-title {
+  position: relative;
+  left: 20px;
+}
+
+.filter-container {
+  margin-left: 10px;
+  float:left;
+}
+
+.filter-container a {
+  color: black;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.filter-container li {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.filter-container .dropdown-menu li a{
+  font-weight: 300;
+}
+
+.filter-container .nav>li>a:hover {
+  background-color: #2a2a2a;
+}
+.filter-container .nav>li>a:focus {
+  background-color: #2a2a2a;
+}
+
+.filter-container .nav>li>a:hover > span {
+  color: white;
+}
+.filter-container .nav>li>a:focus > span {
+  color: black;
+}
+
+.filter-container .nav>li>a {
+  transition: background-color, .7s;
+}
+
+.filter-container .nav>li>a>span {
+  transition: color, .7s;
+}
+
+.icons {
+  border: 2px solid #dce4ec;
+  height: 450px;
+  border-radius: 3px;
+  margin: 0 0 5px 0;
+  transition: transform, .5s, border, .5s, background-color, .5s;
+}
+
+.icons:hover {
+  cursor: pointer;
+  transform: translateY(-5px);
+  border-color: #858585;
+  background-color: #E0E0E0;
+}
+
+.icons div {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.icons .index-item-title {
+  font-size: 18px;
+}
+
+.event-index-container {
+  margin: 20px auto 0 auto;;
+}

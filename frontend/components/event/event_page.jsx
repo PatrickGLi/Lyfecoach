@@ -5,6 +5,7 @@ var React = require('react'),
     EventIndex = require('./index'),
     FilterParamsStore = require('../../stores/filter_params_store'),
     EventPageActions = require('../../actions/event_page_actions'),
+    NavTransitions = require('../../util/nav_transitions'),
     Filter = require('../filter/filter');
 
 function _getAllEvents() {
@@ -26,43 +27,14 @@ var EventPage = React.createClass({
   componentDidMount: function() {
     this.eventListener = EventStore.addListener(this._eventsChanged);
     this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
-
-    this.addNavTransitions();
+    NavTransitions.addNavTransitions();
   },
 
   componentWillUnmount: function() {
     this.eventListener.remove();
     this.filterListener.remove();
     FilterParamsStore.resetFilters();
-    this.removeNavTransitions();
-  },
-
-  addNavTransitions: function() {
-    this.$navbar = $(".navbar-default .navbar-nav > li > a");
-    this.$logo = $("#logo");
-
-    this.$navbar.hover(
-      function() {
-        $(this).css("color", "#bdbdbd"); },
-      function() {
-        $(this).css("color", "white"); });
-
-    this.$logo.hover(
-      function() {
-        $(this).css("color", "#bdbdbd"); },
-      function() {
-        $(this).css("color", "white"); });
-
-    this.$navbar.css('transition', 'color, 0.7s');
-    this.$logo.css('transition', 'color, 0.7s');
-  },
-
-  removeNavTransitions: function() {
-    this.$logo.unbind('mouseenter mouseleave');
-    this.$navbar.unbind('mouseenter mouseleave');
-
-    this.$navbar.css('transition', 'color, 0s');
-    this.$logo.css('transition', 'color, 0s');
+    NavTransitions.removeNavTransitions();
   },
 
   _filtersChanged: function () {
@@ -85,7 +57,6 @@ var EventPage = React.createClass({
                   <Filter filterParams={this.state.filterParams}/>
                 </div>
               </div>
-
               <EventIndex events={this.state.events} history={this.props.history}/>
             </div>
            );

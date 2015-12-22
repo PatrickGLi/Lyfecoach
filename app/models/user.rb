@@ -21,7 +21,8 @@ class User < ActiveRecord::Base
   validates :host_name, length: { minimum: 6 }
   after_initialize :ensure_session_token
 
-  has_many :events
+  has_many :events,
+  foreign_key: :organizer_id
 
   attr_reader :password
 
