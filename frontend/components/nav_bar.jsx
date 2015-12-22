@@ -69,7 +69,7 @@ var NavBar = React.createClass({
     // </form>
 
     return (
-      <nav className="navbar navbar-default nav-items">
+      <nav id="tst" className="navbar navbar-default nav-items">
         <div className="container-fluid">
           <div className="navbar-header">
             <button type="button" className="navbar-toggle collapsed"

@@ -68,43 +68,36 @@ body, h1, h2 {
   font-weight: 300;
 }
 
-a {
-  transition: color, .5s;
-}
-
 #logo {
   font-size: 26px;
   letter-spacing: 6px;
-  font-weight: 100;
-}
-
-#logo:hover, #logo:focus {
-  color: #bdbdbd;
-}
-
-.navbar-default .navbar-nav>li>a:hover,
-.navbar-default .navbar-nav>li>a:focus {
-  color: #bdbdbd;
+  font-weight: 200;;
 }
 
 .navbar {
-  background-color: #424242;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 1px;
-}
-
-.navbar {
   margin-bottom: 0;
   border-radius: 0;
 }
 
+.transparency{
+  background: transparent;
+}
+
 .navbar .sign-out-link {
   border: none;
+  font-size: 16px;
   background: transparent;
-  margin: 0 auto;
+  margin-left: 50px;
+  font-weight: 500;
+  transition: font-size, 1s;
 }
 
 .jumbotron {
+  z-index: -1;
+  position:relative;
+  top: -60px;
   background-size: cover;
   background-position: 0% 50%;
   background-repeat: no-repeat;
