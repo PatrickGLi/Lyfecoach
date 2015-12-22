@@ -3,7 +3,7 @@ var React = require('react'),
 
 var EventIndex = React.createClass({
   showUserDetail: function(event) {
-    this.props.history.pushState(null, 'api/users/' + event.organizer.id);
+    this.props.history.pushState(null, 'api/users/' + event.organizer.id + '/events/' + event.id);
   },
 
   render: function() {

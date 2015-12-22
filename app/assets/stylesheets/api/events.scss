@@ -7,7 +7,6 @@
   padding-bottom: 20px;
 }
 
-
 .map {
   width: 300px;
   height: 100%;
@@ -21,6 +20,15 @@
 .event-title {
   position: relative;
   left: 20px;
+}
+
+.no-selection {
+  width: 50%;
+  margin: 0 auto;
+  height: 500px;
+  text-align: center;
+  font-size: 24px;
+  padding-top: 100px;
 }
 
 .filter-container {
@@ -67,7 +75,7 @@
 
 .icons {
   border: 2px solid #dce4ec;
-  height: 450px;
+  height: 470px;
   border-radius: 3px;
   margin: 0 0 5px 0;
   transition: transform, .5s, border, .5s, background-color, .5s;

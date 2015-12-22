@@ -8,7 +8,7 @@ var Detail = React.createClass({
   },
 
   getStateFromStore: function() {
-    return EventStore.find(parseInt(this.props.params.eventId));
+    return EventStore.fetch();
   },
 
   componentDidMount: function() {
@@ -18,6 +18,10 @@ var Detail = React.createClass({
 
   componentWillUnmount: function() {
     this.token.remove();
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    EventDetailActions.fetchSingleEvent(parseInt(newProps.params.eventId));
   },
 
   showEventDetail: function() {
@@ -55,15 +59,31 @@ var Detail = React.createClass({
     endTime = this.convertTime(endTime);
 
     return (
-      <div>
-        <div>{event.title}</div>
-        <div><img src={image}/></div>
+      <div className="event-detail">
+        <div><h4>{event.title}</h4></div>
+        <div className="event-image"><img src={image}/></div>
         <div>{event.location}</div>
-        <div>{event.description}</div>
         <div>{startDate} {startTime}</div>
         <div>{endDate} {endTime}</div>
         <div>{event.price}</div>
-        <div>{event.organizer.host_name}</div>
+
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+          <div className="panel panel-default">
+            <div className="panel-heading" role="tab" id="headingOne">
+              <h4 className="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  >
+                </a>
+              </h4>
+            </div>
+            <div id="collapseOne" className="host-description panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+
+              <div>{event.organizer.host_name}</div>
+              {event.description}
+            </div>
+          </div>
+        </div>
+
       </div>
 
 

@@ -9,12 +9,8 @@ EventStore.all = function() {
   return _events.slice(0);
 };
 
-EventStore.find = function(id) {
-  for (var i = 0; i < _events.length; i++) {
-    if (_events[i].id === id) {
-      return _events[i];
-    }
-  }
+EventStore.fetch = function() {
+  return _events[0];
 };
 
 var resetEvents = function(events){
@@ -24,14 +20,14 @@ var resetEvents = function(events){
 };
 
 var resetSingleEvent = function(event) {
-  for (var i = 0; i < _events.length; i++) {
-    if (_events[i].id === event.id) {
-      _events[i] = event;
-    }
-  }
+  _events = [event];
 
   EventStore.__emitChange();
 };
+
+EventStore.clearEvents = function() {
+  _events = [];
+}
 
 EventStore.__onDispatch = function(payload) {
   switch(payload.actionType) {
@@ -43,5 +39,7 @@ EventStore.__onDispatch = function(payload) {
       break;
   }
 };
+
+
 
 module.exports = EventStore

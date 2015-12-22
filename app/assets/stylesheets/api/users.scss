@@ -12,3 +12,13 @@
 .host-head {
   padding-bottom: 20px;
 }
+
+.host-head img,
+.event-detail img {
+  border: 2px solid #dce4ec;
+}
+
+.host-head img:hover,
+.event-detail img:hover {
+  cursor: default;
+}

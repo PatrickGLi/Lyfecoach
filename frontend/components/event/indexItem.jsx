@@ -20,8 +20,6 @@ var IndexItem = React.createClass({
   },
 
   render: function() {
-    debugger
-
     var startDate = new Date(this.props.event.start_date).toString().split(' ').slice(0,4).join(' ');
     var endDate = new Date(this.props.event.end_date).toString().split(' ').slice(0,4).join(' ');
     var startTime = this.props.event.start_time;
@@ -40,9 +38,7 @@ var IndexItem = React.createClass({
              className="img-responsive"
              alt="Responsive image">
         </img>
-        <div className="index-item-title">{this.props.event.organizer.host_name}</div>
-        <br/>
-        <div className="index-item-title">{this.props.event.title}</div>
+        <div className="index-item-title">{this.props.event.title}</div><br/>
         <div>{this.props.event.location}</div>
         <br/>
         <div>{startDate} {startTime} to {endDate} {endTime}</div>
