@@ -1,60 +1,62 @@
-<div class="row">
-  <div class="col-xs-4 col-xs-offset-1">
-    <h1 class="logo">Lyfecoach</h1>
+<div class="user-container">
+  <div class="row">
+    <div class="col-xs-4 col-xs-offset-1">
+      <h1 class="logo">Lyfecoach</h1>
 
-    <form action="<%=users_url%>" method="post">
-      <%= auth_token %>
+      <form action="<%=users_url%>" method="post">
+        <%= auth_token %>
 
-      <div class="form-group">
-        <label for="first_name">First Name</label>
-        <input class="form-control"
-               id="first_name"
-               type="text"
-               name="user[first_name]"
-               value="<%=@user.first_name%>"/>
-      </div>
+        <div class="form-group">
+          <label for="first_name">First Name</label>
+          <input class="form-control"
+                 id="first_name"
+                 type="text"
+                 name="user[first_name]"
+                 value="<%=@user.first_name%>"/>
+        </div>
 
-      <div class="form-group">
-        <label for="last_name">Last Name</label>
-        <input class="form-control"
-               id="last_name"
-               type="text"
-               name="user[last_name]"
-               value="<%=@user.last_name%>"/>
-      </div>
+        <div class="form-group">
+          <label for="last_name">Last Name</label>
+          <input class="form-control"
+                 id="last_name"
+                 type="text"
+                 name="user[last_name]"
+                 value="<%=@user.last_name%>"/>
+        </div>
 
-      <div class="form-group">
-        <label for="host_name">Alias</label>
-        <input class="form-control"
-               id="host_name"
-               type="text"
-               name="user[host_name]"
-               value="<%=@user.host_name%>"/>
-      </div>
+        <div class="form-group">
+          <label for="host_name">Alias</label>
+          <input class="form-control"
+                 id="host_name"
+                 type="text"
+                 name="user[host_name]"
+                 value="<%=@user.host_name%>"/>
+        </div>
 
-      <div class="form-group">
-        <label for="email">email</label>
-        <input class="form-control"
-               id="email"
-               type="text"
-               name="user[email]"
-               value="<%=@user.email%>"/>
-      </div>
+        <div class="form-group">
+          <label for="email">email</label>
+          <input class="form-control"
+                 id="email"
+                 type="text"
+                 name="user[email]"
+                 value="<%=@user.email%>"/>
+        </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input class="form-control"
-               id="password"
-               type="password"
-               name="user[password]"/>
-      </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input class="form-control"
+                 id="password"
+                 type="password"
+                 name="user[password]"/>
+        </div>
 
-      <button class="btn btn-primary" type="submit">Sign Up</button>
-    </form>
+        <button class="btn btn-primary" type="submit">Sign Up</button>
+      </form>
 
-    <%= render "/shared/errors" %>
+      <%= render "/shared/errors" %>
 
-    <%=link_to "Or, Sign in.", new_session_url%>
+      <%=link_to "Or, Sign in.", new_session_url%>
 
+    </div>
   </div>
 </div>

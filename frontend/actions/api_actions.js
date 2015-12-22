@@ -1,6 +1,7 @@
 var AppDispatcher = require('../dispatcher/dispatcher');
     EventConstants = require('../constants/event_constants'),
-    NavBarConstants = require('../constants/nav_bar_constants');
+    NavBarConstants = require('../constants/nav_bar_constants'),
+    UserConstants = require('../constants/user_constants');
 
 ApiActions = {
   receiveAll: function(events){
@@ -21,6 +22,13 @@ ApiActions = {
     AppDispatcher.dispatch({
       actionType: NavBarConstants.GET_CURRENT_USER,
       currentUser: currentUser
+    });
+  },
+
+  getSingleUser: function(user) {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.GET_SINGLE_USER,
+      user: user
     });
   }
 }

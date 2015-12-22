@@ -163,15 +163,24 @@
 }
 
 .popular-title {
-  margin: 0 0 15px 20px;
+  width: 90%;
+  margin: 0 auto;
 }
 
 img:hover {
   cursor: pointer;
 }
 
+.popular-event-index {
+  width: 90%;
+  margin: 0 auto;
+  padding-bottom: 20px;
+  position: relative;
+  bottom: -15px;
+}
+
 div .popular-icons img {
-  margin: 0 12px 24px 12px;
+  margin: 0 0 24px 0;
   padding: 0;
   opacity: 0.6;
   transition: opacity, 1s;
@@ -181,69 +190,7 @@ div .popular-icons img:hover {
   opacity: 1;
 }
 
-.event-page {
-  background-color: #f2f2f2;
-}
-
-
 .footer-container {
   height: 250px;
   background-color: #2a2a2a;
-}
-
-.map {
-  width: 300px;
-  height: 100%;
-  float:left;
-}
-
-.map-and-filters-container {
-  height: 300px;
-}
-
-.event-title {
-  position: relative;
-  left: 20px;
-}
-
-.filter-container {
-  margin-left: 10px;
-  float:left;
-}
-
-.filter-container a {
-  color: black;
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.filter-container li {
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.filter-container .dropdown-menu li a{
-  font-weight: 300;
-}
-
-.filter-container .nav>li>a:hover {
-  background-color: #2a2a2a;
-}
-.filter-container .nav>li>a:focus {
-  background-color: #2a2a2a;
-}
-
-.filter-container .nav>li>a:hover > span {
-  color: white;
-}
-.filter-container .nav>li>a:focus > span {
-  color: black;
-}
-
-.filter-container .nav>li>a {
-  transition: background-color, .7s;
-}
-
-.filter-container .nav>li>a>span {
-  transition: color, .7s;
 }

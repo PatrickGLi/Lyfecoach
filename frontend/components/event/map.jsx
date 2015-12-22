@@ -84,28 +84,20 @@ var Map = React.createClass({
   addMarker: function(event) {
     var myLatLng = {lat: event.lat, lng: event.lng};
 
-    // var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-    //                                           new google.maps.Size(21, 34),
-    //                                           new google.maps.Point(0, 0),
-    //                                           new google.maps.Point(10, 34));
-   var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-                                               new google.maps.Size(40, 37),
-                                               new google.maps.Point(0, 0),
-                                               new google.maps.Point(12, 35));
     var marker = new google.maps.Marker({
       position: myLatLng,
       map: this.map,
-      title: "hello world",
+      title: "Hosted by " + event.organizer.host_name,
       eventId: event.id,
       icon: 'http://res.cloudinary.com/dlqjek68b/image/upload/v1450771235/marker_black_mpnvvp.png'
     });
 
-    marker.addListener('mouseover', this.showInfo);
+    marker.addListener('click', this.goToHost);
 
     this.markers.push(marker);
   },
 
-  showInfo: function() {
+  goToHost: function() {
     console.log("hi!");
   },
 

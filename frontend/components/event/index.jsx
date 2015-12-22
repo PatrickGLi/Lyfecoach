@@ -2,21 +2,21 @@ var React = require('react'),
     IndexItem = require('./indexItem');
 
 var EventIndex = React.createClass({
-  showEventDetail: function(event) {
-    this.props.history.pushState(null, 'api/events/' + event.id);
+  showUserDetail: function(event) {
+    this.props.history.pushState(null, 'api/users/' + event.organizer.id);
   },
 
   render: function() {
-    var showEventDetail = this.showEventDetail;
-    var events = this.props.events.map(function(event) {
-      var bindedClick = showEventDetail.bind(null, event);
+    var showUserDetail = this.showUserDetail;
+    var events = this.props.events.map(function(event, index) {
+      var bindedClick = showUserDetail.bind(null, event);
       return ( <IndexItem onClick={bindedClick}
                           key={event.id}
                           event={event}/> );
     });
 
     return (
-      <div className="row">
+      <div className="container event-index-container">
         {events}
       </div>
     );

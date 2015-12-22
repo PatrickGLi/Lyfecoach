@@ -12,5 +12,5 @@ json.array! @events do |event|
   json.lat event.lat
   json.lng event.lng
   json.view_count event.view_count
-  json.organizer event.organizer.email
+  json.organizer event.organizer
 end
