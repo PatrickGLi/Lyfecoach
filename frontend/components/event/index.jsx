@@ -1,5 +1,4 @@
 var React = require('react'),
-    EventStore = require('../../stores/event_store'),
     IndexItem = require('./indexItem');
 
 var EventIndex = React.createClass({

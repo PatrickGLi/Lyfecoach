@@ -25,7 +25,7 @@ var Map = React.createClass({
 
    var locationData = { nearLat: lat,
                         nearLng: lng,
-                        address: "you." };
+                        address: "you" };
 
   if (Object.keys(FilterParamsStore.params()).length === 0) {
     MapActions.updateLocation(locationData);
@@ -37,7 +37,7 @@ var Map = React.createClass({
 
   componentWillReceiveProps: function(newProps) {
     if (typeof this.map === 'undefined') {
-      return
+      return;
     } //component receives props before geolocation
 
     if (this.props.events !== newProps.events) {

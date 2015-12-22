@@ -3,7 +3,7 @@ var React = require('react'),
 
 var Title = React.createClass({
   getInitialState: function() {
-    return({ title: FilterParamsStore.getTitle() });
+    return({ title: FilterParamsStore.getTitles() });
   },
 
   componentDidMount: function() {
@@ -15,10 +15,28 @@ var Title = React.createClass({
   },
 
   getTitle: function() {
-    this.setState({ title: FilterParamsStore.getTitle() });
+    this.setState({ title: FilterParamsStore.getTitles() });
   },
 
   render: function() {
+    var location_title = this.state.title.location;
+    if (location_title === "") {
+      location_title = "you"
+    }
+
+    var price_title = this.state.title.price;
+    if (price_title !== "") {
+      price_title = " under $" + price_title;
+    }
+
+    var date_title = this.state.title.date;
+    if (date_title !== "") {
+      date_title = date_title.toLowerCase();
+    }
+
+    var category_title = this.state.title.category.toLowerCase() + " ";
+
+
     // var title;
     //
     // for (var key in this.state.title) {
@@ -28,7 +46,9 @@ var Title = React.createClass({
     console.log(this.state.title)
 
     return (
-      <div>Events near {this.state.title.location} for ${this.state.title.price}</div>
+      <div>
+        <h1>{category_title}events near {location_title}{price_title} {date_title}</h1>
+      </div>
     );
   }
 

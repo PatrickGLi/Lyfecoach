@@ -2,7 +2,6 @@ var React = require('react'),
     Map = require('./map'),
     EventStore = require('../../stores/event_store'),
     EventTitle = require('./title'),
-    EventSearch = require('./search'),
     EventIndex = require('./index'),
     FilterParamsStore = require('../../stores/filter_params_store'),
     EventPageActions = require('../../actions/event_page_actions'),
@@ -47,11 +46,10 @@ var EventPage = React.createClass({
 
   render: function() {
     return (
-            <div>
+            <div className="event-page">
               <Map events={this.state.events} filterParams={this.state.filterParams}/>
               <EventTitle/>
               <Filter filterParams={this.state.filterParams}/>
-              <EventSearch/>
               <EventIndex events={this.state.events} history={this.props.history}/>
             </div>
            );

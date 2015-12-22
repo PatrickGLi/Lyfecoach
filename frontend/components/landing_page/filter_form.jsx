@@ -32,18 +32,18 @@ var FilterForm = React.createClass({
 
   render: function() {
     return(
-      <form onSubmit={this.handleSubmit}
-            className="navbar-form navbar-left"
-            role="search">
-        <div className="form-group">
-          <input type="text"
-                 className="form-control"
-                 placeholder="Search by Event or Category"
-                 valueLink={this.linkState('title')}/>
-          <SearchFilter/>
-        </div>
-        <button type="submit" className="btn btn-default">Search</button>
-      </form>
+      <div className="popular-search">
+        <form onSubmit={this.handleSubmit}
+              className="form-inline">
+            <input type="text"
+                   className="form-control"
+                   placeholder="Search by Event or Category"
+                   valueLink={this.linkState('title')}/>
+            <SearchFilter/>
+          <button type="submit" className="btn btn-default">Search</button>
+        </form>
+      </div>
+
     );
   }
 

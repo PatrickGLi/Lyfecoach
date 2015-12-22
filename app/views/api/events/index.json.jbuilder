@@ -2,7 +2,6 @@ json.array! @events do |event|
   json.id event.id
   json.title event.title
   json.location event.location
-  json.description event.description
   json.category event.category
   json.start_date event.start_date
   json.start_time event.start_time

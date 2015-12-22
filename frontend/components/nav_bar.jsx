@@ -1,35 +1,26 @@
 var React = require('react'),
     NavBarActions = require('../actions/nav_bar_actions'),
     CurrentUserStore = require('../stores/current_user_store'),
-    ReactConstants = require('../constants/react_constants'),
-    DropdownActions = require('../actions/dropdown_actions'),
-    DropdownStore = require('../stores/dropdown_store');
+    ReactConstants = require('../constants/react_constants');
 
 var NavBar = React.createClass({
 
   getInitialState: function() {
     return ({
       currentUser: "Guest",
-      shown: ""
     });
   },
 
   componentDidMount: function() {
     this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
-    this.currentDropdownListener = DropdownStore.addListener(this._onChange);
 
     if (ReactConstants.CURRENT_USER !== -1) {
       NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
     }
   },
 
-  _onChange: function() {
-    this.setState({ shown: DropdownStore.fetch() });
-  },
-
   componentWillUnmount: function() {
     this.currentUserListener.remove();
-    this.currentDropdownListener.remove();
   },
 
   getCurrentUser: function() {
@@ -45,14 +36,10 @@ var NavBar = React.createClass({
     this.props.history.pushState(null,'api/events/new');
   },
 
-  handleClick: function(e) {
-    DropdownActions.showDropdown(e.target.innerText);
-  },
-
   render: function() {
     var events;
     if (ReactConstants.CURRENT_USER !== -1) {
-      events = <li onClick={this.goToEventForm}><a href="#">Be a host.</a></li>
+      events = <li onClick={this.goToEventForm}><a id="test4" href="#">Be a host.</a></li>
       user = <li className="dropdown">
         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.state.currentUser.first_name} <span className="caret"></span></a>
         <ul className="dropdown-menu" role="menu">
@@ -64,7 +51,7 @@ var NavBar = React.createClass({
               <input name="authenticity_token"
                      type="hidden"
                      value={ReactConstants.AUTH_TOKEN} />
-              <input type="submit" value="Sign Out"></input>
+              <input className="sign-out-link" type="submit" value="Sign Out"></input>
             </form>
           </li>
         </ul>
@@ -73,6 +60,13 @@ var NavBar = React.createClass({
       events = <li><a href="users/new">Sign Up</a></li>;
       user = <li><a href="session/new">Sign In</a></li>;
     }
+
+    // <form className="navbar-form navbar-left" role="search">
+    //   <div className="form-group">
+    //     <input type="text" className="form-control" placeholder="Search"/>
+    //   </div>
+    //   <button type="submit" className="btn btn-default">Submit</button>
+    // </form>
 
     return (
       <nav className="navbar navbar-default nav-items">
@@ -87,18 +81,11 @@ var NavBar = React.createClass({
               <span className="icon-bar"></span>
             </button>
             <div onClick={this.returnToHomepage}>
-              <a className="navbar-brand logo" href="#">lyfecoach</a>
+              <a id="logo" className="navbar-brand logo" href="#">lyfecoach</a>
             </div>
           </div>
 
           <div className="collapse navbar-collapse navbar-right" id="collapse-menu">
-            <form className="navbar-form navbar-left" role="search">
-              <div className="form-group">
-                <input type="text" className="form-control" placeholder="Search"/>
-              </div>
-              <button type="submit" className="btn btn-default">Submit</button>
-            </form>
-
             <ul className="nav navbar-nav">
               {events}
               {user}

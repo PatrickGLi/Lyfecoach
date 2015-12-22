@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-event_type = ["Cuisine", "Arts", "Music", "Nightlife", "Sports & Fitness"]
+event_type = ["Food & Drink", "Art", "Music", "Nightlife", "Sports & Fitness"]
 
 User.create!(email: "templenightclub@gmail.com",
              first_name: "Temple",
@@ -52,11 +52,33 @@ Ruby Skye is in a class all by itself, innovative menu choices and our attention
               password: "password123",
               url: "/v1450654168/dpzDUkJrTHb71Yla1EzF_IMG_4098_qzifm7.jpg")
 
+User.create!(email: "regencyballroom@gmail.com",
+             first_name: "Regency",
+             last_name: "Ballroom",
+             host_name: "So Cute! Tour",
+             description: "Tour Dates 2015
+12.2.15 - Lincoln - Nebraska- Vega - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.3.15 - Denver - Colorado- Gothic Theater - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.4.15 - Salt Lake City - Utah - Urban Lounge - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.5.15 - Boise - Idaho - Knitting Factory - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.8.15 - Bellingham - Washington - Wild Buffalo - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.9.15 - Vancouver - British Columbia - Fortune Sound - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.10.15 - Victoria - British Columbia - DISTRIKT - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.11.15 - Seattle - Washington - Showbox - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.12.15 - Portland - Oregon - Wonder Ballroom - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.13.15 - Eugene - Oregon - Hi-Fi - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.16.15 - Arcata - California - Arcata Theater - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.17.15 - San Francisco - California - Regency Ballroom - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.18.15 - Los Angeles - California - Fonda - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.19.15 - Santa Ana - California - Observatory - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
+12.20.15 - San Diego - California - Observatory North Park - So Cute! Tour w/ Slow Magic, Lindsay Lowend & Gupi - Tickets",
+             password: "password123",
+             url: "/v1450654174/photo-1420161900862-9a86fa1f5c79_b1hev9.jpg")
 
 Event.create!(title: "Big Boi (DJ Set) with Special Guest Falcons",
               location: "1015 Folsom St, San Francisco, CA 94103",
-              start_date: 1421913500000,
-              end_date: 1422000000000,
+              start_date: 1453363200000,
+              end_date: 1453449600000,
               start_time: 22,
               end_time: 2,
               description: "Outside his primary role as partner to André 3000 in OutKast and as one of the central members of The Dungeon Family, Big Boi (born Antwan André Patton) appeared on tracks by Missy Elliott (“All N My Grill”), Trick Daddy (“In da Wind”), Jay-Z (“Poppin’ Tags”), Killer Mike (“A.D.I.D.A.S.”), Beyoncé (“Hip Hop Star”), Brooke Valentine (“Girlfight”), Sleepy Brown (“Margarita”), and Fantasia (“Hood Boy”). As a solo artist, the MC had a hit in 2005 with “Kryptonite (I’m on It),” one of the year’s best rap singles; it was the lead single from the officially released showcase for his Purple Ribbon label, the eclectic Got Purp?, Vol. 2, which featured the likes of Killer Mike and Sleepy Brown, as well as protégé Janelle Monáe.
@@ -74,8 +96,8 @@ Also involved in film (ATL, OutKast’s Idlewild,Who’s Your Caddy?) and even t
 
 Event.create!(title: "Metro Boomin with Special Guest Twrk",
               location: "1015 Folsom St, San Francisco, CA 94103",
-              start_date: 1422518400000,
-              end_date: 1422604800000,
+              start_date: 1454054400000,
+              end_date: 1454140800000,
               start_time: 22,
               end_time: 2,
               description: "At only 21 years old, Metro Boomin has become one of hip-hop’s most sought after producers and DJ’s, working with some of the genre’s biggest stars, a list of names that includes Future, Drake, Kanye West, Nicki Minaj 2 Chainz, Gucci Mane, YG, Ludacris, Wiz Khalifa, Travi$ Scott, Young Thug, Meek Mill, and more.
@@ -99,8 +121,8 @@ As the accomplishments continue to stack, it’s safe to say that Metro has expe
 
 Event.create!(title: "The Lonely Hearts Club 2016 Ft. Darius + Autograf Ekali",
               location: "1015 Folsom St, San Francisco, CA 94103",
-              start_date: 1423727000000,
-              end_date: 1423814400000,
+              start_date: 1455264000000,
+              end_date: 1455350400000,
               start_time: 22,
               end_time: 3,
               description: "Darius is an uprising French artist, known as an inaugural player of a recent House music movement taking its roots in France and quickly spreading around the world. Infused by the uplifting beat of Disco and Funk, Darius add a certain underground intricacy to his music, setting himself alongside his successful house compatriots. After his standard setting jewel 'Maliblue', Terrence N'Guyen was a key part in bringing Cherokee to the international scene.
@@ -120,8 +142,8 @@ One of the most exciting young talents to emerge from France, DJ / producer Dari
 
 Event.create!(title: "Temple Presents Oliver Heldens",
               location: "540 Howard St, San Francisco, CA 94105",
-              start_date: 1426834700000,
-              end_date: 1426921200000,
+              start_date: 1458370800000,
+              end_date: 1458457200000,
               start_time: 23,
               end_time: 4,
               description: "We welcome 2016 with an incredible 1 Year Anniversary Celebration of #TheNewTemple with Oliver Heldens
@@ -145,8 +167,8 @@ Contact us at 415.312.3668 or vip@templesf.com to make a reservation",
         )
 Event.create!(title: "Temple Presents Bingo Players",
               location: "1015 Folsom St, San Francisco, CA 94103",
-              start_date: 1422518400000,
-              end_date: 1422604800000,
+              start_date: 1454054400000,
+              end_date: 1454140800000,
               start_time: 22,
               end_time: 2,
               description: "AMaarten Hoogstraten wasn't like other kids his age. When he was 10, his friends were buying toys to play with, but Maarten was already spending his cash on vinyl and CDs.
@@ -201,8 +223,8 @@ Contact us at 415.312.3668 or vip@templesf.com to make a reservation",
 
 Event.create!(title: "Ruby Skye & Control Present EPHWURD",
               location: "420 Mason St, San Francisco, CA 94109",
-              start_date: 1421222400000,
-              end_date: 1421308700000,
+              start_date: 1452758400000,
+              end_date: 1452844800000,
               start_time: 21,
               end_time: 2,
               description: "EPHWURD [SF DEBUT] & AUTOEROTIQUE Ruby Skye Thursday, January 14, 2016 at 9:00 PM (PST) San Francisco, CA",
@@ -218,8 +240,8 @@ Event.create!(title: "Ruby Skye & Control Present EPHWURD",
 
 Event.create!(title: "Ruby Skye Presents HOOK N SLING & ELEPHANTE",
               location: "420 Mason St, San Francisco, CA 94109",
-              start_date: 1421913500000,
-              end_date: 1422000000000,
+              start_date: 1453363200000,
+              end_date: 1453449600000,
               start_time: 22,
               end_time: 4,
               description: "Ruby Skye Presents
@@ -236,6 +258,34 @@ BUY TICKETS NOW
               lng: -122.409595,
               organizer_id: 3
         )
+
+Event.create!(title: "Giraffage ft. Slow Magic",
+              location: "1300 Van Ness Ave, San Francisco, CA 94109",
+              start_date: 1457164800000,
+              end_date: 1457251200000,
+              start_time: 20,
+              end_time: 2,
+              description: "A DIY project with worldwide scope, Slow Magic is universal and inclusive. It’s cosmic electronic music culled from the ether, yet crafted with human hands. It’s joyous, escapist, multi-disciplinary art that mixes transcendent performance with the nostalgic intimacy of two teenagers staying up too late on the phone.
+
+After the release of 2012’s beloved and critically-acclaimed Triangle, Slow Magic became an international movement after touring with artists like Gold Panda and XXYYXX. Crowds found a masked man in their midst, bathed in fantastic light, with electronic triggers and a drum. The future-primitive combination infused the project’s electronic compositions with new life.
+
+How To Run Away, Slow Magic’s debut with Downtown Records, reflects this growth, oozing both otherworldly beauty and a mastery of production. Lead single “Girls” is deconstructionist house with an organic pulse and collaged, handcrafted samples. “Hold Still” sculpts elastic organs and jazz piano into an emotionally-pummeling finale, while the melancholy “Let U Go” merges watery dub with spectral piano and “Closer” plays like a ‘90s R&B fever dream.
+
+Slow Magic is music by your imaginary friend.
+
+Giraffage is San Francisco-based producer and beat guru, Charlie Yin. His signature sound of electronic pop has won him praise from musical tastemakers Pitchfork, FADER and XLR8R. He burst onto the music scene with his debut Pretty Things EP. It was immediately followed by his dreamy synth-pop debut album, Comfort, which XLR8R called “[an] ebullient slice of electronic pop
+ … [with] pleasantly ambient and sample-laden instrumentals.” In February 2013, he released his lush Needs mixtape via Alpha Pup Records, showing his versatility as a producer and “omnivorous music lover,” as noted by Pitchfork. Giraffage’s staying power was fully cemented when he remixed one the sexiest albums of the decade, The-Dream’s Love/Hate, and turned it on its head.FADER
+ backed the project saying, “Trying to remember a moment of anticipation right before hitting the play button as happy as the one I just experienced.” He most recently dropped his No Reason EP via Fool’s Gold, the first release to ever feature Charlie’s original work. He has toured with Phantogram, Flume, XXYYXX and served as the main support on Porter Robinson’s massive “Worlds Tour.” He has performed at staple music festivals such as Treasure Island, HARD Day of The Dead, Splash House, Lightning in a Bottle and Roskilde in Europe.",
+              ticket_max: 3000,
+              price: 25.00,
+              view_count: rand(3000..100000),
+              url: "/v1450739579/SA_Giraffage_Sickest-Addictions_Sick-Addicts_2012_k0bfxj.jpg",
+              category: "Music",
+              lat: 37.752211,
+              lng: -122.416472,
+              organizer_id: 4
+        )
+
 
 
 

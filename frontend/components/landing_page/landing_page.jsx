@@ -17,8 +17,12 @@ LandingPage = React.createClass({
   },
 
   componentDidMount: function() {
-    this.eventListener = EventStore.addListener(this.eventsChanged);
+    this.eventListener = EventStore.addListener(this._receiveEvents);
     LandingPageActions.fetchPopularEvents();
+  },
+
+  _receiveEvents: function() {
+    this.setState({ events: _getAllEvents() });
   },
 
   componentWillUnmount: function() {
@@ -30,7 +34,8 @@ LandingPage = React.createClass({
       <div>
         <Jumbotron/>
         <FilterForm history={this.props.history}/>
-        <PopularEventsIndex/>
+        <div><h2 className="popular-title">popular</h2></div>
+        <PopularEventsIndex history={this.props.history} events={this.state.events}/>
       </div>
     );
   }
