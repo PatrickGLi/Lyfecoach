@@ -23,6 +23,10 @@ class Api::EventsController < ApplicationController
                             "%#{title.downcase}%", "%#{title.downcase}%")
     end
 
+    if popular
+      events = events.limit(popular)
+    end
+
     @events = events.order(view_count: :desc)
     render :index
   end
@@ -64,5 +68,9 @@ class Api::EventsController < ApplicationController
 
   def title
     params[:title]
+  end
+
+  def popular
+    params[:popular]
   end
 end

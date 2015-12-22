@@ -5,7 +5,12 @@ var Store = require('flux/utils').Store,
     DateConstants = require('../constants/date_constants');
 
 var _filter_params = {};
-var _filter_title = { location: 'unknown.' };
+var _filter_titles = {
+  location: '',
+  price: '',
+  category: '',
+  date: '',
+ };
 
 var FilterParamsStore = new Store(AppDispatcher);
 
@@ -13,13 +18,18 @@ FilterParamsStore.params = function() {
   return Object.assign({}, _filter_params);
 };
 
-FilterParamsStore.getTitle = function() {
-  return Object.assign({}, _filter_title);
+FilterParamsStore.getTitles = function() {
+  return Object.assign({}, _filter_titles);
 };
 
 FilterParamsStore.resetFilters = function() {
   _filter_params = {};
-  _filter_title = { location: 'unknown.' };
+  _filter_titles = {
+    location: '',
+    price: '',
+    category: '',
+    date: ''
+  };
 }
 
 FilterParamsStore.__onDispatch = function(payload) {
@@ -44,19 +54,19 @@ FilterParamsStore.__onDispatch = function(payload) {
 
 var handleLocation = function(locationData) {
   _filter_params.location = locationData;
-  _filter_title.location = locationData.address.split(',')[0];
+  _filter_titles.location = locationData.address.split(',')[0];
   FilterParamsStore.__emitChange();
 };
 
 var handlePrice = function(priceData) {
   _filter_params.price = priceData;
-  _filter_title.price = priceData;
+  _filter_titles.price = priceData;
   FilterParamsStore.__emitChange();
 };
 
 var handleCategory = function(categoryData) {
   _filter_params.category = categoryData;
-  _filter_title.category = categoryData;
+  _filter_titles.category = categoryData;
   FilterParamsStore.__emitChange();
 };
 
@@ -77,7 +87,7 @@ var handleDate = function(dateData) {
   }
 
   _filter_params.date = newDate;
-  _filter_title.date = newDate;
+  _filter_titles.date = dateData;
   FilterParamsStore.__emitChange();
 };
 

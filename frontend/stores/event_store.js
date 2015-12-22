@@ -3,32 +3,32 @@ var Store = require('flux/utils').Store,
     EventConstants = require('../constants/event_constants');
     EventStore = new Store(AppDispatcher);
 
-var _events = {};
+var _events = [];
 
 EventStore.all = function() {
-  var events = [];
-  for (var id in _events) {
-    events.push(_events[id]);
-  }
-
-  return events;
+  return _events.slice(0);
 };
 
 EventStore.find = function(id) {
-  return _events[id];
+  for (var i = 0; i < _events.length; i++) {
+    if (_events[i].id === id) {
+      return _events[i];
+    }
+  }
 };
 
 var resetEvents = function(events){
-  _events = {};
-  events.forEach(function(event) {
-    _events[event.id] = event;
-  });
+  _events = events;
 
   EventStore.__emitChange();
 };
 
 var resetSingleEvent = function(event) {
-  _events[event.id] = event;
+  for (var i = 0; i < _events.length; i++) {
+    if (_events[i].id === event.id) {
+      _events[i] = event;
+    }
+  }
 
   EventStore.__emitChange();
 };

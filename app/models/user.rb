@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
             :first_name, :last_name, :host_name, presence: true
   validates :email, uniqueness: true
   validates :password, length: { minimum: 6, allow_nil: true }
+  validates :host_name, length: { minimum: 6 }
   after_initialize :ensure_session_token
 
   has_many :events

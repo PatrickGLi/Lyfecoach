@@ -126,59 +126,88 @@ var EventForm = React.createClass({
         <div>
           <h3>Event Details</h3>
           <form onSubmit={this.handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="form-title">Event Title</label>
+              <input className="form-control"
+                     type="text"
+                     id="form-title"
+                     valueLink={this.linkState('title')}
+                     placeholder="Give a short distinct name"/>
 
-            <label>Event Title</label>
-
-            <input type="text"
-                   valueLink={this.linkState('title')}
-                   placeholder="Give a short distinct name"/>
-            <br/>
-
-            <input valueLink={this.linkState('location')}
-              ref="autocomplete" placeholder="Enter your address"
-             onFocus={this.geolocate} type="text"></input>
-
-           <label>Start Time</label>
-           <input type="date" valueLink={this.linkState('startDate')}/>
-
-           <select valueLink={this.linkState('startTime')}>
-             <option></option>
-             {times}
-            </select>
-
-            <label>End Time</label>
-            <input type="date" valueLink={this.linkState('endDate')}/>
+                   <label htmlFor="form-location">Location</label>
+              <input valueLink={this.linkState('location')}
+                     className="form-control"
+                     id="form-location"
+                     ref="autocomplete"
+                     placeholder="Enter your address"
+                     onFocus={this.geolocate}
+                     type="text"/>
 
 
-            <select type="number" valueLink={this.linkState('endTime')}>
-              <option></option>
-              {times}
-            </select>
-            <br/>
+                   <label htmlFor="form-start-date">Start Time</label>
+              <input type="date"
+                     id="form-start-date"
+                     className="form-control"
+                     valueLink={this.linkState('startDate')}/>
 
-            <label>Tickets</label>
-            <input type="text" valueLink={this.linkState('price')}/>
-            <br/>
+              <select className="form-control"
+                      valueLink={this.linkState('startTime')}>
+                      <option></option>
+                      {times}
+              </select>
 
-            <label>Ticket Max</label>
-            <input type="text" valueLink={this.linkState('ticketMax')}/>
-            <br/>
+              <label htmlFor="form-end-date">End Time</label>
+              <input type="date"
+                     id="form-end-date"
+                     valueLink={this.linkState('endDate')}
+                     className="form-control"/>
 
-            <label>Category</label>
-            <input type="text" valueLink={this.linkState('category')}/>
-            <br/>
 
-            <div className="upload-form">
-              <button onClick={this.addImage}>ADD EVENT IMAGE</button>
+              <select className="form-control"
+                      valueLink={this.linkState('endTime')}>
+                      <option></option>
+                      {times}
+              </select>
+
+              <label htmlFor="form-ticket">Tickets</label>
+              <input type="text"
+                     valueLink={this.linkState('price')}
+                     id="form-ticket"
+                     className="form-control"/>
+
+
+              <label htmlFor="form-ticket-max">Ticket Max</label>
+              <input type="text"
+                     valueLink={this.linkState('ticketMax')}
+                     id="form-ticket-max"
+                     className="form-control"/>
+
+              <label htmlFor="form-category">Category</label>
+              <input type="text"
+                     id="form-category"
+                     valueLink={this.linkState('category')}
+                     className="form-control"/>
+
+                <br/>
+                <button onClick={this.addImage}
+                        className="btn btn-default">
+                        ADD EVENT IMAGE
+                </button>
+                <br/>
+
+              <label htmlFor="form-description">Add a Description</label>
+              <textarea valueLink={this.linkState('description')}
+                        id="form-description"
+                        className="form-control"></textarea>
+
+              <br/>
+              <button type="submit" className="btn btn-primary">Create Event</button>
             </div>
-
-            <label>Add a Description</label>
-            <textarea valueLink={this.linkState('description')}></textarea>
-            <br/>
-
-            <input type="submit" value="create Event"/>
           </form>
-          <button onClick={this.handleCancel}>Cancel</button>
+          <button className="btn btn-primary"
+                  onClick={this.handleCancel}>
+                  Cancel
+          </button>
           <Error/>
         </div>
     );

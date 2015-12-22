@@ -13,7 +13,9 @@ var ApiUtil = {
   },
 
   fetchPopularEvents: function() {
-    console.log("fetching popular events");
+    $.get('api/events', { popular: 6 }, function(eventsData) {
+      ApiActions.receiveAll(eventsData);
+    });
   },
 
   fetchSingleEvent: function(eventId) {

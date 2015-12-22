@@ -19670,32 +19670,32 @@
 	    EventConstants = __webpack_require__(180);
 	EventStore = new Store(AppDispatcher);
 	
-	var _events = {};
+	var _events = [];
 	
 	EventStore.all = function () {
-	  var events = [];
-	  for (var id in _events) {
-	    events.push(_events[id]);
-	  }
-	
-	  return events;
+	  return _events.slice(0);
 	};
 	
 	EventStore.find = function (id) {
-	  return _events[id];
+	  for (var i = 0; i < _events.length; i++) {
+	    if (_events[i].id === id) {
+	      return _events[i];
+	    }
+	  }
 	};
 	
 	var resetEvents = function (events) {
-	  _events = {};
-	  events.forEach(function (event) {
-	    _events[event.id] = event;
-	  });
+	  _events = events;
 	
 	  EventStore.__emitChange();
 	};
 	
 	var resetSingleEvent = function (event) {
-	  _events[event.id] = event;
+	  for (var i = 0; i < _events.length; i++) {
+	    if (_events[i].id === event.id) {
+	      _events[i] = event;
+	    }
+	  }
 	
 	  EventStore.__emitChange();
 	};
@@ -26425,7 +26425,9 @@
 	  },
 	
 	  fetchPopularEvents: function () {
-	    console.log("fetching popular events");
+	    $.get('api/events', { popular: 6 }, function (eventsData) {
+	      ApiActions.receiveAll(eventsData);
+	    });
 	  },
 	
 	  fetchSingleEvent: function (eventId) {
@@ -26578,7 +26580,12 @@
 	    DateConstants = __webpack_require__(274);
 	
 	var _filter_params = {};
-	var _filter_title = { location: 'unknown.' };
+	var _filter_titles = {
+	  location: '',
+	  price: '',
+	  category: '',
+	  date: ''
+	};
 	
 	var FilterParamsStore = new Store(AppDispatcher);
 	
@@ -26586,13 +26593,18 @@
 	  return Object.assign({}, _filter_params);
 	};
 	
-	FilterParamsStore.getTitle = function () {
-	  return Object.assign({}, _filter_title);
+	FilterParamsStore.getTitles = function () {
+	  return Object.assign({}, _filter_titles);
 	};
 	
 	FilterParamsStore.resetFilters = function () {
 	  _filter_params = {};
-	  _filter_title = { location: 'unknown.' };
+	  _filter_titles = {
+	    location: '',
+	    price: '',
+	    category: '',
+	    date: ''
+	  };
 	};
 	
 	FilterParamsStore.__onDispatch = function (payload) {
@@ -26617,19 +26629,19 @@
 	
 	var handleLocation = function (locationData) {
 	  _filter_params.location = locationData;
-	  _filter_title.location = locationData.address.split(',')[0];
+	  _filter_titles.location = locationData.address.split(',')[0];
 	  FilterParamsStore.__emitChange();
 	};
 	
 	var handlePrice = function (priceData) {
 	  _filter_params.price = priceData;
-	  _filter_title.price = priceData;
+	  _filter_titles.price = priceData;
 	  FilterParamsStore.__emitChange();
 	};
 	
 	var handleCategory = function (categoryData) {
 	  _filter_params.category = categoryData;
-	  _filter_title.category = categoryData;
+	  _filter_titles.category = categoryData;
 	  FilterParamsStore.__emitChange();
 	};
 	
@@ -26650,7 +26662,7 @@
 	  }
 	
 	  _filter_params.date = newDate;
-	  _filter_title.date = newDate;
+	  _filter_titles.date = dateData;
 	  FilterParamsStore.__emitChange();
 	};
 	
@@ -31497,24 +31509,7 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(177),
-	    DropdownConstants = __webpack_require__(245);
-	
-	DropdownActions = {
-	  showDropdown: function (dropdownLabel) {
-	    AppDispatcher.dispatch({
-	      actionType: DropdownConstants.DROPDOWN_CLICKED,
-	      dropdownLabel: dropdownLabel
-	    });
-	  }
-	};
-	
-	module.exports = DropdownActions;
-
-/***/ },
+/* 244 */,
 /* 245 */
 /***/ function(module, exports) {
 
@@ -31529,42 +31524,7 @@
 	module.exports = DropdownConstants;
 
 /***/ },
-/* 246 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(160).Store,
-	    AppDispatcher = __webpack_require__(177),
-	    DropdownConstants = __webpack_require__(245);
-	
-	var _shownDropdown = null;
-	
-	var DropdownStore = new Store(AppDispatcher);
-	
-	DropdownStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case DropdownConstants.DROPDOWN_CLICKED:
-	      updateDropdown(payload.dropdownLabel);
-	      break;
-	  }
-	};
-	
-	DropdownStore.fetch = function () {
-	  return _shownDropdown;
-	};
-	
-	function updateDropdown(labelClicked) {
-	  if (_shownDropdown === labelClicked) {
-	    _shownDropdown = null;
-	  } else {
-	    _shownDropdown = labelClicked;
-	  }
-	
-	  DropdownStore.__emitChange();
-	}
-	
-	module.exports = DropdownStore;
-
-/***/ },
+/* 246 */,
 /* 247 */,
 /* 248 */,
 /* 249 */
@@ -31591,8 +31551,12 @@
 	  },
 	
 	  componentDidMount: function () {
-	    this.eventListener = EventStore.addListener(this.eventsChanged);
+	    this.eventListener = EventStore.addListener(this._receiveEvents);
 	    LandingPageActions.fetchPopularEvents();
+	  },
+	
+	  _receiveEvents: function () {
+	    this.setState({ events: _getAllEvents() });
 	  },
 	
 	  componentWillUnmount: function () {
@@ -31605,7 +31569,16 @@
 	      null,
 	      React.createElement(Jumbotron, null),
 	      React.createElement(FilterForm, { history: this.props.history }),
-	      React.createElement(PopularEventsIndex, null)
+	      React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'h2',
+	          { className: 'popular-title' },
+	          'popular'
+	        )
+	      ),
+	      React.createElement(PopularEventsIndex, { history: this.props.history, events: this.state.events })
 	    );
 	  }
 	
@@ -31625,6 +31598,24 @@
 	
 	  mixins: [History],
 	
+	  componentDidMount: function () {
+	    var backgrounds = ["url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450654179/photo-1446587114233-38830eb63a76_n3iidf.jpg)", "url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450654176/photo-1429962714451-bb934ecdc4ec_pw3ecu.jpg)", "url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450654178/photo-1445251836269-d158eaa028a6_ewteda.jpg)", "url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450644793/photo-1445384763658-0400939829cd_nlvg2v.jpg)"];
+	
+	    var text_colors = ["black", "black", "white", "white"];
+	
+	    var current = 0;
+	    var $jumbotron = $('.jumbotron');
+	
+	    $jumbotron.css('background-image', backgrounds[current]);
+	    $jumbotron.css('color', text_colors[current]);
+	
+	    setInterval(function () {
+	      current = (current + 1) % backgrounds.length;
+	      $jumbotron.css('background-image', backgrounds[current]);
+	      $jumbotron.css('color', text_colors[current]);
+	    }, 4000);
+	  },
+	
 	  goToEventForm: function (e) {
 	    this.history.pushState(null, 'api/events/new');
 	  },
@@ -31642,7 +31633,7 @@
 	          React.createElement(
 	            'h2',
 	            null,
-	            'Sell Tickets'
+	            'sell tickets.'
 	          ),
 	          React.createElement(
 	            'p',
@@ -31662,7 +31653,7 @@
 	          React.createElement(
 	            'h2',
 	            null,
-	            'Explore'
+	            'explore.'
 	          ),
 	          React.createElement(
 	            'p',
@@ -31685,7 +31676,6 @@
 	    Map = __webpack_require__(252),
 	    EventStore = __webpack_require__(159),
 	    EventTitle = __webpack_require__(254),
-	    EventSearch = __webpack_require__(255),
 	    EventIndex = __webpack_require__(256),
 	    FilterParamsStore = __webpack_require__(187),
 	    EventPageActions = __webpack_require__(273),
@@ -31733,11 +31723,10 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'event-page' },
 	      React.createElement(Map, { events: this.state.events, filterParams: this.state.filterParams }),
 	      React.createElement(EventTitle, null),
 	      React.createElement(Filter, { filterParams: this.state.filterParams }),
-	      React.createElement(EventSearch, null),
 	      React.createElement(EventIndex, { events: this.state.events, history: this.props.history })
 	    );
 	  }
@@ -31777,7 +31766,7 @@
 	
 	    var locationData = { nearLat: lat,
 	      nearLng: lng,
-	      address: "you." };
+	      address: "you" };
 	
 	    if (Object.keys(FilterParamsStore.params()).length === 0) {
 	      MapActions.updateLocation(locationData);
@@ -31906,7 +31895,7 @@
 	  displayName: 'Title',
 	
 	  getInitialState: function () {
-	    return { title: FilterParamsStore.getTitle() };
+	    return { title: FilterParamsStore.getTitles() };
 	  },
 	
 	  componentDidMount: function () {
@@ -31918,10 +31907,27 @@
 	  },
 	
 	  getTitle: function () {
-	    this.setState({ title: FilterParamsStore.getTitle() });
+	    this.setState({ title: FilterParamsStore.getTitles() });
 	  },
 	
 	  render: function () {
+	    var location_title = this.state.title.location;
+	    if (location_title === "") {
+	      location_title = "you";
+	    }
+	
+	    var price_title = this.state.title.price;
+	    if (price_title !== "") {
+	      price_title = " under $" + price_title;
+	    }
+	
+	    var date_title = this.state.title.date;
+	    if (date_title !== "") {
+	      date_title = date_title.toLowerCase();
+	    }
+	
+	    var category_title = this.state.title.category.toLowerCase() + " ";
+	
 	    // var title;
 	    //
 	    // for (var key in this.state.title) {
@@ -31933,10 +31939,16 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      'Events near ',
-	      this.state.title.location,
-	      ' for $',
-	      this.state.title.price
+	      React.createElement(
+	        'h1',
+	        null,
+	        category_title,
+	        'events near ',
+	        location_title,
+	        price_title,
+	        ' ',
+	        date_title
+	      )
 	    );
 	  }
 	
@@ -31945,31 +31957,11 @@
 	module.exports = Title;
 
 /***/ },
-/* 255 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var EventSearch = React.createClass({
-	  displayName: 'EventSearch',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      'I\'m the search.'
-	    );
-	  }
-	});
-	
-	module.exports = EventSearch;
-
-/***/ },
+/* 255 */,
 /* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    EventStore = __webpack_require__(159),
 	    IndexItem = __webpack_require__(257);
 	
 	var EventIndex = React.createClass({
@@ -32038,7 +32030,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'col-xs-4' },
+	      { className: 'col-xs-3 icons' },
 	      React.createElement('img', { onClick: this.props.onClick,
 	        src: image,
 	        className: 'img-responsive',
@@ -32058,6 +32050,8 @@
 	        'div',
 	        null,
 	        'Start Time: ',
+	        this.props.event.start_date,
+	        ' ',
 	        startDate,
 	        ' ',
 	        startTime
@@ -32066,6 +32060,8 @@
 	        'div',
 	        null,
 	        'End Time: ',
+	        this.props.event.end_date,
+	        ' ',
 	        endDate,
 	        ' ',
 	        endTime
@@ -32140,52 +32136,243 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    DropdownActions = __webpack_require__(244),
-	    DropdownStore = __webpack_require__(246),
 	    SearchFilter = __webpack_require__(260),
-	    PriceFilter = __webpack_require__(261),
-	    CategoryFilter = __webpack_require__(262),
-	    DateFilter = __webpack_require__(263);
+	    FilterActions = __webpack_require__(258),
+	    FilterParamsStore = __webpack_require__(187),
+	    DateConstants = __webpack_require__(274);
 	
 	var Filter = React.createClass({
 	  displayName: 'Filter',
 	
 	  getInitialState: function () {
-	    return { shown: "" };
+	    return {
+	      filter_titles: { location: 'unknown',
+	        price: 'All prices',
+	        category: 'All categories',
+	        date: 'All dates' }
+	    };
 	  },
 	
 	  componentDidMount: function () {
-	    this.dropdownStoreListener = DropdownStore.addListener(this._onChange);
+	    this.token = FilterParamsStore.addListener(this._changeHeader);
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.dropdownStoreListener.remove();
+	    this.token.remove();
 	  },
 	
-	  handleClick: function (e) {
-	    DropdownActions.showDropdown(e.target.innerText);
+	  _changeHeader: function () {
+	    this.setState({ filter_titles: FilterParamsStore.getTitles() });
 	  },
 	
-	  _onChange: function () {
-	    this.setState({ shown: DropdownStore.fetch() });
+	  updatePrice: function (e) {
+	    e.preventDefault();
+	    FilterActions.updatePrice(e.currentTarget.id);
+	  },
+	
+	  updateCategory: function (e) {
+	    e.preventDefault();
+	    FilterActions.updateCategory(e.currentTarget.innerText);
+	  },
+	
+	  updateDate: function (e) {
+	    e.preventDefault();
+	    FilterActions.updateDate(e.currentTarget.innerText);
 	  },
 	
 	  render: function () {
+	    var price_title = this.state.filter_titles.price;
+	    if (price_title !== "") {
+	      price_title = "Events under $" + price_title;
+	    } else {
+	      price_title = "All prices";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(SearchFilter, null),
-	      React.createElement(PriceFilter, { toggle: this.state.shown,
-	        onClick: this.handleClick,
-	        filterParams: this.props.filterParams }),
-	      React.createElement('br', null),
-	      React.createElement(CategoryFilter, { toggle: this.state.shown,
-	        onClick: this.handleClick,
-	        filterParams: this.props.filterParams }),
-	      React.createElement('br', null),
-	      React.createElement(DateFilter, { toggle: this.state.shown,
-	        onClick: this.handleClick,
-	        filterParams: this.props.filterParams })
+	      React.createElement(SearchFilter, { className: 'form-control' }),
+	      React.createElement(
+	        'ul',
+	        { className: 'nav navbar-nav' },
+	        React.createElement(
+	          'li',
+	          { className: 'dropdown' },
+	          React.createElement(
+	            'a',
+	            { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
+	            'Price ',
+	            React.createElement('span', { className: 'caret' })
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'dropdown-menu', role: 'menu' },
+	            React.createElement(
+	              'li',
+	              { className: 'dropdown-header' },
+	              price_title
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { id: '15', onClick: this.updatePrice },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'Under $15'
+	              )
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { id: '30', onClick: this.updatePrice },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'Under $30'
+	              )
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { id: '50', onClick: this.updatePrice },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'Under $50'
+	              )
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { id: '100', onClick: this.updatePrice },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'Under $100'
+	              )
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'dropdown' },
+	          React.createElement(
+	            'a',
+	            { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
+	            'Category ',
+	            React.createElement('span', { className: 'caret' })
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'dropdown-menu', role: 'menu' },
+	            React.createElement(
+	              'li',
+	              { className: 'dropdown-header' },
+	              this.state.filter_titles.category
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { onClick: this.updateCategory },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'Food & Drink'
+	              )
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { onClick: this.updateCategory },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'Art'
+	              )
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { onClick: this.updateCategory },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'Music'
+	              )
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { onClick: this.updateCategory },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'Nightlife'
+	              )
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { onClick: this.updateCategory },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'Sports & Fitness'
+	              )
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          { className: 'dropdown' },
+	          React.createElement(
+	            'a',
+	            { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
+	            'Date ',
+	            React.createElement('span', { className: 'caret' })
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'dropdown-menu', role: 'menu' },
+	            React.createElement(
+	              'li',
+	              { className: 'dropdown-header' },
+	              this.state.filter_titles.date
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { onClick: this.updateDate },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                DateConstants.THIS_WEEK
+	              )
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { onClick: this.updateDate },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                DateConstants.THIS_MONTH
+	              )
+	            ),
+	            React.createElement('li', { className: 'divider' }),
+	            React.createElement(
+	              'li',
+	              { onClick: this.updateDate },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                DateConstants.THIS_YEAR
+	              )
+	            )
+	          )
+	        )
+	      )
 	    );
 	  }
 	});
@@ -32277,192 +32464,9 @@
 	module.exports = SearchFilter;
 
 /***/ },
-/* 261 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    FilterActions = __webpack_require__(258),
-	    DropdownConstants = __webpack_require__(245);
-	
-	var PriceFilter = React.createClass({
-	  displayName: 'PriceFilter',
-	
-	  filterByPrice: function (e) {
-	    FilterActions.updatePrice(e.target.id);
-	  },
-	
-	  render: function () {
-	    if (this.props.toggle === DropdownConstants.PRICE) {
-	      var hiddenClass = "";
-	    } else {
-	      var hiddenClass = "hidden-dropdown";
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { onClick: this.props.onClick },
-	        DropdownConstants.PRICE
-	      ),
-	      React.createElement(
-	        'div',
-	        { id: 'price-dropdown', className: hiddenClass },
-	        React.createElement(
-	          'div',
-	          { id: '15', onClick: this.filterByPrice },
-	          'Under 15'
-	        ),
-	        React.createElement(
-	          'div',
-	          { id: '30', onClick: this.filterByPrice },
-	          'Under 30'
-	        ),
-	        React.createElement(
-	          'div',
-	          { id: '50', onClick: this.filterByPrice },
-	          'Under 50'
-	        ),
-	        React.createElement(
-	          'div',
-	          { id: '1000', onClick: this.filterByPrice },
-	          'All'
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = PriceFilter;
-
-/***/ },
-/* 262 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    FilterActions = __webpack_require__(258),
-	    DropdownConstants = __webpack_require__(245);
-	
-	var CategoryFilter = React.createClass({
-	  displayName: 'CategoryFilter',
-	
-	  filterByCategory: function (e) {
-	    FilterActions.updateCategory(e.target.innerText);
-	  },
-	
-	  render: function () {
-	    this.label = "Category";
-	
-	    if (this.props.toggle === DropdownConstants.CATEGORY) {
-	      var hiddenClass = "";
-	    } else {
-	      var hiddenClass = "hidden-dropdown";
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { onClick: this.props.onClick },
-	        DropdownConstants.CATEGORY
-	      ),
-	      React.createElement(
-	        'div',
-	        { id: 'category-dropdown', className: hiddenClass },
-	        React.createElement(
-	          'div',
-	          { onClick: this.filterByCategory },
-	          'Cuisine'
-	        ),
-	        React.createElement(
-	          'div',
-	          { onClick: this.filterByCategory },
-	          'Arts'
-	        ),
-	        React.createElement(
-	          'div',
-	          { onClick: this.filterByCategory },
-	          'Music'
-	        ),
-	        React.createElement(
-	          'div',
-	          { onClick: this.filterByCategory },
-	          'Nightlife'
-	        ),
-	        React.createElement(
-	          'div',
-	          { onClick: this.filterByCategory },
-	          'Sports & Fitness'
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = CategoryFilter;
-
-/***/ },
-/* 263 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    FilterActions = __webpack_require__(258),
-	    DropdownConstants = __webpack_require__(245),
-	    DateConstants = __webpack_require__(274);
-	
-	var DateFilter = React.createClass({
-	  displayName: 'DateFilter',
-	
-	  filterByDate: function (e) {
-	    FilterActions.updateDate(e.target.innerText);
-	  },
-	
-	  render: function () {
-	    if (this.props.toggle === DropdownConstants.DATE) {
-	      var hiddenClass = "";
-	    } else {
-	      var hiddenClass = "hidden-dropdown";
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { onClick: this.props.onClick },
-	        DropdownConstants.DATE
-	      ),
-	      React.createElement(
-	        'div',
-	        { id: 'date-dropdown', className: hiddenClass },
-	        React.createElement(
-	          'div',
-	          { onClick: this.filterByDate },
-	          DateConstants.THIS_WEEK
-	        ),
-	        React.createElement(
-	          'div',
-	          { onClick: this.filterByDate },
-	          DateConstants.THIS_MONTH
-	        ),
-	        React.createElement(
-	          'div',
-	          { onClick: this.filterByDate },
-	          DateConstants.THIS_YEAR
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = DateFilter;
-
-/***/ },
+/* 261 */,
+/* 262 */,
+/* 263 */,
 /* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32739,84 +32743,117 @@
 	        'form',
 	        { onSubmit: this.handleSubmit },
 	        React.createElement(
-	          'label',
-	          null,
-	          'Event Title'
-	        ),
-	        React.createElement('input', { type: 'text',
-	          valueLink: this.linkState('title'),
-	          placeholder: 'Give a short distinct name' }),
-	        React.createElement('br', null),
-	        React.createElement('input', { valueLink: this.linkState('location'),
-	          ref: 'autocomplete', placeholder: 'Enter your address',
-	          onFocus: this.geolocate, type: 'text' }),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Start Time'
-	        ),
-	        React.createElement('input', { type: 'date', valueLink: this.linkState('startDate') }),
-	        React.createElement(
-	          'select',
-	          { valueLink: this.linkState('startTime') },
-	          React.createElement('option', null),
-	          times
-	        ),
-	        React.createElement(
-	          'label',
-	          null,
-	          'End Time'
-	        ),
-	        React.createElement('input', { type: 'date', valueLink: this.linkState('endDate') }),
-	        React.createElement(
-	          'select',
-	          { type: 'number', valueLink: this.linkState('endTime') },
-	          React.createElement('option', null),
-	          times
-	        ),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Tickets'
-	        ),
-	        React.createElement('input', { type: 'text', valueLink: this.linkState('price') }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Ticket Max'
-	        ),
-	        React.createElement('input', { type: 'text', valueLink: this.linkState('ticketMax') }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Category'
-	        ),
-	        React.createElement('input', { type: 'text', valueLink: this.linkState('category') }),
-	        React.createElement('br', null),
-	        React.createElement(
 	          'div',
-	          { className: 'upload-form' },
+	          { className: 'form-group' },
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'form-title' },
+	            'Event Title'
+	          ),
+	          React.createElement('input', { className: 'form-control',
+	            type: 'text',
+	            id: 'form-title',
+	            valueLink: this.linkState('title'),
+	            placeholder: 'Give a short distinct name' }),
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'form-location' },
+	            'Location'
+	          ),
+	          React.createElement('input', { valueLink: this.linkState('location'),
+	            className: 'form-control',
+	            id: 'form-location',
+	            ref: 'autocomplete',
+	            placeholder: 'Enter your address',
+	            onFocus: this.geolocate,
+	            type: 'text' }),
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'form-start-date' },
+	            'Start Time'
+	          ),
+	          React.createElement('input', { type: 'date',
+	            id: 'form-start-date',
+	            className: 'form-control',
+	            valueLink: this.linkState('startDate') }),
+	          React.createElement(
+	            'select',
+	            { className: 'form-control',
+	              valueLink: this.linkState('startTime') },
+	            React.createElement('option', null),
+	            times
+	          ),
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'form-end-date' },
+	            'End Time'
+	          ),
+	          React.createElement('input', { type: 'date',
+	            id: 'form-end-date',
+	            valueLink: this.linkState('endDate'),
+	            className: 'form-control' }),
+	          React.createElement(
+	            'select',
+	            { className: 'form-control',
+	              valueLink: this.linkState('endTime') },
+	            React.createElement('option', null),
+	            times
+	          ),
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'form-ticket' },
+	            'Tickets'
+	          ),
+	          React.createElement('input', { type: 'text',
+	            valueLink: this.linkState('price'),
+	            id: 'form-ticket',
+	            className: 'form-control' }),
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'form-ticket-max' },
+	            'Ticket Max'
+	          ),
+	          React.createElement('input', { type: 'text',
+	            valueLink: this.linkState('ticketMax'),
+	            id: 'form-ticket-max',
+	            className: 'form-control' }),
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'form-category' },
+	            'Category'
+	          ),
+	          React.createElement('input', { type: 'text',
+	            id: 'form-category',
+	            valueLink: this.linkState('category'),
+	            className: 'form-control' }),
+	          React.createElement('br', null),
 	          React.createElement(
 	            'button',
-	            { onClick: this.addImage },
+	            { onClick: this.addImage,
+	              className: 'btn btn-default' },
 	            'ADD EVENT IMAGE'
+	          ),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'label',
+	            { htmlFor: 'form-description' },
+	            'Add a Description'
+	          ),
+	          React.createElement('textarea', { valueLink: this.linkState('description'),
+	            id: 'form-description',
+	            className: 'form-control' }),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'button',
+	            { type: 'submit', className: 'btn btn-primary' },
+	            'Create Event'
 	          )
-	        ),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Add a Description'
-	        ),
-	        React.createElement('textarea', { valueLink: this.linkState('description') }),
-	        React.createElement('br', null),
-	        React.createElement('input', { type: 'submit', value: 'create Event' })
+	        )
 	      ),
 	      React.createElement(
 	        'button',
-	        { onClick: this.handleCancel },
+	        { className: 'btn btn-primary',
+	          onClick: this.handleCancel },
 	        'Cancel'
 	      ),
 	      React.createElement(Error, null)
@@ -33225,23 +33262,22 @@
 	
 	  render: function () {
 	    return React.createElement(
-	      'form',
-	      { onSubmit: this.handleSubmit,
-	        className: 'navbar-form navbar-left',
-	        role: 'search' },
+	      'div',
+	      { className: 'popular-search' },
 	      React.createElement(
-	        'div',
-	        { className: 'form-group' },
+	        'form',
+	        { onSubmit: this.handleSubmit,
+	          className: 'form-inline' },
 	        React.createElement('input', { type: 'text',
 	          className: 'form-control',
 	          placeholder: 'Search by Event or Category',
 	          valueLink: this.linkState('title') }),
-	        React.createElement(SearchFilter, null)
-	      ),
-	      React.createElement(
-	        'button',
-	        { type: 'submit', className: 'btn btn-default' },
-	        'Search'
+	        React.createElement(SearchFilter, null),
+	        React.createElement(
+	          'button',
+	          { type: 'submit', className: 'btn btn-default' },
+	          'Search'
+	        )
 	      )
 	    );
 	  }
@@ -33259,11 +33295,31 @@
 	var PopularEventsIndex = React.createClass({
 	  displayName: 'PopularEventsIndex',
 	
+	  showEventDetail: function (event) {
+	    this.props.history.pushState(null, 'api/events/' + event.id);
+	  },
+	
 	  render: function () {
+	    var that = this;
+	    var popular_events = this.props.events.map(function (event, index) {
+	      var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_300" + event.url;
+	      var bindedClick = that.showEventDetail.bind(null, event);
+	      var popularClass = "col-xs-4 popular-icons popular-" + index;
+	      return React.createElement(
+	        'div',
+	        { key: event.id, className: popularClass },
+	        React.createElement('img', { id: 'test2',
+	          onClick: bindedClick,
+	          src: image,
+	          alt: 'Responsive image',
+	          className: 'img-responsive' })
+	      );
+	    });
+	
 	    return React.createElement(
 	      'div',
-	      null,
-	      'Popular events'
+	      { className: 'row' },
+	      popular_events
 	    );
 	  }
 	
@@ -33296,36 +33352,27 @@
 	var React = __webpack_require__(1),
 	    NavBarActions = __webpack_require__(275),
 	    CurrentUserStore = __webpack_require__(243),
-	    ReactConstants = __webpack_require__(186),
-	    DropdownActions = __webpack_require__(244),
-	    DropdownStore = __webpack_require__(246);
+	    ReactConstants = __webpack_require__(186);
 	
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
 	
 	  getInitialState: function () {
 	    return {
-	      currentUser: "Guest",
-	      shown: ""
+	      currentUser: "Guest"
 	    };
 	  },
 	
 	  componentDidMount: function () {
 	    this.currentUserListener = CurrentUserStore.addListener(this.getCurrentUser);
-	    this.currentDropdownListener = DropdownStore.addListener(this._onChange);
 	
 	    if (ReactConstants.CURRENT_USER !== -1) {
 	      NavBarActions.fetchCurrentUser(ReactConstants.CURRENT_USER);
 	    }
 	  },
 	
-	  _onChange: function () {
-	    this.setState({ shown: DropdownStore.fetch() });
-	  },
-	
 	  componentWillUnmount: function () {
 	    this.currentUserListener.remove();
-	    this.currentDropdownListener.remove();
 	  },
 	
 	  getCurrentUser: function () {
@@ -33341,10 +33388,6 @@
 	    this.props.history.pushState(null, 'api/events/new');
 	  },
 	
-	  handleClick: function (e) {
-	    DropdownActions.showDropdown(e.target.innerText);
-	  },
-	
 	  render: function () {
 	    var events;
 	    if (ReactConstants.CURRENT_USER !== -1) {
@@ -33353,7 +33396,7 @@
 	        { onClick: this.goToEventForm },
 	        React.createElement(
 	          'a',
-	          { href: '#' },
+	          { id: 'test4', href: '#' },
 	          'Be a host.'
 	        )
 	      );
@@ -33390,7 +33433,7 @@
 	              React.createElement('input', { name: 'authenticity_token',
 	                type: 'hidden',
 	                value: ReactConstants.AUTH_TOKEN }),
-	              React.createElement('input', { type: 'submit', value: 'Sign Out' })
+	              React.createElement('input', { className: 'sign-out-link', type: 'submit', value: 'Sign Out' })
 	            )
 	          )
 	        )
@@ -33416,6 +33459,13 @@
 	      );
 	    }
 	
+	    // <form className="navbar-form navbar-left" role="search">
+	    //   <div className="form-group">
+	    //     <input type="text" className="form-control" placeholder="Search"/>
+	    //   </div>
+	    //   <button type="submit" className="btn btn-default">Submit</button>
+	    // </form>
+	
 	    return React.createElement(
 	      'nav',
 	      { className: 'navbar navbar-default nav-items' },
@@ -33440,7 +33490,7 @@
 	            { onClick: this.returnToHomepage },
 	            React.createElement(
 	              'a',
-	              { className: 'navbar-brand logo', href: '#' },
+	              { id: 'logo', className: 'navbar-brand logo', href: '#' },
 	              'lyfecoach'
 	            )
 	          )
@@ -33448,20 +33498,6 @@
 	        React.createElement(
 	          'div',
 	          { className: 'collapse navbar-collapse navbar-right', id: 'collapse-menu' },
-	          React.createElement(
-	            'form',
-	            { className: 'navbar-form navbar-left', role: 'search' },
-	            React.createElement(
-	              'div',
-	              { className: 'form-group' },
-	              React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Search' })
-	            ),
-	            React.createElement(
-	              'button',
-	              { type: 'submit', className: 'btn btn-default' },
-	              'Submit'
-	            )
-	          ),
 	          React.createElement(
 	            'ul',
 	            { className: 'nav navbar-nav' },

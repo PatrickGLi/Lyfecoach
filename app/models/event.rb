@@ -24,7 +24,7 @@ class Event < ActiveRecord::Base
             :end_date, :description, :ticket_max, :view_count, :lat, :lng,
             :category, :url, :organizer_id, :price, presence: true
 
-  event_type = ["Cuisine", "Arts", "Music", "Nightlife", "Sports & Fitness"]
+  event_type = ["Food & Drink", "Art", "Music", "Nightlife", "Sports & Fitness"]
 
   validates :category, inclusion: { in: event_type }
   validates :title, uniqueness: true

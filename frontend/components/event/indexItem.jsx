@@ -31,7 +31,7 @@ var IndexItem = React.createClass({
     var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_400" + this.props.event.url;
 
     return(
-      <div className="col-xs-4">
+      <div className="col-xs-3 icons">
         <img onClick={this.props.onClick}
              src={image}
              className="img-responsive"
@@ -39,8 +39,8 @@ var IndexItem = React.createClass({
         </img>
         <div>{this.props.event.title}</div>
         <div>Location: {this.props.event.location}</div>
-        <div>Start Time: {startDate} {startTime}</div>
-        <div>End Time: {endDate} {endTime}</div>
+        <div>Start Time: {this.props.event.start_date} {startDate} {startTime}</div>
+        <div>End Time: {this.props.event.end_date} {endDate} {endTime}</div>
         <div>${this.props.event.price} Hosted by: {this.props.event.organizer}</div>
         <div>{this.props.event.category}</div>
         <div>View Count: {this.props.event.view_count}</div>
