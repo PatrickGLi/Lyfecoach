@@ -33196,6 +33196,7 @@
 	    this.token.remove();
 	    NavTransitions.removeNavTransitions();
 	    EventStore.clearEvents();
+	    UserStore.clearUser();
 	  },
 	
 	  showUserDetail: function () {
@@ -33236,7 +33237,7 @@
 	            'div',
 	            null,
 	            React.createElement(
-	              'h3',
+	              'h2',
 	              null,
 	              host.host_name
 	            )
@@ -33269,7 +33270,7 @@
 	            ),
 	            React.createElement(
 	              'div',
-	              { id: 'collapseOne', className: 'host-description panel-collapse collapse in', role: 'tabpanel', 'aria-labelledby': 'headingOne' },
+	              { id: 'collapseOne', className: 'panel-collapse collapse in', role: 'tabpanel', 'aria-labelledby': 'headingOne' },
 	              host.description
 	            )
 	          )
@@ -33280,11 +33281,7 @@
 	          events
 	        )
 	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'event-detail col-md-5 pull-right' },
-	        this.props.children
-	      )
+	      this.props.children
 	    );
 	  }
 	
@@ -33362,12 +33359,12 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'event-detail' },
+	      { className: 'event-detail col-md-4' },
 	      React.createElement(
 	        'div',
 	        null,
 	        React.createElement(
-	          'h4',
+	          'h3',
 	          null,
 	          event.title
 	        )
@@ -33379,55 +33376,55 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        null,
-	        event.location
+	        { className: 'info' },
+	        React.createElement(
+	          'div',
+	          null,
+	          event.location
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          startDate,
+	          ' ',
+	          startTime
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          endDate,
+	          ' ',
+	          endTime
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          '$',
+	          event.price
+	        )
 	      ),
 	      React.createElement(
 	        'div',
-	        null,
-	        startDate,
-	        ' ',
-	        startTime
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        endDate,
-	        ' ',
-	        endTime
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        event.price
-	      ),
-	      React.createElement(
-	        'div',
-	        { id: 'accordion', role: 'tablist', 'aria-multiselectable': 'true' },
+	        { id: 'accordion2', role: 'tablist', 'aria-multiselectable': 'true' },
 	        React.createElement(
 	          'div',
 	          { className: 'panel panel-default' },
 	          React.createElement(
 	            'div',
-	            { className: 'panel-heading', role: 'tab', id: 'headingOne' },
+	            { className: 'panel-heading', role: 'tab', id: 'headingTwo' },
 	            React.createElement(
 	              'h4',
 	              { className: 'panel-title' },
 	              React.createElement(
 	                'a',
-	                { 'data-toggle': 'collapse', 'data-parent': '#accordion', href: '#collapseOne', 'aria-expanded': 'true', 'aria-controls': 'collapseOne' },
-	                '>'
+	                { 'data-toggle': 'collapse', 'data-parent': '#accordion2', href: '#collapseTwo', 'aria-expanded': 'true', 'aria-controls': 'collapseOne' },
+	                'Details'
 	              )
 	            )
 	          ),
 	          React.createElement(
 	            'div',
-	            { id: 'collapseOne', className: 'host-description panel-collapse collapse in', role: 'tabpanel', 'aria-labelledby': 'headingOne' },
-	            React.createElement(
-	              'div',
-	              null,
-	              event.organizer.host_name
-	            ),
+	            { id: 'collapseTwo', className: 'panel-collapse collapse in', role: 'tabpanel', 'aria-labelledby': 'headingTwo' },
 	            event.description
 	          )
 	        )
@@ -33807,6 +33804,10 @@
 	
 	UserStore.fetch = function () {
 	  return _user;
+	};
+	
+	UserStore.clearUser = function () {
+	  _user = null;
 	};
 	
 	UserStore.__onDispatch = function (payload) {

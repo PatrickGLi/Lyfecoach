@@ -10,6 +10,10 @@ UserStore.fetch = function() {
   return _user;
 };
 
+UserStore.clearUser = function() {
+  _user = null;
+}
+
 UserStore.__onDispatch = function(payload){
   switch (payload.actionType) {
     case UserConstants.GET_SINGLE_USER:

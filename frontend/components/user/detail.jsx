@@ -23,6 +23,7 @@ var UserDetail = React.createClass({
     this.token.remove();
     NavTransitions.removeNavTransitions();
     EventStore.clearEvents();
+    UserStore.clearUser();
   },
 
   showUserDetail: function() {
@@ -56,7 +57,7 @@ var UserDetail = React.createClass({
         <div className="col-md-6 col-md-offset-1">
 
           <div className="host-head">
-            <div><h3>{host.host_name}</h3></div>
+            <div><h2>{host.host_name}</h2></div>
             <div><img src={host_image}/></div>
           </div>
 
@@ -69,7 +70,7 @@ var UserDetail = React.createClass({
                   </a>
                 </h4>
               </div>
-              <div id="collapseOne" className="host-description panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+              <div id="collapseOne" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                 {host.description}
               </div>
             </div>
@@ -78,9 +79,8 @@ var UserDetail = React.createClass({
           <div>{events}</div>
         </div>
 
-        <div className="event-detail col-md-5 pull-right">
-          {this.props.children}
-        </div>
+        {this.props.children}
+
       </div>
     );
   }
