@@ -2,16 +2,20 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.host-description {
-  padding: 20px 0;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 24px;
-}
-
 .host-head {
   padding-bottom: 20px;
 }
+
+.event-detail {
+  top: 20px;
+}
+
+.event-detail .info {
+  padding: 10px 0;
+  font-weight: normal;
+  font-size: 17px;
+}
+
 
 .host-head img,
 .event-detail img {
@@ -21,4 +25,39 @@
 .host-head img:hover,
 .event-detail img:hover {
   cursor: default;
+}
+
+#headingOne,
+#headingTwo {
+  font-color: #2a2a2a;
+}
+
+#headingOne a:hover,
+#headingOne a:focus,
+#headingTwo a:hover,
+#headingTwo a:focus {
+  text-decoration: none;
+}
+
+.panel-heading {
+  transition: background-color, .5s;
+}
+
+.panel-heading a {
+  transition: color, .5s;
+}
+
+.panel-heading:hover {
+  background-color: #2a2a2a;
+}
+
+.panel-heading:hover a {
+  color: white;
+}
+
+#collapseOne,
+#collapseTwo {
+  margin: 20px 20px;
+  font-weight: 400;
+  line-height: 24px;
 }

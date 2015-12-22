@@ -59,26 +59,27 @@ var Detail = React.createClass({
     endTime = this.convertTime(endTime);
 
     return (
-      <div className="event-detail">
-        <div><h4>{event.title}</h4></div>
+      <div className="event-detail col-md-4">
+        <div><h3>{event.title}</h3></div>
         <div className="event-image"><img src={image}/></div>
-        <div>{event.location}</div>
-        <div>{startDate} {startTime}</div>
-        <div>{endDate} {endTime}</div>
-        <div>{event.price}</div>
 
-        <div id="accordion" role="tablist" aria-multiselectable="true">
+        <div className="info">
+          <div>{event.location}</div>
+          <div>{startDate} {startTime}</div>
+          <div>{endDate} {endTime}</div>
+          <div>${event.price}</div>
+        </div>
+
+        <div id="accordion2" role="tablist" aria-multiselectable="true">
           <div className="panel panel-default">
-            <div className="panel-heading" role="tab" id="headingOne">
+            <div className="panel-heading" role="tab" id="headingTwo">
               <h4 className="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  >
+                <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                  Details
                 </a>
               </h4>
             </div>
-            <div id="collapseOne" className="host-description panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-
-              <div>{event.organizer.host_name}</div>
+            <div id="collapseTwo" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
               {event.description}
             </div>
           </div>
