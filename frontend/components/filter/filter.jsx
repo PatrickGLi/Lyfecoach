@@ -8,10 +8,10 @@ var Filter = React.createClass({
   getInitialState: function() {
     return({
       filter_titles:
-      { location: 'unknown',
-        price: 'All prices',
-        category: 'All categories',
-        date: 'All dates' }
+      { location: '',
+        price: '',
+        category: '',
+        date: '' }
     });
   },
 
@@ -50,12 +50,22 @@ var Filter = React.createClass({
       price_title = "All prices";
     }
 
+    var category_title = this.state.filter_titles.category;
+    if (category_title === "") {
+      category_title = "All categories";
+    }
+
+    var date_title = this.state.filter_titles.date;
+    if (date_title === "") {
+      date_title = "All dates";
+    }
+
     return (
       <div className="filter-container col-md-4">
         <SearchFilter className="form-control" />
         <ul className="nav navbar-nav">
           <li className="dropdown">
-            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Price <span className="caret"></span></a>
+            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">price <span className="caret"></span></a>
               <ul className="dropdown-menu" role="menu">
                 <li className="dropdown-header">{price_title}</li>
                 <li className="divider"></li>
@@ -69,9 +79,9 @@ var Filter = React.createClass({
               </ul>
           </li>
           <li className="dropdown">
-            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Category <span className="caret"></span></a>
+            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">category <span className="caret"></span></a>
               <ul className="dropdown-menu" role="menu">
-                <li className="dropdown-header">{this.state.filter_titles.category}</li>
+                <li className="dropdown-header">{category_title}</li>
                 <li className="divider"></li>
                 <li onClick={this.updateCategory}><a href="#">Food & Drink</a></li>
                 <li className="divider"></li>
@@ -85,9 +95,9 @@ var Filter = React.createClass({
               </ul>
           </li>
           <li className="dropdown">
-            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Date <span className="caret"></span></a>
+            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">date <span className="caret"></span></a>
               <ul className="dropdown-menu" role="menu">
-                <li className="dropdown-header">{this.state.filter_titles.date}</li>
+                <li className="dropdown-header">{date_title}</li>
                 <li className="divider"></li>
                 <li onClick={this.updateDate}><a href="#">{DateConstants.THIS_WEEK}</a></li>
                 <li className="divider"></li>

@@ -40,7 +40,7 @@ var Title = React.createClass({
 
     return (
       <div className="event-title col-md-6">
-        <h2>{category_title}events near {location_title}{price_title} {date_title}</h2>
+        <h3>{category_title}events near {location_title}{price_title} {date_title}</h3>
       </div>
     );
   }
