@@ -193,24 +193,57 @@ div .popular-icons img:hover {
 
 .map {
   width: 300px;
-  height: 300px;
+  height: 100%;
   float:left;
 }
 
-.clearfix:after {
-  content: "";
-  display: table;
-  clear: both;
+.map-and-filters-container {
+  height: 300px;
 }
 
-// .title-and-filters-container {
-//   float:left;
-// }
-
 .event-title {
-  margin-left: 20px;
+  position: relative;
+  left: 20px;
 }
 
 .filter-container {
   margin-left: 10px;
+  float:left;
+}
+
+.filter-container a {
+  color: black;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.filter-container li {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.filter-container .dropdown-menu li a{
+  font-weight: 300;
+}
+
+.filter-container .nav>li>a:hover {
+  background-color: #2a2a2a;
+}
+.filter-container .nav>li>a:focus {
+  background-color: #2a2a2a;
+}
+
+.filter-container .nav>li>a:hover > span {
+  color: white;
+}
+.filter-container .nav>li>a:focus > span {
+  color: black;
+}
+
+.filter-container .nav>li>a {
+  transition: background-color, .7s;
+}
+
+.filter-container .nav>li>a>span {
+  transition: color, .7s;
 }

@@ -41,19 +41,17 @@ var EventPage = React.createClass({
     this.$navbar = $(".navbar-default .navbar-nav > li > a");
     this.$logo = $("#logo");
 
-    var that = this;
     this.$navbar.hover(
       function() {
-        console.log(this);
-        this.css("color", "#bdbdbd"); },
+        $(this).css("color", "#bdbdbd"); },
       function() {
-        this.css("color", "white"); });
+        $(this).css("color", "white"); });
 
     this.$logo.hover(
       function() {
-        that.css("color", "#bdbdbd"); },
+        $(this).css("color", "#bdbdbd"); },
       function() {
-        that.css("color", "white"); });
+        $(this).css("color", "white"); });
 
     this.$navbar.css('transition', 'color, 0.7s');
     this.$logo.css('transition', 'color, 0.7s');
@@ -80,7 +78,7 @@ var EventPage = React.createClass({
   render: function() {
     return (
             <div className="event-page">
-              <div className="clearfix">
+              <div className="map-and-filters-container">
                 <Map events={this.state.events} filterParams={this.state.filterParams}/>
                 <div className="row">
                   <EventTitle/>

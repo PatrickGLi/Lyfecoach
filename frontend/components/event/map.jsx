@@ -97,6 +97,7 @@ var Map = React.createClass({
       map: this.map,
       title: "hello world",
       eventId: event.id,
+      icon: 'http://res.cloudinary.com/dlqjek68b/image/upload/v1450771235/marker_black_mpnvvp.png'
     });
 
     marker.addListener('mouseover', this.showInfo);

@@ -39,7 +39,7 @@ var NavBar = React.createClass({
   render: function() {
     var events;
     if (ReactConstants.CURRENT_USER !== -1) {
-      events = <li onClick={this.goToEventForm}><a id="test4" href="#">Be a host.</a></li>
+      events = <li onClick={this.goToEventForm}><a href="#">Be a host.</a></li>
       user = <li className="dropdown">
         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.state.currentUser.first_name} <span className="caret"></span></a>
         <ul className="dropdown-menu" role="menu">

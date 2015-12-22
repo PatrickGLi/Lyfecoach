@@ -31740,18 +31740,16 @@
 	    this.$navbar = $(".navbar-default .navbar-nav > li > a");
 	    this.$logo = $("#logo");
 	
-	    var that = this;
 	    this.$navbar.hover(function () {
-	      console.log(this);
-	      this.css("color", "#bdbdbd");
+	      $(this).css("color", "#bdbdbd");
 	    }, function () {
-	      this.css("color", "white");
+	      $(this).css("color", "white");
 	    });
 	
 	    this.$logo.hover(function () {
-	      that.css("color", "#bdbdbd");
+	      $(this).css("color", "#bdbdbd");
 	    }, function () {
-	      that.css("color", "white");
+	      $(this).css("color", "white");
 	    });
 	
 	    this.$navbar.css('transition', 'color, 0.7s');
@@ -31782,7 +31780,7 @@
 	      { className: 'event-page' },
 	      React.createElement(
 	        'div',
-	        { className: 'clearfix' },
+	        { className: 'map-and-filters-container' },
 	        React.createElement(Map, { events: this.state.events, filterParams: this.state.filterParams }),
 	        React.createElement(
 	          'div',
@@ -31897,7 +31895,8 @@
 	      position: myLatLng,
 	      map: this.map,
 	      title: "hello world",
-	      eventId: event.id
+	      eventId: event.id,
+	      icon: 'http://res.cloudinary.com/dlqjek68b/image/upload/v1450771235/marker_black_mpnvvp.png'
 	    });
 	
 	    marker.addListener('mouseover', this.showInfo);
@@ -31998,7 +31997,7 @@
 	      'div',
 	      { className: 'event-title col-md-6' },
 	      React.createElement(
-	        'h2',
+	        'h3',
 	        null,
 	        category_title,
 	        'events near ',
@@ -32204,10 +32203,10 @@
 	
 	  getInitialState: function () {
 	    return {
-	      filter_titles: { location: 'unknown',
-	        price: 'All prices',
-	        category: 'All categories',
-	        date: 'All dates' }
+	      filter_titles: { location: '',
+	        price: '',
+	        category: '',
+	        date: '' }
 	    };
 	  },
 	
@@ -32246,6 +32245,16 @@
 	      price_title = "All prices";
 	    }
 	
+	    var category_title = this.state.filter_titles.category;
+	    if (category_title === "") {
+	      category_title = "All categories";
+	    }
+	
+	    var date_title = this.state.filter_titles.date;
+	    if (date_title === "") {
+	      date_title = "All dates";
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'filter-container col-md-4' },
@@ -32259,7 +32268,7 @@
 	          React.createElement(
 	            'a',
 	            { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
-	            'Price ',
+	            'price ',
 	            React.createElement('span', { className: 'caret' })
 	          ),
 	          React.createElement(
@@ -32318,7 +32327,7 @@
 	          React.createElement(
 	            'a',
 	            { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
-	            'Category ',
+	            'category ',
 	            React.createElement('span', { className: 'caret' })
 	          ),
 	          React.createElement(
@@ -32327,7 +32336,7 @@
 	            React.createElement(
 	              'li',
 	              { className: 'dropdown-header' },
-	              this.state.filter_titles.category
+	              category_title
 	            ),
 	            React.createElement('li', { className: 'divider' }),
 	            React.createElement(
@@ -32387,7 +32396,7 @@
 	          React.createElement(
 	            'a',
 	            { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
-	            'Date ',
+	            'date ',
 	            React.createElement('span', { className: 'caret' })
 	          ),
 	          React.createElement(
@@ -32396,7 +32405,7 @@
 	            React.createElement(
 	              'li',
 	              { className: 'dropdown-header' },
-	              this.state.filter_titles.date
+	              date_title
 	            ),
 	            React.createElement('li', { className: 'divider' }),
 	            React.createElement(
@@ -33454,7 +33463,7 @@
 	        { onClick: this.goToEventForm },
 	        React.createElement(
 	          'a',
-	          { id: 'test4', href: '#' },
+	          { href: '#' },
 	          'Be a host.'
 	        )
 	      );
