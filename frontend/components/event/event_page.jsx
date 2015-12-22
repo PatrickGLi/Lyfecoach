@@ -33,8 +33,10 @@ var EventPage = React.createClass({
   componentWillUnmount: function() {
     this.eventListener.remove();
     this.filterListener.remove();
+    this.receivedEvents = false;
     FilterParamsStore.resetFilters();
     NavTransitions.removeNavTransitions();
+    EventStore.clearEvents();
   },
 
   _filtersChanged: function () {
@@ -44,10 +46,40 @@ var EventPage = React.createClass({
   },
 
   _eventsChanged: function() {
+    this.receivedEvents = true;
     this.setState({ events: _getAllEvents() });
   },
 
   render: function() {
+    var events;
+
+    if (this.state.events.length === 0 && this.receivedEvents) {
+      events = <div className="no-selection">
+                 <p>no posted events with those options. <b>host</b> successful events
+                  yourself and add to lyfecoach or adjust your selection and location query.</p>
+               </div>;
+    } else if (this.state.events.length === 0) {
+      events =
+            <div className="no-selection">
+              <div className="sk-circle">
+                 <div className="sk-circle1 sk-child"></div>
+                 <div className="sk-circle2 sk-child"></div>
+                 <div className="sk-circle3 sk-child"></div>
+                 <div className="sk-circle4 sk-child"></div>
+                 <div className="sk-circle5 sk-child"></div>
+                 <div className="sk-circle6 sk-child"></div>
+                 <div className="sk-circle7 sk-child"></div>
+                 <div className="sk-circle8 sk-child"></div>
+                 <div className="sk-circle9 sk-child"></div>
+                 <div className="sk-circle10 sk-child"></div>
+                 <div className="sk-circle11 sk-child"></div>
+                 <div className="sk-circle12 sk-child"></div>
+               </div>
+             </div>;
+    } else {
+      events = <EventIndex events={this.state.events} history={this.props.history}/>;
+    }
+
     return (
             <div className="event-page">
               <div className="map-and-filters-container">
@@ -57,7 +89,8 @@ var EventPage = React.createClass({
                   <Filter filterParams={this.state.filterParams}/>
                 </div>
               </div>
-              <EventIndex events={this.state.events} history={this.props.history}/>
+              {events}
+
             </div>
            );
   }

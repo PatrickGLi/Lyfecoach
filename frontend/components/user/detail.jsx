@@ -22,6 +22,7 @@ var UserDetail = React.createClass({
   componentWillUnmount: function() {
     this.token.remove();
     NavTransitions.removeNavTransitions();
+    EventStore.clearEvents();
   },
 
   showUserDetail: function() {
@@ -29,7 +30,7 @@ var UserDetail = React.createClass({
   },
 
   showEventDetail: function(event) {
-    this.props.history.pushState(null, 'events/' + event.id);
+    this.props.history.pushState(null, "api/users/" + event.organizer_id + "/events/" + event.id);
   },
 
   render: function() {
@@ -52,7 +53,7 @@ var UserDetail = React.createClass({
 
     return (
       <div className="row user-info">
-        <div className="col-md-5 col-md-offset-1">
+        <div className="col-md-6 col-md-offset-1">
 
           <div className="host-head">
             <div><h3>{host.host_name}</h3></div>
@@ -75,11 +76,10 @@ var UserDetail = React.createClass({
           </div>
 
           <div>{events}</div>
+        </div>
 
-          <div className="event-detail col-md-7">
-            {this.props.children}
-          </div>
-
+        <div className="event-detail col-md-5 pull-right">
+          {this.props.children}
         </div>
       </div>
     );

@@ -46,6 +46,7 @@ class Event < ActiveRecord::Base
   end
 
   belongs_to :organizer,
+  foreign_key: :organizer_id,
   class_name: "User"
 
   def self.near_location(location)

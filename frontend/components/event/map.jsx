@@ -21,6 +21,7 @@ var Map = React.createClass({
    };
 
    this.map = new google.maps.Map(map, mapOptions);
+
    this.props.events.forEach(this.addMarker);
 
    var locationData = { nearLat: lat,
@@ -33,6 +34,10 @@ var Map = React.createClass({
 
    //when the map mounts, update location parameters and fetch
    MapActions.fetchEvents();
+  },
+
+  componentWillUnmount: function() {
+    window.mapMounted = false;
   },
 
   componentWillReceiveProps: function(newProps) {

@@ -19681,12 +19681,8 @@
 	  return _events.slice(0);
 	};
 	
-	EventStore.find = function (id) {
-	  for (var i = 0; i < _events.length; i++) {
-	    if (_events[i].id === id) {
-	      return _events[i];
-	    }
-	  }
+	EventStore.fetch = function () {
+	  return _events[0];
 	};
 	
 	var resetEvents = function (events) {
@@ -19696,13 +19692,13 @@
 	};
 	
 	var resetSingleEvent = function (event) {
-	  for (var i = 0; i < _events.length; i++) {
-	    if (_events[i].id === event.id) {
-	      _events[i] = event;
-	    }
-	  }
+	  _events = [event];
 	
 	  EventStore.__emitChange();
+	};
+	
+	EventStore.clearEvents = function () {
+	  _events = [];
 	};
 	
 	EventStore.__onDispatch = function (payload) {
@@ -31605,7 +31601,17 @@
 	            React.createElement(
 	              'a',
 	              { href: '#' },
-	              'Account Settings'
+	              'follows'
+	            )
+	          ),
+	          React.createElement('li', { className: 'divider' }),
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              'a',
+	              { href: '#' },
+	              'about lyfecoach'
 	            )
 	          ),
 	          React.createElement('li', { className: 'divider' }),
@@ -31619,7 +31625,7 @@
 	              React.createElement('input', { name: 'authenticity_token',
 	                type: 'hidden',
 	                value: ReactConstants.AUTH_TOKEN }),
-	              React.createElement('input', { className: 'sign-out-link', type: 'submit', value: 'Sign Out' })
+	              React.createElement('input', { className: 'sign-out-link', type: 'submit', value: 'sign out' })
 	            )
 	          )
 	        )
@@ -31667,40 +31673,7 @@
 	            'ul',
 	            { className: 'nav navbar-nav' },
 	            events,
-	            user,
-	            React.createElement(
-	              'li',
-	              { className: 'dropdown' },
-	              React.createElement(
-	                'a',
-	                { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-expanded': 'false' },
-	                'Help ',
-	                React.createElement('span', { className: 'caret' })
-	              ),
-	              React.createElement(
-	                'ul',
-	                { className: 'dropdown-menu', role: 'menu' },
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  React.createElement(
-	                    'a',
-	                    { href: '#' },
-	                    'Hidden Stuff'
-	                  )
-	                ),
-	                React.createElement('li', { className: 'divider' }),
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  React.createElement(
-	                    'a',
-	                    { href: '#' },
-	                    'Separated link'
-	                  )
-	                )
-	              )
-	            )
+	            user
 	          )
 	        )
 	      )
@@ -31811,6 +31784,7 @@
 	    $('nav').toggleClass('transparency');
 	    clearInterval(this.interval);
 	    this.removeNavChanges();
+	    EventStore.clearEvents();
 	  },
 	
 	  backgroundChange: function () {
@@ -32328,7 +32302,7 @@
 	  displayName: 'PopularEventsIndex',
 	
 	  showEventDetail: function (event) {
-	    this.props.history.pushState(null, 'api/events/' + event.id);
+	    this.props.history.pushState(null, 'api/users/' + event.organizer.id + '/events/' + event.id);
 	  },
 	
 	  render: function () {
@@ -32464,8 +32438,10 @@
 	  componentWillUnmount: function () {
 	    this.eventListener.remove();
 	    this.filterListener.remove();
+	    this.receivedEvents = false;
 	    FilterParamsStore.resetFilters();
 	    NavTransitions.removeNavTransitions();
+	    EventStore.clearEvents();
 	  },
 	
 	  _filtersChanged: function () {
@@ -32475,10 +32451,54 @@
 	  },
 	
 	  _eventsChanged: function () {
+	    this.receivedEvents = true;
 	    this.setState({ events: _getAllEvents() });
 	  },
 	
 	  render: function () {
+	    var events;
+	
+	    if (this.state.events.length === 0 && this.receivedEvents) {
+	      events = React.createElement(
+	        'div',
+	        { className: 'no-selection' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'no posted events with those options. ',
+	          React.createElement(
+	            'b',
+	            null,
+	            'host'
+	          ),
+	          ' successful events yourself and add to lyfecoach or adjust your selection and location query.'
+	        )
+	      );
+	    } else if (this.state.events.length === 0) {
+	      events = React.createElement(
+	        'div',
+	        { className: 'no-selection' },
+	        React.createElement(
+	          'div',
+	          { className: 'sk-circle' },
+	          React.createElement('div', { className: 'sk-circle1 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle2 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle3 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle4 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle5 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle6 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle7 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle8 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle9 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle10 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle11 sk-child' }),
+	          React.createElement('div', { className: 'sk-circle12 sk-child' })
+	        )
+	      );
+	    } else {
+	      events = React.createElement(EventIndex, { events: this.state.events, history: this.props.history });
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'event-page' },
@@ -32493,7 +32513,7 @@
 	          React.createElement(Filter, { filterParams: this.state.filterParams })
 	        )
 	      ),
-	      React.createElement(EventIndex, { events: this.state.events, history: this.props.history })
+	      events
 	    );
 	  }
 	});
@@ -32528,6 +32548,7 @@
 	    };
 	
 	    this.map = new google.maps.Map(map, mapOptions);
+	
 	    this.props.events.forEach(this.addMarker);
 	
 	    var locationData = { nearLat: lat,
@@ -32540,6 +32561,10 @@
 	
 	    //when the map mounts, update location parameters and fetch
 	    MapActions.fetchEvents();
+	  },
+	
+	  componentWillUnmount: function () {
+	    window.mapMounted = false;
 	  },
 	
 	  componentWillReceiveProps: function (newProps) {
@@ -32723,7 +32748,7 @@
 	  displayName: 'EventIndex',
 	
 	  showUserDetail: function (event) {
-	    this.props.history.pushState(null, 'api/users/' + event.organizer.id);
+	    this.props.history.pushState(null, 'api/users/' + event.organizer.id + '/events/' + event.id);
 	  },
 	
 	  render: function () {
@@ -32773,8 +32798,6 @@
 	  },
 	
 	  render: function () {
-	    debugger;
-	
 	    var startDate = new Date(this.props.event.start_date).toString().split(' ').slice(0, 4).join(' ');
 	    var endDate = new Date(this.props.event.end_date).toString().split(' ').slice(0, 4).join(' ');
 	    var startTime = this.props.event.start_time;
@@ -32796,14 +32819,9 @@
 	      React.createElement(
 	        'div',
 	        { className: 'index-item-title' },
-	        this.props.event.organizer.host_name
-	      ),
-	      React.createElement('br', null),
-	      React.createElement(
-	        'div',
-	        { className: 'index-item-title' },
 	        this.props.event.title
 	      ),
+	      React.createElement('br', null),
 	      React.createElement(
 	        'div',
 	        null,
@@ -33177,6 +33195,7 @@
 	  componentWillUnmount: function () {
 	    this.token.remove();
 	    NavTransitions.removeNavTransitions();
+	    EventStore.clearEvents();
 	  },
 	
 	  showUserDetail: function () {
@@ -33184,7 +33203,7 @@
 	  },
 	
 	  showEventDetail: function (event) {
-	    this.props.history.pushState(null, 'events/' + event.id);
+	    this.props.history.pushState(null, "api/users/" + event.organizer_id + "/events/" + event.id);
 	  },
 	
 	  render: function () {
@@ -33209,7 +33228,7 @@
 	      { className: 'row user-info' },
 	      React.createElement(
 	        'div',
-	        { className: 'col-md-5 col-md-offset-1' },
+	        { className: 'col-md-6 col-md-offset-1' },
 	        React.createElement(
 	          'div',
 	          { className: 'host-head' },
@@ -33259,12 +33278,12 @@
 	          'div',
 	          null,
 	          events
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'event-detail col-md-7' },
-	          this.props.children
 	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'event-detail col-md-5 pull-right' },
+	        this.props.children
 	      )
 	    );
 	  }
@@ -33289,7 +33308,7 @@
 	  },
 	
 	  getStateFromStore: function () {
-	    return EventStore.find(parseInt(this.props.params.eventId));
+	    return EventStore.fetch();
 	  },
 	
 	  componentDidMount: function () {
@@ -33299,6 +33318,10 @@
 	
 	  componentWillUnmount: function () {
 	    this.token.remove();
+	  },
+	
+	  componentWillReceiveProps: function (newProps) {
+	    EventDetailActions.fetchSingleEvent(parseInt(newProps.params.eventId));
 	  },
 	
 	  showEventDetail: function () {
@@ -33339,26 +33362,25 @@
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'event-detail' },
 	      React.createElement(
 	        'div',
 	        null,
-	        event.title
+	        React.createElement(
+	          'h4',
+	          null,
+	          event.title
+	        )
 	      ),
 	      React.createElement(
 	        'div',
-	        null,
+	        { className: 'event-image' },
 	        React.createElement('img', { src: image })
 	      ),
 	      React.createElement(
 	        'div',
 	        null,
 	        event.location
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        event.description
 	      ),
 	      React.createElement(
 	        'div',
@@ -33381,8 +33403,34 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        null,
-	        event.organizer.host_name
+	        { id: 'accordion', role: 'tablist', 'aria-multiselectable': 'true' },
+	        React.createElement(
+	          'div',
+	          { className: 'panel panel-default' },
+	          React.createElement(
+	            'div',
+	            { className: 'panel-heading', role: 'tab', id: 'headingOne' },
+	            React.createElement(
+	              'h4',
+	              { className: 'panel-title' },
+	              React.createElement(
+	                'a',
+	                { 'data-toggle': 'collapse', 'data-parent': '#accordion', href: '#collapseOne', 'aria-expanded': 'true', 'aria-controls': 'collapseOne' },
+	                '>'
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { id: 'collapseOne', className: 'host-description panel-collapse collapse in', role: 'tabpanel', 'aria-labelledby': 'headingOne' },
+	            React.createElement(
+	              'div',
+	              null,
+	              event.organizer.host_name
+	            ),
+	            event.description
+	          )
+	        )
 	      )
 	    );
 	  }

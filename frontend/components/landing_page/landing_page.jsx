@@ -32,6 +32,7 @@ LandingPage = React.createClass({
     $('nav').toggleClass('transparency');
     clearInterval(this.interval);
     this.removeNavChanges();
+    EventStore.clearEvents();
   },
 
   backgroundChange: function() {

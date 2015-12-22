@@ -3,7 +3,7 @@ var React = require('react');
 var PopularEventsIndex = React.createClass({
 
   showEventDetail: function(event) {
-    this.props.history.pushState(null, 'api/events/' + event.id);
+    this.props.history.pushState(null, 'api/users/' + event.organizer.id + '/events/' + event.id);
   },
 
   render: function() {

@@ -43,7 +43,9 @@ var NavBar = React.createClass({
       user = <li className="dropdown">
         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.state.currentUser.first_name} <span className="caret"></span></a>
         <ul className="dropdown-menu" role="menu">
-          <li><a href="#">Account Settings</a></li>
+          <li><a href="#">follows</a></li>
+          <li className="divider"></li>
+          <li><a href="#">about lyfecoach</a></li>
           <li className="divider"></li>
           <li className="sign-out-li">
             <form method="post" action="session">
@@ -51,7 +53,7 @@ var NavBar = React.createClass({
               <input name="authenticity_token"
                      type="hidden"
                      value={ReactConstants.AUTH_TOKEN} />
-              <input className="sign-out-link" type="submit" value="Sign Out"></input>
+              <input className="sign-out-link" type="submit" value="sign out"></input>
             </form>
           </li>
         </ul>
@@ -71,14 +73,6 @@ var NavBar = React.createClass({
             <ul className="nav navbar-nav">
               {events}
               {user}
-              <li className="dropdown">
-                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Help <span className="caret"></span></a>
-                  <ul className="dropdown-menu" role="menu">
-                    <li><a href="#">Hidden Stuff</a></li>
-                    <li className="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                  </ul>
-              </li>
             </ul>
           </div>
         </div>
