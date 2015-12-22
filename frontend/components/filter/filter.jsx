@@ -51,7 +51,7 @@ var Filter = React.createClass({
     }
 
     return (
-      <div>
+      <div className="filter-container col-md-4">
         <SearchFilter className="form-control" />
         <ul className="nav navbar-nav">
           <li className="dropdown">
