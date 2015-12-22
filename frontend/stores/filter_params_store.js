@@ -54,7 +54,7 @@ FilterParamsStore.__onDispatch = function(payload) {
 
 var handleLocation = function(locationData) {
   _filter_params.location = locationData;
-  _filter_titles.location = locationData.address.split(',')[0];
+  _filter_titles.location = locationData.address.split(',')[0].toLowerCase();
   FilterParamsStore.__emitChange();
 };
 

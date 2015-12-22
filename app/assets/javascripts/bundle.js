@@ -26425,7 +26425,7 @@
 	  },
 	
 	  fetchPopularEvents: function () {
-	    $.get('api/events', { popular: 6 }, function (eventsData) {
+	    $.get('api/events', { popular: 8 }, function (eventsData) {
 	      ApiActions.receiveAll(eventsData);
 	    });
 	  },
@@ -26629,7 +26629,7 @@
 	
 	var handleLocation = function (locationData) {
 	  _filter_params.location = locationData;
-	  _filter_titles.location = locationData.address.split(',')[0];
+	  _filter_titles.location = locationData.address.split(',')[0].toLowerCase();
 	  FilterParamsStore.__emitChange();
 	};
 	
@@ -31458,7 +31458,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    NavBar = __webpack_require__(280);
+	    NavBar = __webpack_require__(280),
+	    Footer = __webpack_require__(281);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -31468,7 +31469,8 @@
 	      'div',
 	      null,
 	      React.createElement(NavBar, { history: this.props.history }),
-	      this.props.children
+	      this.props.children,
+	      React.createElement(Footer, null)
 	    );
 	  }
 	});
@@ -31561,6 +31563,13 @@
 	    this.backgroundChange();
 	  },
 	
+	  componentWillUnmount: function () {
+	    this.eventListener.remove();
+	    $('nav').toggleClass('transparency');
+	    clearInterval(this.interval);
+	    this.removeNavChanges();
+	  },
+	
 	  backgroundChange: function () {
 	    var backgrounds = ["url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450654179/photo-1446587114233-38830eb63a76_n3iidf.jpg)", "url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450654176/photo-1429962714451-bb934ecdc4ec_pw3ecu.jpg)", "url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450654178/photo-1445251836269-d158eaa028a6_ewteda.jpg)", "url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450644793/photo-1445384763658-0400939829cd_nlvg2v.jpg)"];
 	
@@ -31588,10 +31597,7 @@
 	    }, 6000);
 	  },
 	
-	  componentWillUnmount: function () {
-	    this.eventListener.remove();
-	    $('nav').toggleClass('transparency');
-	    clearInterval(this.interval);
+	  removeNavChanges: function () {
 	    this.$navbar.css('color', 'white');
 	    this.$logo.css('color', 'white');
 	    this.$navbar.css('transition', 'color, 0s');
@@ -31601,7 +31607,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'landing-page' },
 	      React.createElement(Jumbotron, null),
 	      React.createElement(FilterForm, { history: this.props.history }),
 	      React.createElement(
@@ -31643,12 +31649,12 @@
 	      { className: 'jumbotron' },
 	      React.createElement(
 	        'div',
-	        { className: 'container' },
+	        { className: 'container jumbo-text' },
 	        React.createElement(
 	          'div',
 	          { className: 'jumbo-host col-md-6' },
 	          React.createElement(
-	            'h2',
+	            'h3',
 	            null,
 	            'sell tickets.'
 	          ),
@@ -31668,14 +31674,14 @@
 	          'div',
 	          { className: 'jumbo-customer col-md-6' },
 	          React.createElement(
-	            'h2',
+	            'h3',
 	            null,
 	            'explore.'
 	          ),
 	          React.createElement(
 	            'p',
 	            null,
-	            'Know your city, and expand your horizons. Follow your favorite event hosts, and always know what\'s happening in your area.'
+	            'Know your city, and expand your horizons. Follow your favorite hosts, and always know what\'s happening in your area.'
 	          )
 	        )
 	      )
@@ -31719,12 +31725,45 @@
 	  componentDidMount: function () {
 	    this.eventListener = EventStore.addListener(this._eventsChanged);
 	    this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
+	
+	    this.addNavTransitions();
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.eventListener.remove();
 	    this.filterListener.remove();
 	    FilterParamsStore.resetFilters();
+	    this.removeNavTransitions();
+	  },
+	
+	  addNavTransitions: function () {
+	    this.$navbar = $(".navbar-default .navbar-nav > li > a");
+	    this.$logo = $("#logo");
+	
+	    var that = this;
+	    this.$navbar.hover(function () {
+	      console.log(this);
+	      this.css("color", "#bdbdbd");
+	    }, function () {
+	      this.css("color", "white");
+	    });
+	
+	    this.$logo.hover(function () {
+	      that.css("color", "#bdbdbd");
+	    }, function () {
+	      that.css("color", "white");
+	    });
+	
+	    this.$navbar.css('transition', 'color, 0.7s');
+	    this.$logo.css('transition', 'color, 0.7s');
+	  },
+	
+	  removeNavTransitions: function () {
+	    this.$logo.unbind('mouseenter mouseleave');
+	    this.$navbar.unbind('mouseenter mouseleave');
+	
+	    this.$navbar.css('transition', 'color, 0s');
+	    this.$logo.css('transition', 'color, 0s');
 	  },
 	
 	  _filtersChanged: function () {
@@ -31741,9 +31780,17 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'event-page' },
-	      React.createElement(Map, { events: this.state.events, filterParams: this.state.filterParams }),
-	      React.createElement(EventTitle, null),
-	      React.createElement(Filter, { filterParams: this.state.filterParams }),
+	      React.createElement(
+	        'div',
+	        { className: 'clearfix' },
+	        React.createElement(Map, { events: this.state.events, filterParams: this.state.filterParams }),
+	        React.createElement(
+	          'div',
+	          { className: 'row' },
+	          React.createElement(EventTitle, null),
+	          React.createElement(Filter, { filterParams: this.state.filterParams })
+	        )
+	      ),
 	      React.createElement(EventIndex, { events: this.state.events, history: this.props.history })
 	    );
 	  }
@@ -31945,19 +31992,13 @@
 	
 	    var category_title = this.state.title.category.toLowerCase() + " ";
 	
-	    // var title;
-	    //
-	    // for (var key in this.state.title) {
-	    //   var title =
-	    // }
-	
 	    console.log(this.state.title);
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'event-title col-md-6' },
 	      React.createElement(
-	        'h1',
+	        'h2',
 	        null,
 	        category_title,
 	        'events near ',
@@ -32207,7 +32248,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'filter-container col-md-4' },
 	      React.createElement(SearchFilter, { className: 'form-control' }),
 	      React.createElement(
 	        'ul',
@@ -33280,7 +33321,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'popular-search' },
+	      { className: 'filter-search' },
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit,
@@ -33321,7 +33362,7 @@
 	    var popular_events = this.props.events.map(function (event, index) {
 	      var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_300" + event.url;
 	      var bindedClick = that.showEventDetail.bind(null, event);
-	      var popularClass = "col-xs-4 popular-icons popular-" + index;
+	      var popularClass = "col-xs-3 popular-icons popular-" + index;
 	      return React.createElement(
 	        'div',
 	        { key: event.id, className: popularClass },
@@ -33335,7 +33376,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'row' },
+	      { className: 'row popular-event-index' },
 	      popular_events
 	    );
 	  }
@@ -33442,7 +33483,7 @@
 	          React.createElement('li', { className: 'divider' }),
 	          React.createElement(
 	            'li',
-	            null,
+	            { className: 'sign-out-li' },
 	            React.createElement(
 	              'form',
 	              { method: 'post', action: 'session' },
@@ -33482,39 +33523,36 @@
 	    //   </div>
 	    //   <button type="submit" className="btn btn-default">Submit</button>
 	    // </form>
+	    // <div className="navbar-header">
+	    //   <button type="button" className="navbar-toggle collapsed"
+	    //           data-toggle="collapse"
+	    //           data-target="#collapse-menu"
+	    //           aria-expanded="false">
+	    //     <span className="icon-bar"></span>
+	    //     <span className="icon-bar"></span>
+	    //     <span className="icon-bar"></span>
+	    //   </button>
+	    //
+	    // </div>
 	
 	    return React.createElement(
 	      'nav',
-	      { id: 'tst', className: 'navbar navbar-default nav-items' },
+	      { className: 'navbar navbar-default nav-items' },
 	      React.createElement(
 	        'div',
 	        { className: 'container-fluid' },
 	        React.createElement(
 	          'div',
-	          { className: 'navbar-header' },
+	          { onClick: this.returnToHomepage },
 	          React.createElement(
-	            'button',
-	            { type: 'button', className: 'navbar-toggle collapsed',
-	              'data-toggle': 'collapse',
-	              'data-target': '#collapse-menu',
-	              'aria-expanded': 'false' },
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' })
-	          ),
-	          React.createElement(
-	            'div',
-	            { onClick: this.returnToHomepage },
-	            React.createElement(
-	              'a',
-	              { id: 'logo', className: 'navbar-brand logo', href: '#' },
-	              'lyfecoach'
-	            )
+	            'a',
+	            { id: 'logo', className: 'navbar-brand logo', href: '#' },
+	            'lyfecoach'
 	          )
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'collapse navbar-collapse navbar-right', id: 'collapse-menu' },
+	          { className: 'collapse navbar-collapse navbar-right' },
 	          React.createElement(
 	            'ul',
 	            { className: 'nav navbar-nav' },
@@ -33561,6 +33599,22 @@
 	});
 	
 	module.exports = NavBar;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Footer = React.createClass({
+	  displayName: 'Footer',
+	
+	  render: function () {
+	    return React.createElement('div', { className: 'footer-container' });
+	  }
+	});
+	
+	module.exports = Footer;
 
 /***/ }
 /******/ ]);

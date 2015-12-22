@@ -13,7 +13,7 @@ var ApiUtil = {
   },
 
   fetchPopularEvents: function() {
-    $.get('api/events', { popular: 6 }, function(eventsData) {
+    $.get('api/events', { popular: 8 }, function(eventsData) {
       ApiActions.receiveAll(eventsData);
     });
   },

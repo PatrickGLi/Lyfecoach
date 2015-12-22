@@ -26,12 +26,45 @@ var EventPage = React.createClass({
   componentDidMount: function() {
     this.eventListener = EventStore.addListener(this._eventsChanged);
     this.filterListener = FilterParamsStore.addListener(this._filtersChanged);
+
+    this.addNavTransitions();
   },
 
   componentWillUnmount: function() {
     this.eventListener.remove();
     this.filterListener.remove();
     FilterParamsStore.resetFilters();
+    this.removeNavTransitions();
+  },
+
+  addNavTransitions: function() {
+    this.$navbar = $(".navbar-default .navbar-nav > li > a");
+    this.$logo = $("#logo");
+
+    var that = this;
+    this.$navbar.hover(
+      function() {
+        console.log(this);
+        this.css("color", "#bdbdbd"); },
+      function() {
+        this.css("color", "white"); });
+
+    this.$logo.hover(
+      function() {
+        that.css("color", "#bdbdbd"); },
+      function() {
+        that.css("color", "white"); });
+
+    this.$navbar.css('transition', 'color, 0.7s');
+    this.$logo.css('transition', 'color, 0.7s');
+  },
+
+  removeNavTransitions: function() {
+    this.$logo.unbind('mouseenter mouseleave');
+    this.$navbar.unbind('mouseenter mouseleave');
+
+    this.$navbar.css('transition', 'color, 0s');
+    this.$logo.css('transition', 'color, 0s');
   },
 
   _filtersChanged: function () {
@@ -47,9 +80,14 @@ var EventPage = React.createClass({
   render: function() {
     return (
             <div className="event-page">
-              <Map events={this.state.events} filterParams={this.state.filterParams}/>
-              <EventTitle/>
-              <Filter filterParams={this.state.filterParams}/>
+              <div className="clearfix">
+                <Map events={this.state.events} filterParams={this.state.filterParams}/>
+                <div className="row">
+                  <EventTitle/>
+                  <Filter filterParams={this.state.filterParams}/>
+                </div>
+              </div>
+
               <EventIndex events={this.state.events} history={this.props.history}/>
             </div>
            );

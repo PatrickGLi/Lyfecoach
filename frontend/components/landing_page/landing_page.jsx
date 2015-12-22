@@ -27,6 +27,13 @@ LandingPage = React.createClass({
     this.backgroundChange();
   },
 
+  componentWillUnmount: function() {
+    this.eventListener.remove();
+    $('nav').toggleClass('transparency');
+    clearInterval(this.interval);
+    this.removeNavChanges();
+  },
+
   backgroundChange: function() {
     var backgrounds = ["url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450654179/photo-1446587114233-38830eb63a76_n3iidf.jpg)",
                        "url(http://res.cloudinary.com/dlqjek68b/image/upload/v1450654176/photo-1429962714451-bb934ecdc4ec_pw3ecu.jpg)",
@@ -57,10 +64,7 @@ LandingPage = React.createClass({
     }, 6000);
   },
 
-  componentWillUnmount: function() {
-    this.eventListener.remove();
-    $('nav').toggleClass('transparency');
-    clearInterval(this.interval);
+  removeNavChanges: function() {
     this.$navbar.css('color', 'white');
     this.$logo.css('color', 'white');
     this.$navbar.css('transition', 'color, 0s');
@@ -69,7 +73,7 @@ LandingPage = React.createClass({
 
   render: function() {
     return (
-      <div>
+      <div className="landing-page">
         <Jumbotron/>
         <FilterForm history={this.props.history}/>
         <div><h2 className="popular-title">popular</h2></div>

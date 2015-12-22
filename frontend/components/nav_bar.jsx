@@ -45,7 +45,7 @@ var NavBar = React.createClass({
         <ul className="dropdown-menu" role="menu">
           <li><a href="#">Account Settings</a></li>
           <li className="divider"></li>
-          <li>
+          <li className="sign-out-li">
             <form method="post" action="session">
               <input type="hidden" name="_method" value="delete"/>
               <input name="authenticity_token"
@@ -67,25 +67,25 @@ var NavBar = React.createClass({
     //   </div>
     //   <button type="submit" className="btn btn-default">Submit</button>
     // </form>
+    // <div className="navbar-header">
+    //   <button type="button" className="navbar-toggle collapsed"
+    //           data-toggle="collapse"
+    //           data-target="#collapse-menu"
+    //           aria-expanded="false">
+    //     <span className="icon-bar"></span>
+    //     <span className="icon-bar"></span>
+    //     <span className="icon-bar"></span>
+    //   </button>
+    //
+    // </div>
 
     return (
-      <nav id="tst" className="navbar navbar-default nav-items">
+      <nav className="navbar navbar-default nav-items">
         <div className="container-fluid">
-          <div className="navbar-header">
-            <button type="button" className="navbar-toggle collapsed"
-                    data-toggle="collapse"
-                    data-target="#collapse-menu"
-                    aria-expanded="false">
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            <div onClick={this.returnToHomepage}>
-              <a id="logo" className="navbar-brand logo" href="#">lyfecoach</a>
-            </div>
+          <div onClick={this.returnToHomepage}>
+            <a id="logo" className="navbar-brand logo" href="#">lyfecoach</a>
           </div>
-
-          <div className="collapse navbar-collapse navbar-right" id="collapse-menu">
+          <div className="collapse navbar-collapse navbar-right">
             <ul className="nav navbar-nav">
               {events}
               {user}

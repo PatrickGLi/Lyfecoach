@@ -1,3 +1,216 @@
 // Place all the styles related to the StaticPages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+
+#logo {
+  font-size: 26px;
+  letter-spacing: 6px;
+  font-weight: 200;;
+  transition: color, 0.7s;
+}
+
+#logo:hover {
+  color: #bdbdbd;
+}
+
+.navbar .navbar-default .nav-items {
+  background-color: #3f3f3f;
+}
+
+.navbar-default {
+  background-color: #2a2a2a;
+}
+
+.navbar {
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-bottom: 0;
+  border-radius: 0;
+  z-index: 2;
+}
+
+.transparency{
+  background: transparent;
+}
+
+.navbar-nav>li {
+  background: transparent;
+}
+
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus {
+  background-color: transparent;
+  color: white;
+}
+
+.navbar-default .navbar-toggle {
+  background-color: #1a242f;
+}
+
+.navbar-nav>li>.dropdown-menu {
+  background-color: #f2f2f2;
+}
+
+.dropdown-menu>li>a {
+  transition: background-color, 1s;
+}
+
+.dropdown-menu>li>a:hover,
+ .dropdown-menu>li>a:focus {
+   background-color: #4d4d4d;
+ }
+
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>li>a:focus {
+  color: white;
+}
+
+.navbar .sign-out-link {
+  color: #7b8a8b;
+  border: none;
+  font-size: 16px;
+  background: transparent;
+  margin-left: 50px;
+  font-weight: 500;
+  transition: font-size, 1s;
+}
+
+.navbar .sign-out-li form {
+  transition: background-color, 1s;
+}
+
+.navbar .sign-out-li form:hover {
+  background-color: #4d4d4d;
+}
+
+.navbar .sign-out-li form:hover > .sign-out-link {
+  color: white;
+}
+
+.landing-page {
+  background-color: #f2f2f2;
+}
+
+.jumbotron {
+  z-index: 1;
+  position:relative;
+  top: -60px;
+  background-size: cover;
+  background-position: 0% 50%;
+  background-repeat: no-repeat;
+  height: 500px;
+  transition: background-image 2s, color 2s;
+  margin-bottom: 0;
+}
+
+.jumbo-text {
+  position:relative;
+  top: 100px;
+}
+
+.jumbotron button {
+  background-color: #4d4d4d;
+  border: none;
+  border-radius: 0;
+  transition: background-color, .6s;
+}
+
+.jumbotron button:hover {
+  background-color: #151515
+}
+
+.jumbotron p {
+  font-weight: 300;
+}
+
+.filter-search {
+  height: 200px;
+  text-align: center;
+  line-height: 100%;
+  width: 1000px;
+  margin: 0 auto;
+  position:relative;
+  top: -20px;
+}
+
+.filter-search form input {
+  border-radius: 0;
+  transition: border, .5s;
+  text-align: center;
+}
+
+.filter-search .form-inline .form-control {
+  height: 40px;
+  width: 300px;
+  text-align:left;
+}
+
+.filter-search form input:focus {
+  border-color: #4d4d4d;
+}
+
+.filter-search form button {
+  border: none;
+  border-radius: 0;
+  background-color: #4d4d4d;
+  transition: background-color, 1s;
+}
+
+.filter-search form button:hover {
+  background-color: #151515
+}
+
+.popular-title {
+  margin: 0 0 15px 20px;
+}
+
+img:hover {
+  cursor: pointer;
+}
+
+div .popular-icons img {
+  margin: 0 12px 24px 12px;
+  padding: 0;
+  opacity: 0.6;
+  transition: opacity, 1s;
+}
+
+div .popular-icons img:hover {
+  opacity: 1;
+}
+
+.event-page {
+  background-color: #f2f2f2;
+}
+
+
+.footer-container {
+  height: 250px;
+  background-color: #2a2a2a;
+}
+
+.map {
+  width: 300px;
+  height: 300px;
+  float:left;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+// .title-and-filters-container {
+//   float:left;
+// }
+
+.event-title {
+  margin-left: 20px;
+}
+
+.filter-container {
+  margin-left: 10px;
+}

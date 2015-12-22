@@ -1,5 +1,6 @@
 var React = require('react'),
-    NavBar = require('./nav_bar');
+    NavBar = require('./nav_bar'),
+    Footer = require('./footer');
 
 var App = React.createClass({
 
@@ -8,6 +9,7 @@ var App = React.createClass({
       <div>
         <NavBar history={this.props.history}/>
         {this.props.children}
+        <Footer/>
       </div>
     );
   }

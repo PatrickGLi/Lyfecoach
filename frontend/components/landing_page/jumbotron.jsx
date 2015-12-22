@@ -11,9 +11,9 @@ var Jumbotron = React.createClass({
   render: function() {
     return(
       <div className="jumbotron">
-        <div className="container">
+        <div className="container jumbo-text">
           <div className="jumbo-host col-md-6">
-            <h2>sell tickets.</h2>
+            <h3>sell tickets.</h3>
             <p>
               Promote, manage, and host successful events.
             </p>
@@ -22,9 +22,9 @@ var Jumbotron = React.createClass({
             </button>
           </div>
           <div className="jumbo-customer col-md-6">
-            <h2>explore.</h2>
+            <h3>explore.</h3>
             <p>Know your city, and expand your horizons. Follow your
-            favorite event hosts, and always know what's happening in your area.
+            favorite hosts, and always know what's happening in your area.
             </p>
           </div>
         </div>

@@ -32,7 +32,7 @@ var FilterForm = React.createClass({
 
   render: function() {
     return(
-      <div className="popular-search">
+      <div className="filter-search">
         <form onSubmit={this.handleSubmit}
               className="form-inline">
             <input type="text"

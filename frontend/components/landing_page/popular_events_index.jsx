@@ -11,7 +11,7 @@ var PopularEventsIndex = React.createClass({
     var popular_events = this.props.events.map(function(event, index) {
       var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_300" + event.url;
       var bindedClick = that.showEventDetail.bind(null, event);
-      var popularClass = "col-xs-4 popular-icons popular-" + index;
+      var popularClass = "col-xs-3 popular-icons popular-" + index;
       return (
         <div key={event.id} className={popularClass} >
           <img  id="test2"
@@ -25,7 +25,7 @@ var PopularEventsIndex = React.createClass({
     });
 
     return (
-      <div className="row">
+      <div className="row popular-event-index">
         {popular_events}
       </div>
     );
