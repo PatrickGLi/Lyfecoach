@@ -14,58 +14,22 @@
  *= require_tree .
  *= require_self
  */
- // @function set-notification-text-color($color) {
- //   @if (lightness($color) > 50) {
- //     @return #000000; // Lighter backgorund, return dark color
- //   } @else {
- //     @return #ffffff; // Darker background, return light color
- //   }
- // }
-
- // $list: ("http://res.cloudinary.com/dlqjek68b/image/upload/v1450654179/photo-1446587114233-38830eb63a76_n3iidf.jpg",
- //        "http://res.cloudinary.com/dlqjek68b/image/upload/v1450693640/photo-1444426724550-c7bfccd051ee_d20xvh.jpg",
- //        "http://res.cloudinary.com/dlqjek68b/image/upload/v1450654178/photo-1445251836269-d158eaa028a6_ewteda.jpg");
-
- // @function change-background() {
- //   @setInterval(function() {
- //     $index: 1;
- //     @while $index <= 3
- //     $image-number: $index;
- //     $index: $index + 1;
- //     @if $index > 3
- //       $index: 1;
- //     @return nth($list, $image-number)
- //   }, 4000);
- // }
-
-//  p {
-//   animation-duration: 3s;
-//   animation-name: slidein;
-// }
-//
-// @keyframes slidein {
-//   from {
-//     margin-left: 100%;
-//     width: 300%;
-//   }
-//
-//   to {
-//     margin-left: 0%;
-//     width: 100%;
-//   }
-// }
-//
-// @function set-notification-text-color($color) {
-//   @if (lightness($color) > 50) {
-//     @return #000000; // Lighter backgorund, return dark color
-//   } @else {
-//     @return #ffffff; // Darker background, return light color
-//   }
-// }
 
 body, h1, h2, h3, h4 {
   font-family: 'Raleway', sans-serif;
   font-weight: 300;
+  color: #2c3e50;
+}
+
+button {
+  background-color: #4d4d4d;
+  border: none;
+  border-radius: 0;
+  transition: background-color, .6s;
+}
+
+button:hover {
+  background-color: #151515
 }
 
 .sk-circle {

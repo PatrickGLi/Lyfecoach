@@ -8,10 +8,30 @@ setTimeout(function () {
 }, 0);
 
 var FormActions = {
-  createEvent: function(newEventData) {
+
+  createEvent: function(newEventData, callback) {
+    var category;
+
+    switch (newEventData.category) {
+      case "food-and-drink":
+        category = "Food & Drink";
+        break;
+      case "art":
+        category = "Art";
+        break;
+      case "music":
+        category = "Music";
+        break;
+      case "nightlife":
+        category = "Nightlife";
+        break;
+      case "sports-and-fitness":
+        category = "Sports & Fitness";
+        break;
+    }
 
     convertedEventData = {
-      category: newEventData.category,
+      category: category,
       description: newEventData.description,
       location: newEventData.location,
       title: newEventData.title,
@@ -27,7 +47,7 @@ var FormActions = {
       end_time: parseInt(newEventData.endTime)
     };
 
-    ApiUtil.createEvent(convertedEventData);
+    ApiUtil.createEvent(convertedEventData, callback);
   },
 
   formError: function(errorData) {

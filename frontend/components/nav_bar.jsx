@@ -39,8 +39,9 @@ var NavBar = React.createClass({
   render: function() {
     var events;
     if (ReactConstants.CURRENT_USER !== -1) {
-      events = <li onClick={this.goToEventForm}><a href="#">Be a host.</a></li>
-      user = <li className="dropdown">
+      events = <li onClick={this.goToEventForm}><a href="#">Be a host.</a></li>;
+      user =
+      <li className="dropdown">
         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.state.currentUser.first_name} <span className="caret"></span></a>
         <ul className="dropdown-menu" role="menu">
           <li><a href="#">follows</a></li>
@@ -57,7 +58,7 @@ var NavBar = React.createClass({
             </form>
           </li>
         </ul>
-      </li>
+      </li>;
     } else {
       events = <li><a href="users/new">Sign Up</a></li>;
       user = <li><a href="session/new">Sign In</a></li>;

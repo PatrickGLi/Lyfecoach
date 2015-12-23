@@ -37,7 +37,7 @@ class Api::EventsController < ApplicationController
 
   def create
     event = Event.create!(event_params)
-    debugger
+
     render json: event
   end
 

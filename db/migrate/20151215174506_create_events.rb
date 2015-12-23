@@ -14,7 +14,7 @@ class CreateEvents < ActiveRecord::Migration
       t.float :lat, null: false
       t.float :lng, null: false
       t.float :price, null: false
-      t.text :url, null: false, default: 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=&url=https%3A%2F%2Fpixabay.com%2Fen%2Fsilhouette-sunset-landscape-woman-283298%2F&bvm=bv.110151844,d.cGc&psig=AFQjCNEIkN-4xKzQ4jLYazWlpb_cc6p3ug&ust=1450288362611394'
+      t.text :url, null: false, default: '/v1450772227/photo-1439337153520-7082a56a81f4_bnx1j5.jpg'
       t.integer :organizer_id, null: false
 
       t.timestamps null: false

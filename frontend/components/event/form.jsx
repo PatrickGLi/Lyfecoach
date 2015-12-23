@@ -3,7 +3,9 @@ var React = require('react'),
     ReactDOM = require('react-dom'),
     FormActions = require('../../actions/form_actions'),
     Error = require('./error'),
-    EventStore = require('../../stores/event_store');
+    ErrorStore = require('../../stores/error_store'),
+    EventStore = require('../../stores/event_store'),
+    NavTransitions = require('../../util/nav_transitions');
 
 var EventForm = React.createClass({
   mixins: [LinkedStateMixin],
@@ -19,9 +21,10 @@ var EventForm = React.createClass({
     lat: "",
     lng: "",
     price: "",
-    url: "https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=&url=https%3A%2F%2Fpixabay.com%2Fen%2Fsilhouette-sunset-landscape-woman-283298%2F&bvm=bv.110151844,d.cGc&psig=AFQjCNEIkN-4xKzQ4jLYazWlpb_cc6p3ug&ust=1450288362611394",
+    url: "/v1450644788/photo-1416304646406-414b1009dbe4_nbwzwj.jpg",
     ticketMax: "",
-    category: ""
+    category: "",
+    validLocation: ""
   },
 
   getInitialState: function(){
@@ -36,12 +39,18 @@ var EventForm = React.createClass({
       }
     });
 
+    NavTransitions.addNavTransitions();
+
     var autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
 
     this.autocomplete = new google.maps.places.Autocomplete(autoCompleteInput,
       {types: ['geocode']});
     this.geocoder = new google.maps.Geocoder();
     this.autocomplete.addListener('place_changed', this.fillInLocation);
+  },
+
+  componentWillUnmount: function() {
+    NavTransitions.removeNavTransitions();
   },
 
   fillInLocation: function() {
@@ -54,10 +63,9 @@ var EventForm = React.createClass({
         that.setState({
           location: address,
           lat: myLatLng.lat(),
-          lng: myLatLng.lng()
+          lng: myLatLng.lng(),
+          validLocation: ""
         });
-      } else {
-        alert(status);
       }
     });
   },
@@ -82,7 +90,9 @@ var EventForm = React.createClass({
 
   handleSubmit: function(e){
     e.preventDefault();
-    FormActions.createEvent(this.state)
+    FormActions.createEvent(this.state, function(organizer_id, event_id) {
+      this.props.history.pushState(null, "api/users/" + organizer_id + "/events/" + event_id);
+    }.bind(this));
   },
 
   handleCancel: function(e){
@@ -98,8 +108,7 @@ var EventForm = React.createClass({
     e.preventDefault();
     cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, function(error, results){
       if(!error){
-        debugger
-        this.props.postImage(results[0]);
+        this.setState({ url: results[0].path });
       }
     }.bind(this));
   },
@@ -122,94 +131,124 @@ var EventForm = React.createClass({
       times.push(<option key={i} value={i}>{time}</option>);
     }
 
+    var image;
+
+    if (this.state.url === "/v1450644788/photo-1416304646406-414b1009dbe4_nbwzwj.jpg") {
+      image = <div></div>;
+    } else {
+      var url = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_300/" + this.state.url;
+      image = <div className="image-holder"><img src={url}></img></div>;
+    }
+
     return (
-        <div>
-          <h3>Event Details</h3>
-          <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="form-title">Event Title</label>
-              <input className="form-control"
-                     type="text"
-                     id="form-title"
-                     valueLink={this.linkState('title')}
-                     placeholder="Give a short distinct name"/>
+        <div className="event-form">
+          <div className="row">
+            <div className="col-md-5 col-md-offset-1">
+              <div className="form-header">
+                <h2>Event Details</h2>
+              </div>
+              <form onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="form-title">Event Title</label>
+                  <input className="form-control"
+                         type="text"
+                         id="form-title"
+                         valueLink={this.linkState('title')}
+                         placeholder="give a short distinct name"/>
 
-                   <label htmlFor="form-location">Location</label>
-              <input valueLink={this.linkState('location')}
-                     className="form-control"
-                     id="form-location"
-                     ref="autocomplete"
-                     placeholder="Enter your address"
-                     onFocus={this.geolocate}
-                     type="text"/>
+                  <label htmlFor="form-location">Location</label>
+                  <input valueLink={this.linkState('location')}
+                         className="form-control"
+                         id="form-location"
+                         ref="autocomplete"
+                         placeholder="enter your event address"
+                         onFocus={this.geolocate}
+                         type="text"/>
+
+                  <label htmlFor="form-start-date">Start Time</label>
+                  <input type="date"
+                         id="form-start-date"
+                         className="form-control form-numbers"
+                         valueLink={this.linkState('startDate')}/>
+
+                  <select className="form-control form-select"
+                          valueLink={this.linkState('startTime')}>
+                          {times}
+                  </select>
+
+                  <label htmlFor="form-end-date">End Time</label>
+                  <input type="date"
+                         id="form-end-date"
+                         valueLink={this.linkState('endDate')}
+                         className="form-control form-numbers"/>
+
+                  <select className="form-control form-select"
+                          valueLink={this.linkState('endTime')}>
+                          {times}
+                  </select>
+
+                  <label htmlFor="form-ticket">Ticket Price</label>
+                  <input type="text"
+                         valueLink={this.linkState('price')}
+                         id="form-ticket"
+                         placeholder="number value please."
+                         className="form-control form-numbers"/>
 
 
-                   <label htmlFor="form-start-date">Start Time</label>
-              <input type="date"
-                     id="form-start-date"
-                     className="form-control"
-                     valueLink={this.linkState('startDate')}/>
+                  <label htmlFor="form-ticket-max">Ticket Max</label>
+                  <input type="text"
+                         valueLink={this.linkState('ticketMax')}
+                         id="form-ticket-max"
+                         placeholder="number value please."
+                         className="form-control form-numbers"/>
 
-              <select className="form-control"
-                      valueLink={this.linkState('startTime')}>
-                      <option></option>
-                      {times}
-              </select>
+                 <label htmlFor="form-category">Category</label>
+                 <select className="form-control form-select"
+                         id="form-category"
+                         valueLink={this.linkState('category')}>
+                         <option></option>
+                         <option value="food-and-drink">Food & Drink</option>
+                         <option value="art">Art</option>
+                         <option value="music">Music</option>
+                         <option value="nightlife">Nightlife</option>
+                         <option value="sports-and-fitness">Sports & Fitness</option>
+                 </select>
 
-              <label htmlFor="form-end-date">End Time</label>
-              <input type="date"
-                     id="form-end-date"
-                     valueLink={this.linkState('endDate')}
-                     className="form-control"/>
+                 <br/>
+                 <button id="image-button"
+                         onClick={this.addImage}
+                         className="btn btn-default">
+                         ADD EVENT IMAGE
+                 </button>
+                 <br/>
 
+                {image}
 
-              <select className="form-control"
-                      valueLink={this.linkState('endTime')}>
-                      <option></option>
-                      {times}
-              </select>
+                 <label htmlFor="form-description">Description</label>
+                 <textarea valueLink={this.linkState('description')}
+                           rows="6" cols="50"
+                           id="form-description"
+                           className="form-control">
+                 </textarea>
 
-              <label htmlFor="form-ticket">Tickets</label>
-              <input type="text"
-                     valueLink={this.linkState('price')}
-                     id="form-ticket"
-                     className="form-control"/>
-
-
-              <label htmlFor="form-ticket-max">Ticket Max</label>
-              <input type="text"
-                     valueLink={this.linkState('ticketMax')}
-                     id="form-ticket-max"
-                     className="form-control"/>
-
-              <label htmlFor="form-category">Category</label>
-              <input type="text"
-                     id="form-category"
-                     valueLink={this.linkState('category')}
-                     className="form-control"/>
-
-                <br/>
-                <button onClick={this.addImage}
-                        className="btn btn-default">
-                        ADD EVENT IMAGE
-                </button>
-                <br/>
-
-              <label htmlFor="form-description">Add a Description</label>
-              <textarea valueLink={this.linkState('description')}
-                        id="form-description"
-                        className="form-control"></textarea>
-
-              <br/>
-              <button type="submit" className="btn btn-primary">Create Event</button>
-            </div>
-          </form>
-          <button className="btn btn-primary"
-                  onClick={this.handleCancel}>
-                  Cancel
-          </button>
-          <Error/>
+                 <br/>
+                 <button type="submit" className="btn btn-primary form-button btn-lg btn-block">Create Event</button>
+               </div>
+             </form>
+             <button className="btn btn-primary form-button"
+                     onClick={this.handleCancel}>
+                     Cancel
+             </button>
+           </div>
+           <div className="col-md-5">
+             <div className="error-right">
+               <h3>successful events have detail. make sure people are interested in you.</h3>
+               <h2>almost done.</h2>
+               <Error/>
+             </div>
+          </div>
         </div>
+      </div>
     );
   }
 });

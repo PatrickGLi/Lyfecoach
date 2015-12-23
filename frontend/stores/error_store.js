@@ -1,9 +1,10 @@
 var AppDispatcher = require('../dispatcher/dispatcher'),
+    FormConstants = require('../constants/form_constants'),
     Store = require('flux/utils').Store;
 
     var ErrorStore = new Store(AppDispatcher);
 
-    var _error = null;
+    var _error = false;
 
     ErrorStore.fetch = function () {
       return _error;
@@ -11,22 +12,20 @@ var AppDispatcher = require('../dispatcher/dispatcher'),
 
     ErrorStore.__onDispatch = function (payload) {
       switch (payload.actionType) {
-        case "FORM_ERROR":
+        case FormConstants.FORM_ERROR:
           handleError(payload.data);
           break;
       }
-
-
     };
 
     function handleError (data) {
-      _error = data;
+      _error = true;
+
+      ErrorStore.__emitChange();
     }
 
     ErrorStore.resetError = function() {
-      return _error = null;
-
-      ErrorStore.__emitChange();
+      _error = false;
     }
 
 
