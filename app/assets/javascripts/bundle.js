@@ -55,8 +55,8 @@
 	    LandingPage = __webpack_require__(248),
 	    EventPage = __webpack_require__(260),
 	    UserDetail = __webpack_require__(269),
-	    EventDetail = __webpack_require__(270),
-	    EventForm = __webpack_require__(272);
+	    EventDetail = __webpack_require__(272),
+	    EventForm = __webpack_require__(274);
 	
 	var routes = React.createElement(
 	  Route,
@@ -26437,14 +26437,14 @@
 	    });
 	  },
 	
-	  createEvent: function (eventData) {
+	  createEvent: function (eventData, callback) {
 	    $.ajax({
 	      method: "post",
 	      url: "api/events",
 	      data: { event: eventData },
 	      success: function (successData) {
-	        console.log("IT WORKED");
-	        debugger;
+	        ApiActions.receiveSingleEvent(successData);
+	        callback && callback(successData.organizer_id, successData.id);
 	      },
 	      error: function (errorData) {
 	        FormActions.formError(errorData);
@@ -26540,10 +26540,30 @@
 	}, 0);
 	
 	var FormActions = {
-	  createEvent: function (newEventData) {
+	
+	  createEvent: function (newEventData, callback) {
+	    var category;
+	
+	    switch (newEventData.category) {
+	      case "food-and-drink":
+	        category = "Food & Drink";
+	        break;
+	      case "art":
+	        category = "Art";
+	        break;
+	      case "music":
+	        category = "Music";
+	        break;
+	      case "nightlife":
+	        category = "Nightlife";
+	        break;
+	      case "sports-and-fitness":
+	        category = "Sports & Fitness";
+	        break;
+	    }
 	
 	    convertedEventData = {
-	      category: newEventData.category,
+	      category: category,
 	      description: newEventData.description,
 	      location: newEventData.location,
 	      title: newEventData.title,
@@ -26559,7 +26579,7 @@
 	      end_time: parseInt(newEventData.endTime)
 	    };
 	
-	    ApiUtil.createEvent(convertedEventData);
+	    ApiUtil.createEvent(convertedEventData, callback);
 	  },
 	
 	  formError: function (errorData) {
@@ -33170,9 +33190,9 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(275),
+	    UserStore = __webpack_require__(270),
 	    NavTransitions = __webpack_require__(267),
-	    UserDetailActions = __webpack_require__(276),
+	    UserDetailActions = __webpack_require__(271),
 	    IndexItem = __webpack_require__(265);
 	
 	var UserDetail = React.createClass({
@@ -33293,9 +33313,57 @@
 /* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var Store = __webpack_require__(160).Store;
+	AppDispatcher = __webpack_require__(177), UserConstants = __webpack_require__(184);
+	
+	var UserStore = new Store(AppDispatcher);
+	
+	var _user = null;
+	
+	UserStore.fetch = function () {
+	  return _user;
+	};
+	
+	UserStore.clearUser = function () {
+	  _user = null;
+	};
+	
+	UserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.GET_SINGLE_USER:
+	      resetSingleUser(payload.user);
+	      break;
+	  }
+	};
+	
+	var resetSingleUser = function (user) {
+	  _user = user;
+	  UserStore.__emitChange();
+	};
+	
+	module.exports = UserStore;
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(181);
+	
+	var UserDetailActions = {
+	  fetchSingleUser: function (userId) {
+	    ApiUtil.fetchSingleUser(userId);
+	  }
+	};
+	
+	module.exports = UserDetailActions;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
-	    EventDetailActions = __webpack_require__(271);
+	    EventDetailActions = __webpack_require__(273);
 	
 	var Detail = React.createClass({
 	  displayName: 'Detail',
@@ -33437,7 +33505,7 @@
 	module.exports = Detail;
 
 /***/ },
-/* 271 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(181);
@@ -33451,15 +33519,17 @@
 	module.exports = EventDetailActions;
 
 /***/ },
-/* 272 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    LinkedStateMixin = __webpack_require__(251),
 	    ReactDOM = __webpack_require__(158),
 	    FormActions = __webpack_require__(185),
-	    Error = __webpack_require__(273),
-	    EventStore = __webpack_require__(159);
+	    Error = __webpack_require__(275),
+	    ErrorStore = __webpack_require__(276),
+	    EventStore = __webpack_require__(159),
+	    NavTransitions = __webpack_require__(267);
 	
 	var EventForm = React.createClass({
 	  displayName: 'EventForm',
@@ -33477,9 +33547,10 @@
 	    lat: "",
 	    lng: "",
 	    price: "",
-	    url: "https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=&url=https%3A%2F%2Fpixabay.com%2Fen%2Fsilhouette-sunset-landscape-woman-283298%2F&bvm=bv.110151844,d.cGc&psig=AFQjCNEIkN-4xKzQ4jLYazWlpb_cc6p3ug&ust=1450288362611394",
+	    url: "/v1450644788/photo-1416304646406-414b1009dbe4_nbwzwj.jpg",
 	    ticketMax: "",
-	    category: ""
+	    category: "",
+	    validLocation: ""
 	  },
 	
 	  getInitialState: function () {
@@ -33494,11 +33565,17 @@
 	      }
 	    });
 	
+	    NavTransitions.addNavTransitions();
+	
 	    var autoCompleteInput = ReactDOM.findDOMNode(this.refs.autocomplete);
 	
 	    this.autocomplete = new google.maps.places.Autocomplete(autoCompleteInput, { types: ['geocode'] });
 	    this.geocoder = new google.maps.Geocoder();
 	    this.autocomplete.addListener('place_changed', this.fillInLocation);
+	  },
+	
+	  componentWillUnmount: function () {
+	    NavTransitions.removeNavTransitions();
 	  },
 	
 	  fillInLocation: function () {
@@ -33511,10 +33588,9 @@
 	        that.setState({
 	          location: address,
 	          lat: myLatLng.lat(),
-	          lng: myLatLng.lng()
+	          lng: myLatLng.lng(),
+	          validLocation: ""
 	        });
-	      } else {
-	        alert(status);
 	      }
 	    });
 	  },
@@ -33539,7 +33615,9 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    FormActions.createEvent(this.state);
+	    FormActions.createEvent(this.state, (function (organizer_id, event_id) {
+	      this.props.history.pushState(null, "api/users/" + organizer_id + "/events/" + event_id);
+	    }).bind(this));
 	  },
 	
 	  handleCancel: function (e) {
@@ -33555,8 +33633,7 @@
 	    e.preventDefault();
 	    cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, (function (error, results) {
 	      if (!error) {
-	        debugger;
-	        this.props.postImage(results[0]);
+	        this.setState({ url: results[0].path });
 	      }
 	    }).bind(this));
 	  },
@@ -33583,132 +33660,206 @@
 	      ));
 	    }
 	
+	    var image;
+	
+	    if (this.state.url === "/v1450644788/photo-1416304646406-414b1009dbe4_nbwzwj.jpg") {
+	      image = React.createElement('div', null);
+	    } else {
+	      var url = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_300/" + this.state.url;
+	      image = React.createElement(
+	        'div',
+	        { className: 'image-holder' },
+	        React.createElement('img', { src: url })
+	      );
+	    }
+	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'event-form' },
 	      React.createElement(
-	        'h3',
-	        null,
-	        'Event Details'
-	      ),
-	      React.createElement(
-	        'form',
-	        { onSubmit: this.handleSubmit },
+	        'div',
+	        { className: 'row' },
 	        React.createElement(
 	          'div',
-	          { className: 'form-group' },
+	          { className: 'col-md-5 col-md-offset-1' },
 	          React.createElement(
-	            'label',
-	            { htmlFor: 'form-title' },
-	            'Event Title'
-	          ),
-	          React.createElement('input', { className: 'form-control',
-	            type: 'text',
-	            id: 'form-title',
-	            valueLink: this.linkState('title'),
-	            placeholder: 'Give a short distinct name' }),
-	          React.createElement(
-	            'label',
-	            { htmlFor: 'form-location' },
-	            'Location'
-	          ),
-	          React.createElement('input', { valueLink: this.linkState('location'),
-	            className: 'form-control',
-	            id: 'form-location',
-	            ref: 'autocomplete',
-	            placeholder: 'Enter your address',
-	            onFocus: this.geolocate,
-	            type: 'text' }),
-	          React.createElement(
-	            'label',
-	            { htmlFor: 'form-start-date' },
-	            'Start Time'
-	          ),
-	          React.createElement('input', { type: 'date',
-	            id: 'form-start-date',
-	            className: 'form-control',
-	            valueLink: this.linkState('startDate') }),
-	          React.createElement(
-	            'select',
-	            { className: 'form-control',
-	              valueLink: this.linkState('startTime') },
-	            React.createElement('option', null),
-	            times
+	            'div',
+	            { className: 'form-header' },
+	            React.createElement(
+	              'h2',
+	              null,
+	              'Event Details'
+	            )
 	          ),
 	          React.createElement(
-	            'label',
-	            { htmlFor: 'form-end-date' },
-	            'End Time'
+	            'form',
+	            { onSubmit: this.handleSubmit },
+	            React.createElement(
+	              'div',
+	              { className: 'form-group' },
+	              React.createElement(
+	                'label',
+	                { htmlFor: 'form-title' },
+	                'Event Title'
+	              ),
+	              React.createElement('input', { className: 'form-control',
+	                type: 'text',
+	                id: 'form-title',
+	                valueLink: this.linkState('title'),
+	                placeholder: 'give a short distinct name' }),
+	              React.createElement(
+	                'label',
+	                { htmlFor: 'form-location' },
+	                'Location'
+	              ),
+	              React.createElement('input', { valueLink: this.linkState('location'),
+	                className: 'form-control',
+	                id: 'form-location',
+	                ref: 'autocomplete',
+	                placeholder: 'enter your event address',
+	                onFocus: this.geolocate,
+	                type: 'text' }),
+	              React.createElement(
+	                'label',
+	                { htmlFor: 'form-start-date' },
+	                'Start Time'
+	              ),
+	              React.createElement('input', { type: 'date',
+	                id: 'form-start-date',
+	                className: 'form-control form-numbers',
+	                valueLink: this.linkState('startDate') }),
+	              React.createElement(
+	                'select',
+	                { className: 'form-control form-select',
+	                  valueLink: this.linkState('startTime') },
+	                times
+	              ),
+	              React.createElement(
+	                'label',
+	                { htmlFor: 'form-end-date' },
+	                'End Time'
+	              ),
+	              React.createElement('input', { type: 'date',
+	                id: 'form-end-date',
+	                valueLink: this.linkState('endDate'),
+	                className: 'form-control form-numbers' }),
+	              React.createElement(
+	                'select',
+	                { className: 'form-control form-select',
+	                  valueLink: this.linkState('endTime') },
+	                times
+	              ),
+	              React.createElement(
+	                'label',
+	                { htmlFor: 'form-ticket' },
+	                'Ticket Price'
+	              ),
+	              React.createElement('input', { type: 'text',
+	                valueLink: this.linkState('price'),
+	                id: 'form-ticket',
+	                placeholder: 'number value please.',
+	                className: 'form-control form-numbers' }),
+	              React.createElement(
+	                'label',
+	                { htmlFor: 'form-ticket-max' },
+	                'Ticket Max'
+	              ),
+	              React.createElement('input', { type: 'text',
+	                valueLink: this.linkState('ticketMax'),
+	                id: 'form-ticket-max',
+	                placeholder: 'number value please.',
+	                className: 'form-control form-numbers' }),
+	              React.createElement(
+	                'label',
+	                { htmlFor: 'form-category' },
+	                'Category'
+	              ),
+	              React.createElement(
+	                'select',
+	                { className: 'form-control form-select',
+	                  id: 'form-category',
+	                  valueLink: this.linkState('category') },
+	                React.createElement('option', null),
+	                React.createElement(
+	                  'option',
+	                  { value: 'food-and-drink' },
+	                  'Food & Drink'
+	                ),
+	                React.createElement(
+	                  'option',
+	                  { value: 'art' },
+	                  'Art'
+	                ),
+	                React.createElement(
+	                  'option',
+	                  { value: 'music' },
+	                  'Music'
+	                ),
+	                React.createElement(
+	                  'option',
+	                  { value: 'nightlife' },
+	                  'Nightlife'
+	                ),
+	                React.createElement(
+	                  'option',
+	                  { value: 'sports-and-fitness' },
+	                  'Sports & Fitness'
+	                )
+	              ),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'button',
+	                { id: 'image-button',
+	                  onClick: this.addImage,
+	                  className: 'btn btn-default' },
+	                'ADD EVENT IMAGE'
+	              ),
+	              React.createElement('br', null),
+	              image,
+	              React.createElement(
+	                'label',
+	                { htmlFor: 'form-description' },
+	                'Description'
+	              ),
+	              React.createElement('textarea', { valueLink: this.linkState('description'),
+	                rows: '6', cols: '50',
+	                id: 'form-description',
+	                className: 'form-control' }),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'button',
+	                { type: 'submit', className: 'btn btn-primary form-button btn-lg btn-block' },
+	                'Create Event'
+	              )
+	            )
 	          ),
-	          React.createElement('input', { type: 'date',
-	            id: 'form-end-date',
-	            valueLink: this.linkState('endDate'),
-	            className: 'form-control' }),
-	          React.createElement(
-	            'select',
-	            { className: 'form-control',
-	              valueLink: this.linkState('endTime') },
-	            React.createElement('option', null),
-	            times
-	          ),
-	          React.createElement(
-	            'label',
-	            { htmlFor: 'form-ticket' },
-	            'Tickets'
-	          ),
-	          React.createElement('input', { type: 'text',
-	            valueLink: this.linkState('price'),
-	            id: 'form-ticket',
-	            className: 'form-control' }),
-	          React.createElement(
-	            'label',
-	            { htmlFor: 'form-ticket-max' },
-	            'Ticket Max'
-	          ),
-	          React.createElement('input', { type: 'text',
-	            valueLink: this.linkState('ticketMax'),
-	            id: 'form-ticket-max',
-	            className: 'form-control' }),
-	          React.createElement(
-	            'label',
-	            { htmlFor: 'form-category' },
-	            'Category'
-	          ),
-	          React.createElement('input', { type: 'text',
-	            id: 'form-category',
-	            valueLink: this.linkState('category'),
-	            className: 'form-control' }),
-	          React.createElement('br', null),
 	          React.createElement(
 	            'button',
-	            { onClick: this.addImage,
-	              className: 'btn btn-default' },
-	            'ADD EVENT IMAGE'
-	          ),
-	          React.createElement('br', null),
+	            { className: 'btn btn-primary form-button',
+	              onClick: this.handleCancel },
+	            'Cancel'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'col-md-5' },
 	          React.createElement(
-	            'label',
-	            { htmlFor: 'form-description' },
-	            'Add a Description'
-	          ),
-	          React.createElement('textarea', { valueLink: this.linkState('description'),
-	            id: 'form-description',
-	            className: 'form-control' }),
-	          React.createElement('br', null),
-	          React.createElement(
-	            'button',
-	            { type: 'submit', className: 'btn btn-primary' },
-	            'Create Event'
+	            'div',
+	            { className: 'error-right' },
+	            React.createElement(
+	              'h3',
+	              null,
+	              'successful events have detail. make sure people are interested in you.'
+	            ),
+	            React.createElement(
+	              'h2',
+	              null,
+	              'almost done.'
+	            ),
+	            React.createElement(Error, null)
 	          )
 	        )
-	      ),
-	      React.createElement(
-	        'button',
-	        { className: 'btn btn-primary',
-	          onClick: this.handleCancel },
-	        'Cancel'
-	      ),
-	      React.createElement(Error, null)
+	      )
 	    );
 	  }
 	});
@@ -33716,11 +33867,11 @@
 	module.exports = EventForm;
 
 /***/ },
-/* 273 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ErrorStore = __webpack_require__(274);
+	    ErrorStore = __webpack_require__(276);
 	
 	var Error = React.createClass({
 	  displayName: 'Error',
@@ -33740,14 +33891,14 @@
 	
 	  _onChange: function () {
 	    if (ErrorStore.fetch()) {
-	      this.setState({ error: "All inputs must be valid." });
+	      this.setState({ error: "oops. some of those answers won't work. let's try again" });
 	    }
 	  },
 	
 	  render: function () {
 	    return React.createElement(
-	      'p',
-	      null,
+	      'div',
+	      { className: 'form-error' },
 	      this.state.error
 	    );
 	  }
@@ -33757,15 +33908,16 @@
 	module.exports = Error;
 
 /***/ },
-/* 274 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(177),
+	    FormConstants = __webpack_require__(186),
 	    Store = __webpack_require__(160).Store;
 	
 	var ErrorStore = new Store(AppDispatcher);
 	
-	var _error = null;
+	var _error = false;
 	
 	ErrorStore.fetch = function () {
 	  return _error;
@@ -33773,71 +33925,23 @@
 	
 	ErrorStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
-	    case "FORM_ERROR":
+	    case FormConstants.FORM_ERROR:
 	      handleError(payload.data);
 	      break;
 	  }
 	};
 	
 	function handleError(data) {
-	  _error = data;
+	  _error = true;
+	
+	  ErrorStore.__emitChange();
 	}
 	
 	ErrorStore.resetError = function () {
-	  return _error = null;
-	
-	  ErrorStore.__emitChange();
+	  _error = false;
 	};
 	
 	module.exports = ErrorStore;
-
-/***/ },
-/* 275 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(160).Store;
-	AppDispatcher = __webpack_require__(177), UserConstants = __webpack_require__(184);
-	
-	var UserStore = new Store(AppDispatcher);
-	
-	var _user = null;
-	
-	UserStore.fetch = function () {
-	  return _user;
-	};
-	
-	UserStore.clearUser = function () {
-	  _user = null;
-	};
-	
-	UserStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.GET_SINGLE_USER:
-	      resetSingleUser(payload.user);
-	      break;
-	  }
-	};
-	
-	var resetSingleUser = function (user) {
-	  _user = user;
-	  UserStore.__emitChange();
-	};
-	
-	module.exports = UserStore;
-
-/***/ },
-/* 276 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ApiUtil = __webpack_require__(181);
-	
-	var UserDetailActions = {
-	  fetchSingleUser: function (userId) {
-	    ApiUtil.fetchSingleUser(userId);
-	  }
-	};
-	
-	module.exports = UserDetailActions;
 
 /***/ }
 /******/ ]);

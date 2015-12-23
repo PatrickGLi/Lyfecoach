@@ -17,12 +17,12 @@ var Error = React.createClass({
 
   _onChange: function () {
     if (ErrorStore.fetch()) {
-      this.setState({ error: "All inputs must be valid."});
+      this.setState({ error: "oops. some of those answers won't work. let's try again"});
     }
   },
 
   render: function() {
-    return (<p>{this.state.error}</p>);
+    return (<div className="form-error">{this.state.error}</div>);
   }
 
 });

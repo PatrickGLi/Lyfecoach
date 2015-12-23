@@ -3,14 +3,16 @@
 # Table name: users
 #
 #  id              :integer          not null, primary key
-#  email        :string           not null
+#  email           :string           not null
+#  first_name      :string           not null
+#  last_name       :string           not null
+#  host_name       :string           not null
 #  password_digest :string           not null
 #  session_token   :string           not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  name            :string
 #  description     :text
-#  url             :text             default("http://s3.amazonaws.com/wavesforwater/images/avatar-default.gif?sizes=/y:33/x:33")
+#  url             :text             default("/v1450772227/photo-1439337153520-7082a56a81f4_bnx1j5.jpg")
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

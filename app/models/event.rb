@@ -5,15 +5,18 @@
 #  id           :integer          not null, primary key
 #  title        :string           not null
 #  location     :string           not null
-#  start_time   :date             not null
-#  end_time     :date             not null
+#  start_time   :integer          not null
+#  end_time     :integer          not null
+#  start_date   :integer          not null
+#  end_date     :integer          not null
 #  description  :text             not null
 #  ticket_max   :integer          not null
 #  view_count   :integer          default(0), not null
 #  category     :string           not null
 #  lat          :float            not null
 #  lng          :float            not null
-#  url          :text             default("https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=&url=https%3A%2F%2Fpixabay.com%2Fen%2Fsilhouette-sunset-landscape-woman-283298%2F&bvm=bv.110151844,d.cGc&psig=AFQjCNEIkN-4xKzQ4jLYazWlpb_cc6p3ug&ust=1450288362611394"), not null
+#  price        :float            not null
+#  url          :text             default("/v1450644788/photo-1416304646406-414b1009dbe4_nbwzwj.jpg"), not null
 #  organizer_id :integer          not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -26,9 +29,12 @@ class Event < ActiveRecord::Base
 
   event_type = ["Food & Drink", "Art", "Music", "Nightlife", "Sports & Fitness"]
 
+  validates :lat, :lng, numericality: true
   validates :category, inclusion: { in: event_type }
   validates :title, uniqueness: true
-  validates :ticket_max, numericality: { greater_than: 20 }
+  validates :ticket_max, numericality: { greater_than: 100 }
+  validates :price, numericality: { greater_than: 5 }
+  validates :start_date, :end_date, numericality: { greater_than: 100000000 }
   validates :start_time, :end_time,
             numericality: { greater_than_or_equal_to: 0, less_than: 24 }
   validate :end_time_cannot_be_before_start_time
@@ -38,10 +44,10 @@ class Event < ActiveRecord::Base
     start_time_in_milliseconds = start_time * 60 * 60 * 1000
 
     total_end_time = end_date + end_time_in_milliseconds
-    total_start_time = start_time + start_time_in_milliseconds
+    total_start_time = start_date + start_time_in_milliseconds
 
     if total_start_time > total_end_time
-      errors.add(:end_time, "Event cannot end before it starts.")
+      errors.add(:end_time, "cannot end before it starts.")
     end
   end
 

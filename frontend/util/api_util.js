@@ -1,6 +1,6 @@
 var ApiActions = require('../actions/api_actions'),
     FormActions = require('../actions/form_actions'),
-    FilterParamsStore = require('../stores/filter_params_store');
+    FilterParamsStore = require('../stores/filter_params_store')
 
 var ApiUtil = {
   fetchEvents: function(){
@@ -24,14 +24,14 @@ var ApiUtil = {
     });
   },
 
-  createEvent: function(eventData) {
+  createEvent: function(eventData, callback) {
     $.ajax({
       method: "post",
       url: "api/events",
       data: { event: eventData },
       success: function(successData) {
-        console.log("IT WORKED");
-        debugger
+        ApiActions.receiveSingleEvent(successData);
+        callback && callback(successData.organizer_id, successData.id);
       },
       error: function(errorData) {
         FormActions.formError(errorData);
