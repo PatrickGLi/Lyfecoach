@@ -27,6 +27,9 @@ var Detail = React.createClass({
   showEventDetail: function() {
     this.setState({ event: this.getStateFromStore() });
   },
+  componentDidUpdate: function() {
+    console.log("updated");
+  },
 
   convertTime: function(time) {
     if (time === 0) {
