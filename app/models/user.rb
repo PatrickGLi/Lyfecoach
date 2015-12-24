@@ -26,6 +26,8 @@ class User < ActiveRecord::Base
   has_many :events,
   foreign_key: :organizer_id
 
+  has_many :followers
+
   attr_reader :password
 
   def password=(password)

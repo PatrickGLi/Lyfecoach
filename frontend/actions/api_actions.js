@@ -30,6 +30,27 @@ ApiActions = {
       actionType: UserConstants.GET_SINGLE_USER,
       user: user
     });
+  },
+
+  receiveFollowers: function(followers) {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.FOLLOWERS_RECEIVED,
+      followers: followers
+    });
+  },
+
+  addFollow: function(follow) {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.ADD_FOLLOW,
+      follow: follow
+    });
+  },
+
+  removeFollow: function(unfollow) {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.REMOVE_FOLLOW,
+      unfollow: unfollow
+    });
   }
 }
 

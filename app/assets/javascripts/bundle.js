@@ -55,8 +55,8 @@
 	    LandingPage = __webpack_require__(248),
 	    EventPage = __webpack_require__(260),
 	    UserDetail = __webpack_require__(286),
-	    EventDetail = __webpack_require__(289),
-	    EventForm = __webpack_require__(291);
+	    EventDetail = __webpack_require__(290),
+	    EventForm = __webpack_require__(292);
 	
 	var routes = React.createElement(
 	  Route,
@@ -26465,6 +26465,28 @@
 	    $.get('api/users/' + userId, {}, function (user) {
 	      ApiActions.getSingleUser(user);
 	    });
+	  },
+	
+	  fetchFollowers: function (organizerId) {
+	    $.get('api/follows', { organizer: organizerId }, function (followers) {
+	      ApiActions.receiveFollowers(followers);
+	    });
+	  },
+	
+	  addFollow: function (followData) {
+	    $.post('api/follows', { follow: followData }, function (successData) {
+	      ApiActions.addFollow(successData);
+	    });
+	  },
+	
+	  removeFollow: function (followerId) {
+	    $.ajax({
+	      method: "delete",
+	      url: "api/follows/" + followerId,
+	      success: function (successData) {
+	        ApiActions.removeFollow(successData);
+	      }
+	    });
 	  }
 	};
 	
@@ -26504,6 +26526,27 @@
 	      actionType: UserConstants.GET_SINGLE_USER,
 	      user: user
 	    });
+	  },
+	
+	  receiveFollowers: function (followers) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.FOLLOWERS_RECEIVED,
+	      followers: followers
+	    });
+	  },
+	
+	  addFollow: function (follow) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.ADD_FOLLOW,
+	      follow: follow
+	    });
+	  },
+	
+	  removeFollow: function (unfollow) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.REMOVE_FOLLOW,
+	      unfollow: unfollow
+	    });
 	  }
 	};
 	
@@ -26524,7 +26567,10 @@
 /***/ function(module, exports) {
 
 	var UserConstants = {
-	  GET_SINGLE_USER: "GET_SINGLE_USER"
+	  GET_SINGLE_USER: "GET_SINGLE_USER",
+	  FOLLOWERS_RECEIVED: "FOLLOWERS_RECEIVED",
+	  ADD_FOLLOW: "ADD_FOLLOW",
+	  REMOVE_FOLLOW: "REMOVE_FOLLOW"
 	};
 	
 	module.exports = UserConstants;
@@ -26565,7 +26611,7 @@
 	        break;
 	    }
 	
-	    convertedEventData = {
+	    var convertedEventData = {
 	      category: category,
 	      description: newEventData.description,
 	      location: newEventData.location,
@@ -37519,43 +37565,65 @@
 
 	var React = __webpack_require__(1),
 	    UserStore = __webpack_require__(287),
+	    FollowStore = __webpack_require__(288),
 	    NavTransitions = __webpack_require__(284),
-	    UserDetailActions = __webpack_require__(288),
+	    ReactConstants = __webpack_require__(187),
+	    UserDetailActions = __webpack_require__(289),
 	    IndexItem = __webpack_require__(265);
 	
 	var UserDetail = React.createClass({
 	  displayName: 'UserDetail',
 	
 	  getInitialState: function () {
-	    return { user: this.getStateFromStore() };
+	    return { user: this.getUserFromStore(),
+	      followers: this.getFollowsFromStore()
+	    };
 	  },
 	
-	  getStateFromStore: function () {
+	  getUserFromStore: function () {
 	    return UserStore.fetch();
 	  },
 	
+	  getFollowsFromStore: function () {
+	    return FollowStore.fetch();
+	  },
+	
 	  componentDidMount: function () {
-	    this.token = UserStore.addListener(this.showUserDetail);
+	    this.userListener = UserStore.addListener(this.showUserDetail);
+	    this.followListener = FollowStore.addListener(this.resetFollowers);
 	    UserDetailActions.fetchSingleUser(parseInt(this.props.params.userId));
+	    UserDetailActions.fetchFollowers(parseInt(this.props.params.userId));
 	    NavTransitions.addNavTransitions();
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.token.remove();
+	    this.userListener.remove();
+	    this.followListener.remove();
 	    NavTransitions.removeNavTransitions();
 	    EventStore.clearEvents();
 	    UserStore.clearUser();
 	  },
 	
 	  showUserDetail: function () {
-	    this.setState({ user: this.getStateFromStore() });
+	    this.setState({ user: this.getUserFromStore() });
+	  },
+	
+	  resetFollowers: function () {
+	    this.setState({ followers: this.getFollowsFromStore() });
 	  },
 	
 	  showEventDetail: function (event) {
 	    this.props.history.pushState(null, "api/users/" + event.organizer_id + "/events/" + event.id);
 	  },
 	
-	  follow: function () {},
+	  follow: function () {
+	    UserDetailActions.addFollow(parseInt(this.props.params.userId));
+	  },
+	
+	  unfollow: function () {
+	    var followerId = FollowStore.fetchId();
+	    UserDetailActions.removeFollow(followerId);
+	  },
 	
 	  render: function () {
 	    var host = this.state.user;
@@ -37571,6 +37639,26 @@
 	          event: event });
 	      });
 	    }
+	
+	    var followButton;
+	
+	    if (FollowStore.find(ReactConstants.CURRENT_USER)) {
+	      followButton = React.createElement(
+	        'button',
+	        { className: 'btn btn-primary follow-button',
+	          onClick: this.unfollow },
+	        'unfollow'
+	      );
+	    } else {
+	      followButton = React.createElement(
+	        'button',
+	        { className: 'btn btn-primary follow-button',
+	          onClick: this.follow },
+	        'follow'
+	      );
+	    }
+	
+	    var followers = this.state.followers.length;
 	
 	    var host_image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_200,w_300" + host.url;
 	
@@ -37589,6 +37677,8 @@
 	            host.host_name
 	          )
 	        ),
+	        'Followers: ',
+	        followers,
 	        React.createElement(
 	          'div',
 	          { className: 'row' },
@@ -37604,12 +37694,7 @@
 	          React.createElement(
 	            'div',
 	            { className: 'follow col-md-offset-1 col-md-3' },
-	            React.createElement(
-	              'button',
-	              { className: 'btn btn-primary follow-button',
-	                onClick: this.follow },
-	              'Follow'
-	            ),
+	            followButton,
 	            React.createElement(
 	              'h4',
 	              null,
@@ -37697,23 +37782,118 @@
 /* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ApiUtil = __webpack_require__(181);
+	var Store = __webpack_require__(160).Store,
+	    AppDispatcher = __webpack_require__(177),
+	    UserConstants = __webpack_require__(184);
+	
+	var _follows = [];
+	var _followId = null;
+	
+	var FollowStore = new Store(AppDispatcher);
+	
+	FollowStore.fetch = function () {
+	  return _follows.slice(0);
+	};
+	
+	FollowStore.fetchId = function () {
+	  return _followId;
+	};
+	
+	FollowStore.find = function (userId) {
+	  for (var i = 0; i < _follows.length; i++) {
+	    if (userId === _follows[i].follower_id) {
+	      _followId = _follows[i].id;
+	      return _follows[i];
+	      break;
+	    }
+	  }
+	
+	  return null;
+	};
+	
+	FollowStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.FOLLOWERS_RECEIVED:
+	      resetFollowers(payload.followers);
+	      break;
+	    case UserConstants.ADD_FOLLOW:
+	      addFollow(payload.follow);
+	      break;
+	    case UserConstants.REMOVE_FOLLOW:
+	      removeFollow(payload.unfollow);
+	      break;
+	  }
+	};
+	
+	var resetFollowers = function (followers) {
+	  _follows = followers;
+	
+	  FollowStore.__emitChange();
+	};
+	
+	var addFollow = function (followData) {
+	  _follows.push(followData);
+	
+	  FollowStore.__emitChange();
+	};
+	
+	var removeFollow = function (unfollowData) {
+	  var index = -1;
+	  for (var i = 0; i < _follows.length; i++) {
+	    if (_follows[i].id === unfollowData.id) {
+	      index = i;
+	      break;
+	    }
+	  }
+	
+	  if (index !== -1) {
+	    _follows.splice(index, 1);
+	  }
+	
+	  FollowStore.__emitChange();
+	};
+	
+	module.exports = FollowStore;
+
+/***/ },
+/* 289 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(181),
+	    ReactConstants = __webpack_require__(187);
 	
 	var UserDetailActions = {
 	  fetchSingleUser: function (userId) {
 	    ApiUtil.fetchSingleUser(userId);
+	  },
+	
+	  fetchFollowers: function (organizerId) {
+	    ApiUtil.fetchFollowers(organizerId);
+	  },
+	
+	  addFollow: function (organizerId) {
+	    var followData = {
+	      follower_id: ReactConstants.CURRENT_USER,
+	      organizer_id: organizerId
+	    };
+	
+	    ApiUtil.addFollow(followData);
+	  },
+	
+	  removeFollow: function (followerId) {
+	    ApiUtil.removeFollow(followerId);
 	  }
 	};
 	
 	module.exports = UserDetailActions;
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
-	    EventDetailActions = __webpack_require__(290);
+	    EventDetailActions = __webpack_require__(291);
 	
 	var Detail = React.createClass({
 	  displayName: 'Detail',
@@ -37851,7 +38031,7 @@
 	module.exports = Detail;
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(181);
@@ -37865,15 +38045,15 @@
 	module.exports = EventDetailActions;
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    LinkedStateMixin = __webpack_require__(251),
 	    ReactDOM = __webpack_require__(158),
 	    FormActions = __webpack_require__(185),
-	    Error = __webpack_require__(292),
-	    ErrorStore = __webpack_require__(293),
+	    Error = __webpack_require__(293),
+	    ErrorStore = __webpack_require__(294),
 	    EventStore = __webpack_require__(159),
 	    NavTransitions = __webpack_require__(284);
 	
@@ -38269,11 +38449,11 @@
 	module.exports = EventForm;
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ErrorStore = __webpack_require__(293);
+	    ErrorStore = __webpack_require__(294);
 	
 	var Error = React.createClass({
 	  displayName: 'Error',
@@ -38310,7 +38490,7 @@
 	module.exports = Error;
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(177),

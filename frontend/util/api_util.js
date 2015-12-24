@@ -49,6 +49,28 @@ var ApiUtil = {
     $.get('api/users/' + userId, {}, function(user) {
       ApiActions.getSingleUser(user);
     });
+  },
+
+  fetchFollowers: function(organizerId) {
+    $.get('api/follows', { organizer: organizerId}, function (followers) {
+      ApiActions.receiveFollowers(followers);
+    });
+  },
+
+  addFollow: function(followData) {
+    $.post('api/follows', { follow: followData }, function(successData) {
+      ApiActions.addFollow(successData);
+    });
+  },
+
+  removeFollow: function(followerId) {
+    $.ajax({
+      method: "delete",
+      url: "api/follows/" + followerId,
+      success: function(successData) {
+        ApiActions.removeFollow(successData);
+      }
+    });
   }
 };
 

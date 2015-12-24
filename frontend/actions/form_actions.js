@@ -30,7 +30,7 @@ var FormActions = {
         break;
     }
 
-    convertedEventData = {
+    var convertedEventData = {
       category: category,
       description: newEventData.description,
       location: newEventData.location,
