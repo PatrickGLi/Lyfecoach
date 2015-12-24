@@ -34,7 +34,7 @@
         </div>
 
         <div class="form-group">
-          <label for="email">email</label>
+          <label for="email">Email</label>
           <input class="form-control"
                  id="email"
                  type="text"
@@ -53,9 +53,14 @@
         <button class="btn btn-primary" type="submit">Sign Up</button>
       </form>
 
+      <button type="button" class="btn btn-default" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">Right</button>
+      <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="" data-original-title="Tooltip on right">Right</button>
+
+      <br/><%=link_to "Or, Sign in.", new_session_url%><br/>
+
       <%= render "/shared/errors" %>
 
-      <%=link_to "Or, Sign in.", new_session_url%>
+
 
     </div>
   </div>

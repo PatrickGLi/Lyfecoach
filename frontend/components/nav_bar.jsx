@@ -36,6 +36,15 @@ var NavBar = React.createClass({
     this.props.history.pushState(null,'api/events/new');
   },
 
+  goToProfile: function(e) {
+    e.preventDefault();
+    this.props.history.pushState(null, 'api/users/' + ReactConstants.CURRENT_USER);
+  },
+
+  aboutLyfecoach: function(e) {
+    e.preventDefault();
+  },
+
   render: function() {
     var events;
     if (ReactConstants.CURRENT_USER !== -1) {
@@ -44,9 +53,11 @@ var NavBar = React.createClass({
       <li className="dropdown">
         <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{this.state.currentUser.first_name} <span className="caret"></span></a>
         <ul className="dropdown-menu" role="menu">
+          <li onClick={this.goToProfile}><a href="#">your profile</a></li>
+          <li className="divider"></li>
           <li><a href="#">follows</a></li>
           <li className="divider"></li>
-          <li><a href="#">about lyfecoach</a></li>
+          <li onClick={this.aboutLyfecoach} data-toggle="modal" data-target="#myModal"><a href="#">about lyfecoach</a></li>
           <li className="divider"></li>
           <li className="sign-out-li">
             <form method="post" action="session">

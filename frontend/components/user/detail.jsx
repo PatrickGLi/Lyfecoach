@@ -29,6 +29,10 @@ var UserDetail = React.createClass({
     NavTransitions.addNavTransitions();
   },
 
+  componentWillReceiveProps: function(newProps) {
+    UserDetailActions.fetchSingleUser(parseInt(newProps.params.userId));
+  },
+
   componentWillUnmount: function() {
     this.userListener.remove();
     this.followListener.remove();
@@ -61,11 +65,14 @@ var UserDetail = React.createClass({
   render: function() {
     var host = this.state.user;
 
+    var events;
     if (host === null) {
       return (<div className="user-detail-filler"></div>);
+    } else if (host.events.length === 0){
+      events = <div><h4>you have no events yet.</h4></div>;
     } else {
       var showEventDetail = this.showEventDetail;
-      var events = host.events.map(function(event) {
+      events = host.events.map(function(event) {
         var bindedClick = showEventDetail.bind(null, event);
         return (<IndexItem key={event.id}
                            onClick={bindedClick}
@@ -74,14 +81,21 @@ var UserDetail = React.createClass({
       });
     }
 
-    var followButton;
+    var followButton, followInfo;
 
-    if (FollowStore.find(ReactConstants.CURRENT_USER)) {
+    if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
+      followButton = <button className="btn btn-primary follow-button"
+                             onClick={this.editProfile}>edit profile</button>;
+      followInfo = <div></div>;
+
+    } else if (FollowStore.find(ReactConstants.CURRENT_USER)) {
       followButton = <button className="btn btn-primary follow-button"
                              onClick={this.unfollow}>unfollow</button>;
+      followInfo = <div></div>;
     } else {
       followButton = <button className="btn btn-primary follow-button"
                              onClick={this.follow}>follow</button>;
+      followInfo = <h4>follow and stay posted on all my events.</h4>;
     }
 
     var followers = this.state.followers.length
@@ -99,7 +113,7 @@ var UserDetail = React.createClass({
             </div>
             <div className="follow col-md-offset-1 col-md-3">
               {followButton}
-              <h4>follow and stay posted on all my events.</h4>
+              {followInfo}
             </div>
           </div>
 

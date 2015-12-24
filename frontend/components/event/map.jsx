@@ -2,9 +2,11 @@ var React = require('react'),
     EventStore = require('../../stores/event_store'),
     ReactDOM = require('react-dom'),
     FilterParamsStore = require('../../stores/filter_params_store'),
-    MapActions = require('../../actions/map_actions');
+    MapActions = require('../../actions/map_actions'),
+    History = require('react-router').History;
 
 var Map = React.createClass({
+  mixins: [History],
 
   componentDidMount: function() {
     this.markers = [];
@@ -92,18 +94,18 @@ var Map = React.createClass({
     var marker = new google.maps.Marker({
       position: myLatLng,
       map: this.map,
-      title: "Hosted by " + event.organizer.host_name,
+      title: "hosted by" + event.organizer.host_name,
       eventId: event.id,
       icon: 'http://res.cloudinary.com/dlqjek68b/image/upload/v1450771235/marker_black_mpnvvp.png'
     });
 
-    marker.addListener('click', this.goToHost);
+    marker.addListener('click', this.goToHost.bind(this, event));
 
     this.markers.push(marker);
   },
 
-  goToHost: function() {
-    console.log("hi!");
+  goToHost: function(event) {
+    this.history.pushState(null, "api/users/" + event.organizer.id);
   },
 
   removeMarker: function(marker) {

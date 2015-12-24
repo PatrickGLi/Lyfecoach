@@ -31587,6 +31587,55 @@
 	    return React.createElement(
 	      'div',
 	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'modal fade', id: 'myModal', tabIndex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel' },
+	        React.createElement(
+	          'div',
+	          { className: 'modal-dialog', role: 'document' },
+	          React.createElement(
+	            'div',
+	            { className: 'modal-content' },
+	            React.createElement(
+	              'div',
+	              { className: 'modal-header' },
+	              React.createElement(
+	                'button',
+	                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+	                React.createElement(
+	                  'span',
+	                  { 'aria-hidden': 'true' },
+	                  '×'
+	                )
+	              ),
+	              React.createElement(
+	                'h4',
+	                { className: 'modal-title', id: 'myModalLabel' },
+	                'Modal title'
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'modal-body' },
+	              '...'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'modal-footer' },
+	              React.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+	                'Close'
+	              ),
+	              React.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-primary' },
+	                'Save changes'
+	              )
+	            )
+	          )
+	        )
+	      ),
 	      React.createElement(NavBar, { history: this.props.history }),
 	      this.props.children,
 	      React.createElement(Footer, null)
@@ -31639,6 +31688,15 @@
 	    this.props.history.pushState(null, 'api/events/new');
 	  },
 	
+	  goToProfile: function (e) {
+	    e.preventDefault();
+	    this.props.history.pushState(null, 'api/users/' + ReactConstants.CURRENT_USER);
+	  },
+	
+	  aboutLyfecoach: function (e) {
+	    e.preventDefault();
+	  },
+	
 	  render: function () {
 	    var events;
 	    if (ReactConstants.CURRENT_USER !== -1) {
@@ -31666,6 +31724,16 @@
 	          { className: 'dropdown-menu', role: 'menu' },
 	          React.createElement(
 	            'li',
+	            { onClick: this.goToProfile },
+	            React.createElement(
+	              'a',
+	              { href: '#' },
+	              'your profile'
+	            )
+	          ),
+	          React.createElement('li', { className: 'divider' }),
+	          React.createElement(
+	            'li',
 	            null,
 	            React.createElement(
 	              'a',
@@ -31676,7 +31744,7 @@
 	          React.createElement('li', { className: 'divider' }),
 	          React.createElement(
 	            'li',
-	            null,
+	            { onClick: this.aboutLyfecoach, 'data-toggle': 'modal', 'data-target': '#myModal' },
 	            React.createElement(
 	              'a',
 	              { href: '#' },
@@ -32597,10 +32665,13 @@
 	    EventStore = __webpack_require__(159),
 	    ReactDOM = __webpack_require__(158),
 	    FilterParamsStore = __webpack_require__(188),
-	    MapActions = __webpack_require__(262);
+	    MapActions = __webpack_require__(262),
+	    History = __webpack_require__(192).History;
 	
 	var Map = React.createClass({
 	  displayName: 'Map',
+	
+	  mixins: [History],
 	
 	  componentDidMount: function () {
 	    this.markers = [];
@@ -32687,18 +32758,18 @@
 	    var marker = new google.maps.Marker({
 	      position: myLatLng,
 	      map: this.map,
-	      title: "Hosted by " + event.organizer.host_name,
+	      title: "hosted by" + event.organizer.host_name,
 	      eventId: event.id,
 	      icon: 'http://res.cloudinary.com/dlqjek68b/image/upload/v1450771235/marker_black_mpnvvp.png'
 	    });
 	
-	    marker.addListener('click', this.goToHost);
+	    marker.addListener('click', this.goToHost.bind(this, event));
 	
 	    this.markers.push(marker);
 	  },
 	
-	  goToHost: function () {
-	    console.log("hi!");
+	  goToHost: function (event) {
+	    this.history.pushState(null, "api/users/" + event.organizer.id);
 	  },
 	
 	  removeMarker: function (marker) {
@@ -37596,6 +37667,10 @@
 	    NavTransitions.addNavTransitions();
 	  },
 	
+	  componentWillReceiveProps: function (newProps) {
+	    UserDetailActions.fetchSingleUser(parseInt(newProps.params.userId));
+	  },
+	
 	  componentWillUnmount: function () {
 	    this.userListener.remove();
 	    this.followListener.remove();
@@ -37628,11 +37703,22 @@
 	  render: function () {
 	    var host = this.state.user;
 	
+	    var events;
 	    if (host === null) {
 	      return React.createElement('div', { className: 'user-detail-filler' });
+	    } else if (host.events.length === 0) {
+	      events = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'h4',
+	          null,
+	          'you have no events yet.'
+	        )
+	      );
 	    } else {
 	      var showEventDetail = this.showEventDetail;
-	      var events = host.events.map(function (event) {
+	      events = host.events.map(function (event) {
 	        var bindedClick = showEventDetail.bind(null, event);
 	        return React.createElement(IndexItem, { key: event.id,
 	          onClick: bindedClick,
@@ -37640,21 +37726,35 @@
 	      });
 	    }
 	
-	    var followButton;
+	    var followButton, followInfo;
 	
-	    if (FollowStore.find(ReactConstants.CURRENT_USER)) {
+	    if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
+	      followButton = React.createElement(
+	        'button',
+	        { className: 'btn btn-primary follow-button',
+	          onClick: this.editProfile },
+	        'edit profile'
+	      );
+	      followInfo = React.createElement('div', null);
+	    } else if (FollowStore.find(ReactConstants.CURRENT_USER)) {
 	      followButton = React.createElement(
 	        'button',
 	        { className: 'btn btn-primary follow-button',
 	          onClick: this.unfollow },
 	        'unfollow'
 	      );
+	      followInfo = React.createElement('div', null);
 	    } else {
 	      followButton = React.createElement(
 	        'button',
 	        { className: 'btn btn-primary follow-button',
 	          onClick: this.follow },
 	        'follow'
+	      );
+	      followInfo = React.createElement(
+	        'h4',
+	        null,
+	        'follow and stay posted on all my events.'
 	      );
 	    }
 	
@@ -37695,11 +37795,7 @@
 	            'div',
 	            { className: 'follow col-md-offset-1 col-md-3' },
 	            followButton,
-	            React.createElement(
-	              'h4',
-	              null,
-	              'follow and stay posted on all my events.'
-	            )
+	            followInfo
 	          )
 	        ),
 	        React.createElement(
@@ -37921,6 +38017,9 @@
 	
 	  showEventDetail: function () {
 	    this.setState({ event: this.getStateFromStore() });
+	  },
+	  componentDidUpdate: function () {
+	    console.log("updated");
 	  },
 	
 	  convertTime: function (time) {
