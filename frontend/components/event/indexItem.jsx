@@ -28,21 +28,25 @@ var IndexItem = React.createClass({
     startTime = this.convertTime(startTime);
     endTime = this.convertTime(endTime);
 
-    var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_400" + this.props.event.url;
+
+
+    var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_250,w_300" + this.props.event.url;
 
     return(
       <div onClick={this.props.onClick}
-           className="col-xs-3 icons">
-        <br/>
-        <img src={image}
-             className="img-responsive"
-             alt="Responsive image">
-        </img>
-        <div className="index-item-title">{this.props.event.title}</div><br/>
-        <div>{this.props.event.location}</div>
-        <br/>
-        <div>{startDate} {startTime} to {endDate} {endTime}</div>
-        <div><b>${this.props.event.price}</b></div>
+           className="grid-item col-lg-3 col-md-4 col-sm-6 col-xs-12">
+           <div className="item-price">
+             <b>${this.props.event.price}</b>
+           </div>
+          <img src={image}
+               alt="event image">
+          </img>
+          <div className="caption">
+            <div className="event-title">{this.props.event.title}</div><br/>
+            <div>{this.props.event.location}</div>
+            <br/>
+            <div>{startDate} {startTime} to {endDate} {endTime}</div>
+          </div>
       </div>
     );
 

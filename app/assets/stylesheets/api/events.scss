@@ -9,21 +9,65 @@
 
 .map {
   width: 300px;
-  height: 100%;
-  float:left;
+  height: 300px;
+  float: left;
 }
 
 .form-control {
   border-radius: 0;
 }
 
-.map-and-filters-container {
-  height: 300px;
+.index-items {
+  width: 80%;
+  margin: 10px auto;
+}
+
+.grid {
+  margin: 20px 0;
+}
+
+.grid:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.grid-item {
+  float: left;
+  padding: 10px;
+  height: 400px;
+  overflow: scroll;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform, .5s, background-color, .5s;
+}
+
+.grid-item img {
+  width: 100%;
+}
+
+.grid-item:hover {
+  background-color: #DCDCDC;
+  cursor: pointer;
+  transform: translateY(-10px);
+}
+
+.item-price {
+  font-size: 17px;
+  padding-bottom: 4px;
+  float:right;
 }
 
 .event-title {
-  position: relative;
-  left: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.filter-and-name {
+  display: inline-block;
+  min-width: 423px;
+  min-height: 300px;
+  margin-left: 30px;
 }
 
 .no-selection {
@@ -77,19 +121,21 @@
   transition: color, .7s;
 }
 
-.icons {
-  border: 2px solid #dce4ec;
-  height: 470px;
-  border-radius: 3px;
-  margin: 0 0 5px 0;
-  transition: transform, .5s, border, .5s, background-color, .5s;
+.caption {
+  width: 80%;
+  padding-left: 5px;
+}
+
+.black {
+  background-color: black;
+  border: 1px solid white;
+  height: 100px;
+  width: 100px;
 }
 
 .icons:hover {
   cursor: pointer;
-  transform: translateY(-5px);
-  border-color: #858585;
-  background-color: #E0E0E0;
+  z-index: 1;
 }
 
 .icons div {
@@ -147,12 +193,13 @@
 }
 
 .error-right h2 {
-  margin: 500px 0 100px 50%;
+  margin: 300px 0 0 50%;
 }
 
 .form-error {
+  height: 200px;
   position: relative;
-  top: 120px;
+  top: 50px;
   left: 40px;
   font-size: 30px;
 }
@@ -164,4 +211,21 @@
 
 .image-holder img{
   border: 2px solid #4d4d4d;
+}
+
+.event-form button {
+  background-color: #4d4d4d;
+  border: none;
+  border-radius: 0;
+  transition: background-color, .6s;
+}
+
+.event-form button:hover {
+  background-color: #151515
+}
+
+#form-carousel {
+  position: relative;
+  bottom: 70px;
+  right: 150px;
 }

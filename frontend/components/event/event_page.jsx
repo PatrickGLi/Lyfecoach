@@ -84,13 +84,12 @@ var EventPage = React.createClass({
             <div className="event-page">
               <div className="map-and-filters-container">
                 <Map events={this.state.events} filterParams={this.state.filterParams}/>
-                <div className="row">
+                <div className="filter-and-name">
                   <EventTitle/>
                   <Filter filterParams={this.state.filterParams}/>
                 </div>
               </div>
               {events}
-
             </div>
            );
   }

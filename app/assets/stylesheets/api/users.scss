@@ -2,6 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.user-info {
+  background-color: #f2f2f2;
+}
+
+.user-detail-filler {
+  height: 1000px;
+  background-color: #f2f2f2;
+}
+
 .host-head {
   padding-bottom: 20px;
 }
@@ -29,29 +38,22 @@
 
 #headingOne,
 #headingTwo {
+  background-color: #E0E0E0;
   font-color: #2a2a2a;
 }
 
-#headingOne a:hover,
-#headingOne a:focus,
-#headingTwo a:hover,
-#headingTwo a:focus {
-  text-decoration: none;
+.panel-heading {
+  transition: background-color, .7s;
 }
 
 .panel-heading {
-  transition: background-color, .5s;
+  transition: color, .7s;
 }
 
-.panel-heading a {
-  transition: color, .5s;
-}
-
-.panel-heading:hover {
+#headingOne:hover,
+#headingTwo:hover {
   background-color: #2a2a2a;
-}
-
-.panel-heading:hover a {
+  cursor: pointer;
   color: white;
 }
 

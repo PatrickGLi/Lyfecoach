@@ -34,11 +34,15 @@ var UserDetail = React.createClass({
     this.props.history.pushState(null, "api/users/" + event.organizer_id + "/events/" + event.id);
   },
 
+  follow: function() {
+
+  },
+
   render: function() {
     var host = this.state.user;
 
     if (host === null) {
-      return (<div></div>);
+      return (<div className="user-detail-filler"></div>);
     } else {
       var showEventDetail = this.showEventDetail;
       var events = host.events.map(function(event) {
@@ -55,27 +59,35 @@ var UserDetail = React.createClass({
     return (
       <div className="row user-info">
         <div className="col-md-6 col-md-offset-1">
+          <div className="host-head"><h2>{host.host_name}</h2></div>
 
-          <div className="host-head">
-            <div><h2>{host.host_name}</h2></div>
-            <div><img src={host_image}/></div>
+          <div className="row">
+            <div className="host-head col-md-6">
+              <div><img src={host_image}/></div>
+            </div>
+            <div className="follow col-md-offset-1 col-md-3">
+              <button className="btn btn-primary follow-button"
+                      onClick={this.follow}>
+                      Follow
+              </button>
+              <h4>follow and stay posted on all my events.</h4>
+            </div>
           </div>
 
           <div id="accordion" role="tablist" aria-multiselectable="true">
             <div className="panel panel-default">
-              <div className="panel-heading" role="tab" id="headingOne">
+              <div className="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                 <h4 className="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    About {host.host_name}
-                  </a>
+                    About
                 </h4>
               </div>
-              <div id="collapseOne" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+              <div id="collapseOne" className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                 {host.description}
               </div>
             </div>
           </div>
 
+          <h3>All Events by {host.host_name}</h3>
           <div>{events}</div>
         </div>
 
