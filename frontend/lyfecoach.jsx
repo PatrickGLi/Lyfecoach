@@ -24,5 +24,8 @@ var routes = (
 );
 
 $(function() {
-  ReactDOM.render(<Router>{routes}</Router> , document.getElementById('content'));
+  var content = document.getElementById('content');
+  if (content) {
+    ReactDOM.render(<Router>{routes}</Router> , content);
+  }
 });

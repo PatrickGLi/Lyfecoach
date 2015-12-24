@@ -1,5 +1,6 @@
 var React = require('react'),
-    IndexItem = require('./indexItem');
+    IndexItem = require('./indexItem'),
+    Masonry = require('react-masonry-component')(React);
 
 var EventIndex = React.createClass({
   showUserDetail: function(event) {
@@ -7,6 +8,7 @@ var EventIndex = React.createClass({
   },
 
   render: function() {
+
     var showUserDetail = this.showUserDetail;
     var events = this.props.events.map(function(event, index) {
       var bindedClick = showUserDetail.bind(null, event);
@@ -16,8 +18,10 @@ var EventIndex = React.createClass({
     });
 
     return (
-      <div className="container event-index-container">
-        {events}
+      <div className="index-items">
+        <div className="grid">
+          {events}
+        </div>
       </div>
     );
   }

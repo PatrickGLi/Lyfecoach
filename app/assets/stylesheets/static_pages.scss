@@ -3,6 +3,9 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
+img:hover {
+  cursor: pointer;
+}
 
 #logo {
   font-size: 26px;
@@ -165,10 +168,6 @@
 .popular-title {
   width: 90%;
   margin: 0 auto;
-}
-
-img:hover {
-  cursor: pointer;
 }
 
 .popular-event-index {

@@ -72,14 +72,12 @@ var Detail = React.createClass({
 
         <div id="accordion2" role="tablist" aria-multiselectable="true">
           <div className="panel panel-default">
-            <div className="panel-heading" role="tab" id="headingTwo">
+            <div className="panel-heading" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
               <h4 className="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
                   Details
-                </a>
               </h4>
             </div>
-            <div id="collapseTwo" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+            <div id="collapseTwo" className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
               {event.description}
             </div>
           </div>
