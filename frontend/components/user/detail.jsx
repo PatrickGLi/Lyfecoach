@@ -62,6 +62,10 @@ var UserDetail = React.createClass({
     UserDetailActions.removeFollow(followerId);
   },
 
+  editProfile: function() {
+    this.props.history.pushState(null, "api/users/" + ReactConstants.CURRENT_USER + "/edit");
+  },
+
   render: function() {
     var host = this.state.user;
 
@@ -84,59 +88,74 @@ var UserDetail = React.createClass({
     var followButton, followInfo;
 
     if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
-      followButton = <button className="btn btn-primary follow-button"
-                             onClick={this.editProfile}>edit profile</button>;
-      followInfo = <div></div>;
+      followButton =
+        <button className="btn btn-primary user-button"
+                     onClick={this.editProfile}>edit profile</button>;
 
     } else if (FollowStore.find(ReactConstants.CURRENT_USER)) {
-      followButton = <button className="btn btn-primary follow-button"
-                             onClick={this.unfollow}>unfollow</button>;
-      followInfo = <div></div>;
+      followButton = <button className="btn btn-primary user-button"
+                                  onClick={this.unfollow}>unfollow</button>;
+
     } else {
-      followButton = <button className="btn btn-primary follow-button"
+      followButton = <div><button className="btn btn-primary user-button"
                              onClick={this.follow}>follow</button>;
-      followInfo = <h4>follow and stay posted on all my events.</h4>;
+                          <h4>follow and stay posted on all my events.</h4></div>;
     }
 
-    var followers = this.state.followers.length
+    var followers;
+     if (this.state.followers.length === 0) {
+       followers = "no followers yet";
+     } else if (this.state.followers.length === 1) {
+       followers = "1 follower";
+     } else {
+       followers = this.state.followers.length.toString() + " followers";
+     }
 
-    var host_image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_200,w_300" + host.url;
+    var backgroundImage = { backgroundImage: "url(http://res.cloudinary.com/dlqjek68b/image/upload/c_fill" + host.background_url + ")" };
+    var hostImage = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_200,w_300" + host.url;
 
     return (
-      <div className="row user-info">
-        <div className="col-md-6 col-md-offset-1">
-          <div className="host-head"><h2>{host.host_name}</h2></div>
-          Followers: {followers}
-          <div className="row">
-            <div className="host-head col-md-6">
-              <div><img src={host_image}/></div>
-            </div>
-            <div className="follow col-md-offset-1 col-md-3">
-              {followButton}
-              {followInfo}
-            </div>
-          </div>
-
-          <div id="accordion" role="tablist" aria-multiselectable="true">
-            <div className="panel panel-default">
-              <div className="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                <h4 className="panel-title">
-                    About
-                </h4>
-              </div>
-              <div id="collapseOne" className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                {host.description}
-              </div>
-            </div>
-          </div>
-
-          <h3>All Events by {host.host_name}</h3>
-          <div>{events}</div>
+      <div className="user-info">
+        <div className="cover-image">
+          <div className="host-background" style={backgroundImage}></div>
         </div>
+        <div className="row user-info">
+          <div className="col-md-6 col-md-offset-1">
+            <div className="host-head"><h2>{host.host_name}</h2></div>
+            <div><h4>{followers}</h4></div>
+            <div className="row">
+              <div className="host-head">
+                <div><img src={hostImage}/></div>
+              </div>
+              <div className="follow">
+                {followButton}
+                {followInfo}
+              </div>
+            </div>
 
-        {this.props.children}
+            <div id="accordion" role="tablist" aria-multiselectable="true">
+              <div className="panel panel-default">
+                <div className="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  <h4 className="panel-title">
+                      About
+                  </h4>
+                </div>
+                <div id="collapseOne" className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                  {host.description}
+                </div>
+              </div>
+            </div>
 
+            <h3>All Events by {host.host_name}</h3>
+            <div>{events}</div>
+          </div>
+
+          {this.props.children}
+
+        </div>
       </div>
+
+
     );
   }
 

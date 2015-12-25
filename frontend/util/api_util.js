@@ -1,6 +1,7 @@
 var ApiActions = require('../actions/api_actions'),
     FormActions = require('../actions/form_actions'),
-    FilterParamsStore = require('../stores/filter_params_store')
+    FilterParamsStore = require('../stores/filter_params_store');
+
 
 var ApiUtil = {
   fetchEvents: function(){
@@ -69,6 +70,24 @@ var ApiUtil = {
       url: "api/follows/" + followerId,
       success: function(successData) {
         ApiActions.removeFollow(successData);
+      }
+    });
+  },
+
+  editProfile: function(profileData, callback) {
+    adjustedProfileData = {
+      url: profileData.url,
+      background_url: profileData.backgroundUrl,
+      description: profileData.description
+    }
+
+    $.ajax({
+      method: "put",
+      url: "api/users/" + profileData.id,
+      data: { user: adjustedProfileData },
+      success: function(successData) {
+        ApiActions.editProfile(successData);
+        callback();
       }
     });
   }

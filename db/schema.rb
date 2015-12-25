@@ -11,10 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151224011032) do
+ActiveRecord::Schema.define(version: 20151224194238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "backgrounds", force: :cascade do |t|
+  end
 
   create_table "events", force: :cascade do |t|
     t.string   "title",                                                                                       null: false
@@ -30,7 +33,7 @@ ActiveRecord::Schema.define(version: 20151224011032) do
     t.float    "lat",                                                                                         null: false
     t.float    "lng",                                                                                         null: false
     t.float    "price",                                                                                       null: false
-    t.text     "url",                    default: "/v1450644788/photo-1416304646406-414b1009dbe4_nbwzwj.jpg", null: false
+    t.text     "url",                    default: "/v1450772227/photo-1439337153520-7082a56a81f4_bnx1j5.jpg", null: false
     t.integer  "organizer_id",                                                                                null: false
     t.datetime "created_at",                                                                                  null: false
     t.datetime "updated_at",                                                                                  null: false
@@ -47,19 +50,21 @@ ActiveRecord::Schema.define(version: 20151224011032) do
   end
 
   add_index "follows", ["follower_id"], name: "index_follows_on_follower_id", using: :btree
+  add_index "follows", ["organizer_id", "follower_id"], name: "index_follows_on_organizer_id_and_follower_id", unique: true, using: :btree
   add_index "follows", ["organizer_id"], name: "index_follows_on_organizer_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                                                                                null: false
-    t.string   "first_name",                                                                           null: false
-    t.string   "last_name",                                                                            null: false
-    t.string   "host_name",                                                                            null: false
-    t.string   "password_digest",                                                                      null: false
-    t.string   "session_token",                                                                        null: false
-    t.datetime "created_at",                                                                           null: false
-    t.datetime "updated_at",                                                                           null: false
+    t.string   "email",                                                                                  null: false
+    t.string   "first_name",                                                                             null: false
+    t.string   "last_name",                                                                              null: false
+    t.string   "host_name",                                                                              null: false
+    t.string   "password_digest",                                                                        null: false
+    t.string   "session_token",                                                                          null: false
+    t.datetime "created_at",                                                                             null: false
+    t.datetime "updated_at",                                                                             null: false
     t.text     "description"
     t.text     "url",             default: "/v1450772227/photo-1439337153520-7082a56a81f4_bnx1j5.jpg"
+    t.text     "background_url",  default: "/v1450772408/photo-1448318440207-ef1893eb8ac0_1_lgb6am.jpg"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

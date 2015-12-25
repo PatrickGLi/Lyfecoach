@@ -4,6 +4,7 @@
 
 .user-info {
   background-color: #f2f2f2;
+  padding-bottom: 10px;
 }
 
 .user-detail-filler {
@@ -12,6 +13,8 @@
 }
 
 .host-head {
+  display: inline-block;
+  width: 300px;
   padding-bottom: 20px;
 }
 
@@ -19,12 +22,32 @@
   top: 20px;
 }
 
+.host-background {
+  height: 200px;
+  background-position: 0% 70%;
+  border-bottom: 8px solid #dce4ec;
+}
+
+.follow {
+  height: 200px;
+  width: 200px;
+  margin-left: 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.user-button {
+  border: 2px solid white;
+  border-radius:0;
+  width: 120px;
+  transition: background-color, .5s;
+}
+
 .event-detail .info {
   padding: 10px 0;
   font-weight: normal;
   font-size: 17px;
 }
-
 
 .host-head img,
 .event-detail img {

@@ -25,10 +25,7 @@ var Detail = React.createClass({
   },
 
   showEventDetail: function() {
-    this.setState({ event: this.getStateFromStore() });
-  },
-  componentDidUpdate: function() {
-    console.log("updated");
+    this.setState({ event: this.getStateFromStore() }, function () {this.refs.detail.scrollIntoView();}.bind(this));
   },
 
   convertTime: function(time) {
@@ -62,7 +59,7 @@ var Detail = React.createClass({
     endTime = this.convertTime(endTime);
 
     return (
-      <div className="event-detail col-md-4">
+      <div className="event-detail col-md-4" ref="detail">
         <div><h3>{event.title}</h3></div>
         <div className="event-image"><img src={image}/></div>
 

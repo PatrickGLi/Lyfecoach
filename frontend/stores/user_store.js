@@ -19,6 +19,9 @@ UserStore.__onDispatch = function(payload){
     case UserConstants.GET_SINGLE_USER:
       resetSingleUser(payload.user);
       break;
+    case UserConstants.EDIT_PROFILE:
+      resetSingleUser(payload.profile);
+      break;
   }
 };
 
