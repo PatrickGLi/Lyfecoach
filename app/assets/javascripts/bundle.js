@@ -19683,6 +19683,7 @@
 	EventStore = new Store(AppDispatcher);
 	
 	var _events = [];
+	var _followingEvents = {};
 	
 	EventStore.all = function () {
 	  return _events.slice(0);
@@ -19690,6 +19691,10 @@
 	
 	EventStore.fetch = function () {
 	  return _events[0];
+	};
+	
+	EventStore.fetchFollowingEvents = function () {
+	  return Object.assign({}, _followingEvents);
 	};
 	
 	var resetEvents = function (events) {
@@ -19700,6 +19705,22 @@
 	
 	var resetSingleEvent = function (event) {
 	  _events = [event];
+	
+	  EventStore.__emitChange();
+	};
+	
+	var deleteSingleEvent = function (deletedEvent) {
+	  var index = -1;
+	  for (var i = 0; i < _events.length; i++) {
+	    if (_events[i].id === deletedEvent.id) {
+	      index = i;
+	      break;
+	    }
+	  }
+	
+	  if (index !== -1) {
+	    _events.splice(index, 1);
+	  }
 	
 	  EventStore.__emitChange();
 	};
@@ -19716,7 +19737,27 @@
 	    case EventConstants.SINGLE_EVENT_RECEIVED:
 	      resetSingleEvent(payload.event);
 	      break;
+	    case EventConstants.FOLLOWING_EVENTS_RECEIVED:
+	      resetFollowingEvents(payload.followingEvents);
+	      break;
+	    case EventConstants.DELETE_EVENT:
+	      deleteSingleEvent(payload.deleted);
+	      break;
 	  }
+	};
+	
+	var resetFollowingEvents = function (followingEvents) {
+	  _followingEvents = {};
+	
+	  followingEvents.forEach(function (followingEvent) {
+	    if (typeof _followingEvents[followingEvent.organizer_id] === "undefined") {
+	      _followingEvents[followingEvent.organizer_id] = [followingEvent];
+	    } else {
+	      _followingEvents[followingEvent.organizer_id].push(followingEvent);
+	    }
+	  });
+	
+	  EventStore.__emitChange();
 	};
 	
 	module.exports = EventStore;
@@ -26409,7 +26450,9 @@
 
 	EventConstants = {
 	  EVENTS_RECEIVED: "EVENTS_RECEIVED",
-	  SINGLE_EVENT_RECEIVED: "SINGLE_EVENT_RECEIVED"
+	  SINGLE_EVENT_RECEIVED: "SINGLE_EVENT_RECEIVED",
+	  FOLLOWING_EVENTS_RECEIVED: "FOLLOWING_EVENTS_RECEIVED",
+	  DELETE_EVENT: "DELETE_EVENT"
 	};
 	
 	module.exports = EventConstants;
@@ -26444,6 +26487,18 @@
 	    });
 	  },
 	
+	  deleteSingleEvent: function (eventId, callback) {
+	    $.ajax({
+	      method: "delete",
+	      url: "api/events/" + eventId,
+	      success: function (successData) {
+	        ApiActions.deleteEvent(successData);
+	
+	        callback();
+	      }
+	    });
+	  },
+	
 	  createEvent: function (eventData, callback) {
 	    $.ajax({
 	      method: "post",
@@ -26472,8 +26527,11 @@
 	  },
 	
 	  fetchFollowing: function (followerId) {
-	    $.get('api/users/' + followerId, { fetching: true }, function (followings) {
+	    $.get('api/users/' + followerId, { fetchingUser: true }, function (followings) {
 	      ApiActions.getFollowings(followings);
+	      $.get('api/users/' + followerId, { fetchingEvents: true }, function (followingEvents) {
+	        ApiActions.getFollowingEvents(followingEvents);
+	      });
 	    });
 	  },
 	
@@ -26542,6 +26600,13 @@
 	    });
 	  },
 	
+	  deleteEvent: function (deletedEvent) {
+	    AppDispatcher.dispatch({
+	      actionType: EventConstants.DELETE_EVENT,
+	      deleted: deletedEvent
+	    });
+	  },
+	
 	  getCurrentUser: function (currentUser) {
 	    AppDispatcher.dispatch({
 	      actionType: NavBarConstants.GET_CURRENT_USER,
@@ -26588,6 +26653,13 @@
 	    AppDispatcher.dispatch({
 	      actionType: UserConstants.FOLLOWINGS_RECEIVED,
 	      following: followingData
+	    });
+	  },
+	
+	  getFollowingEvents: function (followingEventsData) {
+	    AppDispatcher.dispatch({
+	      actionType: EventConstants.FOLLOWING_EVENTS_RECEIVED,
+	      followingEvents: followingEventsData
 	    });
 	  }
 	};
@@ -31664,7 +31736,7 @@
 	            React.createElement(
 	              'div',
 	              { className: 'modal-body' },
-	              'Lyfecoach is an event management application that lets users follow their favorite hosts and organizers, and keep updated whereever they go.'
+	              'Lyfecoach is an event management application that lets users follow their favorite hosts and organizers, and keep updated wherever they go.'
 	            ),
 	            React.createElement(
 	              'div',
@@ -32807,7 +32879,7 @@
 	    var marker = new google.maps.Marker({
 	      position: myLatLng,
 	      map: this.map,
-	      title: "hosted by" + event.organizer.host_name,
+	      title: "hosted by " + event.organizer.host_name,
 	      eventId: event.id,
 	      icon: 'http://res.cloudinary.com/dlqjek68b/image/upload/v1450771235/marker_black_mpnvvp.png'
 	    });
@@ -37789,7 +37861,7 @@
 	      });
 	    }
 	
-	    var followButton, followInfo;
+	    var followButton;
 	
 	    if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
 	      followButton = React.createElement(
@@ -37883,8 +37955,7 @@
 	            React.createElement(
 	              'div',
 	              { className: 'follow' },
-	              followButton,
-	              followInfo
+	              followButton
 	            )
 	          ),
 	          React.createElement(
@@ -37940,6 +38011,7 @@
 	var UserStore = new Store(AppDispatcher);
 	
 	var _user = null;
+	var _followings = {};
 	
 	UserStore.fetch = function () {
 	  return _user;
@@ -37947,6 +38019,10 @@
 	
 	UserStore.clearUser = function () {
 	  _user = null;
+	};
+	
+	UserStore.fetchFollowing = function () {
+	  return Object.assign({}, _followings);
 	};
 	
 	UserStore.__onDispatch = function (payload) {
@@ -37957,7 +38033,20 @@
 	    case UserConstants.EDIT_PROFILE:
 	      resetSingleUser(payload.profile);
 	      break;
+	    case UserConstants.FOLLOWINGS_RECEIVED:
+	      resetFollowings(payload.following);
+	      break;
 	  }
+	};
+	
+	var resetFollowings = function (followings) {
+	  _followings = {};
+	
+	  followings.forEach(function (following) {
+	    _followings[following.id] = following;
+	  });
+	
+	  UserStore.__emitChange();
 	};
 	
 	var resetSingleUser = function (user) {
@@ -37977,16 +38066,11 @@
 	
 	var _follows = [];
 	var _followId = null;
-	var _followings = [];
 	
 	var FollowStore = new Store(AppDispatcher);
 	
 	FollowStore.fetch = function () {
 	  return _follows.slice(0);
-	};
-	
-	FollowStore.fetchFollowing = function () {
-	  return _followings.slice(0);
 	};
 	
 	FollowStore.fetchId = function () {
@@ -38016,20 +38100,11 @@
 	    case UserConstants.REMOVE_FOLLOW:
 	      removeFollow(payload.unfollow);
 	      break;
-	    case UserConstants.FOLLOWINGS_RECEIVED:
-	      resetFollowings(payload.following);
-	      break;
 	  }
 	};
 	
 	var resetFollowers = function (followers) {
 	  _follows = followers;
-	
-	  FollowStore.__emitChange();
-	};
-	
-	var resetFollowings = function (followings) {
-	  _followings = followings;
 	
 	  FollowStore.__emitChange();
 	};
@@ -38096,6 +38171,7 @@
 
 	var React = __webpack_require__(1),
 	    EventStore = __webpack_require__(159),
+	    ReactConstants = __webpack_require__(187),
 	    EventDetailActions = __webpack_require__(291);
 	
 	var Detail = React.createClass({
@@ -38126,6 +38202,13 @@
 	    this.setState({ event: this.getStateFromStore() }, (function () {
 	      this.refs.detail.scrollIntoView();
 	    }).bind(this));
+	  },
+	
+	  deleteEvent: function () {
+	    var that = this;
+	    EventDetailActions.deleteEvent(parseInt(this.props.params.eventId), function () {
+	      that.props.history.pushState(null, "api/users/" + that.props.params.userId);
+	    });
 	  },
 	
 	  convertTime: function (time) {
@@ -38159,6 +38242,24 @@
 	
 	    startTime = this.convertTime(startTime);
 	    endTime = this.convertTime(endTime);
+	
+	    var deleteEventsButton;
+	
+	    if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
+	      deleteEventsButton = React.createElement(
+	        'button',
+	        { className: 'btn btn-primary delete-event-button',
+	          onClick: this.deleteEvent },
+	        'delete event'
+	      );
+	    } else {
+	      deleteEventsButton = React.createElement(
+	        'button',
+	        { className: 'btn btn-primary buy-ticket-button',
+	          onClick: this.buyTickets },
+	        'buy tickets'
+	      );
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -38227,7 +38328,8 @@
 	            event.description
 	          )
 	        )
-	      )
+	      ),
+	      deleteEventsButton
 	    );
 	  }
 	
@@ -38244,6 +38346,10 @@
 	var EventDetailActions = {
 	  fetchSingleEvent: function (eventId) {
 	    ApiUtil.fetchSingleEvent(eventId);
+	  },
+	
+	  deleteEvent: function (eventId, callback) {
+	    ApiUtil.deleteSingleEvent(eventId, callback);
 	  }
 	};
 	
@@ -38254,7 +38360,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    FollowStore = __webpack_require__(288),
+	    EventStore = __webpack_require__(159),
+	    UserStore = __webpack_require__(287),
 	    FollowerActions = __webpack_require__(298);
 	
 	var UserFollows = React.createClass({
@@ -38262,29 +38369,69 @@
 	
 	  getInitialState: function () {
 	    return {
-	      followings: FollowStore.fetchFollowing()
+	      followings: []
 	    };
 	  },
 	
 	  componentDidMount: function () {
-	    this.followListener = FollowStore.addListener(this._onChange);
+	    this.eventListener = EventStore.addListener(this._onChange);
 	    FollowerActions.fetchFollowing(parseInt(this.props.params.userId));
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.followListener.remove();
+	    this.eventListener.remove();
 	  },
 	
 	  _onChange: function () {
-	    debugger;
+	    var followings = UserStore.fetchFollowing();
+	    var followingEvents = EventStore.fetchFollowingEvents();
+	    var result = [];
+	
+	    for (var following in followings) {
+	      var subresult = {};
+	
+	      subresult["following"] = followings[following];
+	      subresult["events"] = followingEvents[following];
+	
+	      result.push(subresult);
+	
+	      this.setState({ followings: result });
+	    }
 	  },
 	
 	  render: function () {
+	    var followings = this.state.followings.map(function (following) {
+	
+	      var followingEvents = following.events.map(function (event) {
+	        return React.createElement(
+	          'li',
+	          { key: event.id },
+	          event.title,
+	          ' ',
+	          event.location
+	        );
+	      });
+	
+	      return React.createElement(
+	        'div',
+	        { key: following.following.id },
+	        React.createElement(
+	          'div',
+	          null,
+	          following.following.host_name
+	        ),
+	        React.createElement(
+	          'ul',
+	          null,
+	          followingEvents
+	        )
+	      );
+	    });
 	
 	    return React.createElement(
 	      'div',
 	      null,
-	      'Follows page'
+	      followings
 	    );
 	  }
 	});
@@ -38647,6 +38794,7 @@
 	                'select',
 	                { className: 'form-control form-select',
 	                  valueLink: this.linkState('startTime') },
+	                React.createElement('option', null),
 	                times
 	              ),
 	              React.createElement(
@@ -38662,6 +38810,7 @@
 	                'select',
 	                { className: 'form-control form-select',
 	                  valueLink: this.linkState('endTime') },
+	                React.createElement('option', null),
 	                times
 	              ),
 	              React.createElement(

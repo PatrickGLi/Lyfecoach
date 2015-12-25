@@ -1,30 +1,57 @@
 var React = require('react'),
-    FollowStore = require('../../stores/follow_store'),
+    EventStore = require('../../stores/event_store'),
+    UserStore = require('../../stores/user_store'),
     FollowerActions = require('../../actions/follower_actions')
 
 var UserFollows = React.createClass({
   getInitialState: function() {
     return ({
-      followings: FollowStore.fetchFollowing()
+      followings: []
     });
   },
 
   componentDidMount: function() {
-    this.followListener = FollowStore.addListener(this._onChange);
+    this.eventListener = EventStore.addListener(this._onChange);
     FollowerActions.fetchFollowing(parseInt(this.props.params.userId));
   },
 
   componentWillUnmount: function() {
-    this.followListener.remove();
+    this.eventListener.remove();
   },
 
   _onChange: function() {
-    debugger
+    var followings = UserStore.fetchFollowing();
+    var followingEvents = EventStore.fetchFollowingEvents();
+    var result  = [];
+
+    for (var following in followings) {
+      var subresult = {};
+
+      subresult["following"] = followings[following];
+      subresult["events"] = followingEvents[following];
+
+      result.push(subresult);
+
+      this.setState({ followings: result });
+    }
   },
 
   render: function() {
+    var followings = this.state.followings.map(function(following) {
 
-    return <div>Follows page</div>;
+      var followingEvents = following.events.map(function(event) {
+        return (<li key={event.id}>{event.title} {event.location}</li>);
+      });
+
+      return(
+        <div key={following.following.id}>
+        <div>{following.following.host_name}</div>
+          <ul>{followingEvents}</ul>
+        </div>
+      );
+    });
+
+    return <div>{followings}</div>;
   }
 });
 

@@ -5,6 +5,7 @@ var Store = require('flux/utils').Store;
 var UserStore = new Store(AppDispatcher);
 
 var _user = null;
+var _followings = {};
 
 UserStore.fetch = function() {
   return _user;
@@ -12,7 +13,11 @@ UserStore.fetch = function() {
 
 UserStore.clearUser = function() {
   _user = null;
-}
+};
+
+UserStore.fetchFollowing = function() {
+  return Object.assign({}, _followings);
+};
 
 UserStore.__onDispatch = function(payload){
   switch (payload.actionType) {
@@ -22,7 +27,20 @@ UserStore.__onDispatch = function(payload){
     case UserConstants.EDIT_PROFILE:
       resetSingleUser(payload.profile);
       break;
+    case UserConstants.FOLLOWINGS_RECEIVED:
+      resetFollowings(payload.following)
+      break;
   }
+};
+
+var resetFollowings = function(followings) {
+  _followings = {};
+
+  followings.forEach(function(following) {
+    _followings[following.id] = following;
+  });
+
+  UserStore.__emitChange();
 };
 
 var resetSingleUser = function(user) {

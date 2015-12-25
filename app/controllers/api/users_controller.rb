@@ -4,8 +4,11 @@ class Api::UsersController < ApplicationController
   end
 
   def show
-    debugger
-    if fetching
+    if fetchingEvents
+      followed_events = User.find(params[:id]).followed_events
+
+      render json: followed_events
+    elsif fetchingUser
       followings = User.find(params[:id]).followings
 
       render json: followings
@@ -13,7 +16,6 @@ class Api::UsersController < ApplicationController
       @user = User.find(params[:id])
 
       render :show
-
     end
   end
 
@@ -29,7 +31,11 @@ class Api::UsersController < ApplicationController
     params.require(:user).permit(:url, :background_url, :description)
   end
 
-  def fetching
-    params[:fetching]
+  def fetchingUser
+    params[:fetchingUser]
+  end
+
+  def fetchingEvents
+    params[:fetchingEvents]
   end
 end
