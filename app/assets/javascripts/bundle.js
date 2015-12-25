@@ -56,7 +56,8 @@
 	    EventPage = __webpack_require__(260),
 	    UserDetail = __webpack_require__(286),
 	    EventDetail = __webpack_require__(290),
-	    EventForm = __webpack_require__(292);
+	    UserEdit = __webpack_require__(292),
+	    EventForm = __webpack_require__(294);
 	
 	var routes = React.createElement(
 	  Route,
@@ -67,7 +68,8 @@
 	  React.createElement(
 	    Route,
 	    { path: 'api/users/:userId', component: UserDetail },
-	    React.createElement(Route, { path: 'events/:eventId', component: EventDetail })
+	    React.createElement(Route, { path: 'events/:eventId', component: EventDetail }),
+	    React.createElement(Route, { path: 'edit', component: UserEdit })
 	  )
 	);
 	
@@ -26487,6 +26489,24 @@
 	        ApiActions.removeFollow(successData);
 	      }
 	    });
+	  },
+	
+	  editProfile: function (profileData, callback) {
+	    adjustedProfileData = {
+	      url: profileData.url,
+	      background_url: profileData.backgroundUrl,
+	      description: profileData.description
+	    };
+	
+	    $.ajax({
+	      method: "put",
+	      url: "api/users/" + profileData.id,
+	      data: { user: adjustedProfileData },
+	      success: function (successData) {
+	        ApiActions.editProfile(successData);
+	        callback();
+	      }
+	    });
 	  }
 	};
 	
@@ -26547,6 +26567,13 @@
 	      actionType: UserConstants.REMOVE_FOLLOW,
 	      unfollow: unfollow
 	    });
+	  },
+	
+	  editProfile: function (profileData) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.EDIT_PROFILE,
+	      profile: profileData
+	    });
 	  }
 	};
 	
@@ -26570,7 +26597,8 @@
 	  GET_SINGLE_USER: "GET_SINGLE_USER",
 	  FOLLOWERS_RECEIVED: "FOLLOWERS_RECEIVED",
 	  ADD_FOLLOW: "ADD_FOLLOW",
-	  REMOVE_FOLLOW: "REMOVE_FOLLOW"
+	  REMOVE_FOLLOW: "REMOVE_FOLLOW",
+	  EDIT_PROFILE: "EDIT_PROFILE"
 	};
 	
 	module.exports = UserConstants;
@@ -37700,6 +37728,10 @@
 	    UserDetailActions.removeFollow(followerId);
 	  },
 	
+	  editProfile: function () {
+	    this.props.history.pushState(null, "api/users/" + ReactConstants.CURRENT_USER + "/edit");
+	  },
+	
 	  render: function () {
 	    var host = this.state.user;
 	
@@ -37731,108 +37763,135 @@
 	    if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
 	      followButton = React.createElement(
 	        'button',
-	        { className: 'btn btn-primary follow-button',
+	        { className: 'btn btn-primary user-button',
 	          onClick: this.editProfile },
 	        'edit profile'
 	      );
-	      followInfo = React.createElement('div', null);
 	    } else if (FollowStore.find(ReactConstants.CURRENT_USER)) {
 	      followButton = React.createElement(
 	        'button',
-	        { className: 'btn btn-primary follow-button',
+	        { className: 'btn btn-primary user-button',
 	          onClick: this.unfollow },
 	        'unfollow'
 	      );
-	      followInfo = React.createElement('div', null);
 	    } else {
 	      followButton = React.createElement(
-	        'button',
-	        { className: 'btn btn-primary follow-button',
-	          onClick: this.follow },
-	        'follow'
-	      );
-	      followInfo = React.createElement(
-	        'h4',
+	        'div',
 	        null,
-	        'follow and stay posted on all my events.'
+	        React.createElement(
+	          'button',
+	          { className: 'btn btn-primary user-button',
+	            onClick: this.follow },
+	          'follow'
+	        ),
+	        ';',
+	        React.createElement(
+	          'h4',
+	          null,
+	          'follow and stay posted on all my events.'
+	        )
 	      );
 	    }
 	
-	    var followers = this.state.followers.length;
+	    var followers;
+	    if (this.state.followers.length === 0) {
+	      followers = "no followers yet";
+	    } else if (this.state.followers.length === 1) {
+	      followers = "1 follower";
+	    } else {
+	      followers = this.state.followers.length.toString() + " followers";
+	    }
 	
-	    var host_image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_200,w_300" + host.url;
+	    var backgroundImage = { backgroundImage: "url(http://res.cloudinary.com/dlqjek68b/image/upload/c_fill" + host.background_url + ")" };
+	    var hostImage = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_200,w_300" + host.url;
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'row user-info' },
+	      { className: 'user-info' },
 	      React.createElement(
 	        'div',
-	        { className: 'col-md-6 col-md-offset-1' },
+	        { className: 'cover-image' },
+	        React.createElement('div', { className: 'host-background', style: backgroundImage })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'row user-info' },
 	        React.createElement(
 	          'div',
-	          { className: 'host-head' },
-	          React.createElement(
-	            'h2',
-	            null,
-	            host.host_name
-	          )
-	        ),
-	        'Followers: ',
-	        followers,
-	        React.createElement(
-	          'div',
-	          { className: 'row' },
+	          { className: 'col-md-6 col-md-offset-1' },
 	          React.createElement(
 	            'div',
-	            { className: 'host-head col-md-6' },
+	            { className: 'host-head' },
 	            React.createElement(
-	              'div',
+	              'h2',
 	              null,
-	              React.createElement('img', { src: host_image })
+	              host.host_name
 	            )
 	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'follow col-md-offset-1 col-md-3' },
-	            followButton,
-	            followInfo
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { id: 'accordion', role: 'tablist', 'aria-multiselectable': 'true' },
+	            null,
+	            React.createElement(
+	              'h4',
+	              null,
+	              followers
+	            )
+	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'panel panel-default' },
+	            { className: 'row' },
 	            React.createElement(
 	              'div',
-	              { className: 'panel-heading', role: 'tab', id: 'headingOne', 'data-toggle': 'collapse', 'data-parent': '#accordion', href: '#collapseOne', 'aria-expanded': 'true', 'aria-controls': 'collapseOne' },
+	              { className: 'host-head' },
 	              React.createElement(
-	                'h4',
-	                { className: 'panel-title' },
-	                'About'
+	                'div',
+	                null,
+	                React.createElement('img', { src: hostImage })
 	              )
 	            ),
 	            React.createElement(
 	              'div',
-	              { id: 'collapseOne', className: 'panel-collapse collapse', role: 'tabpanel', 'aria-labelledby': 'headingOne' },
-	              host.description
+	              { className: 'follow' },
+	              followButton,
+	              followInfo
 	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { id: 'accordion', role: 'tablist', 'aria-multiselectable': 'true' },
+	            React.createElement(
+	              'div',
+	              { className: 'panel panel-default' },
+	              React.createElement(
+	                'div',
+	                { className: 'panel-heading', role: 'tab', id: 'headingOne', 'data-toggle': 'collapse', 'data-parent': '#accordion', href: '#collapseOne', 'aria-expanded': 'true', 'aria-controls': 'collapseOne' },
+	                React.createElement(
+	                  'h4',
+	                  { className: 'panel-title' },
+	                  'About'
+	                )
+	              ),
+	              React.createElement(
+	                'div',
+	                { id: 'collapseOne', className: 'panel-collapse collapse', role: 'tabpanel', 'aria-labelledby': 'headingOne' },
+	                host.description
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'h3',
+	            null,
+	            'All Events by ',
+	            host.host_name
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            events
 	          )
 	        ),
-	        React.createElement(
-	          'h3',
-	          null,
-	          'All Events by ',
-	          host.host_name
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          events
-	        )
-	      ),
-	      this.props.children
+	        this.props.children
+	      )
 	    );
 	  }
 	
@@ -37863,6 +37922,9 @@
 	  switch (payload.actionType) {
 	    case UserConstants.GET_SINGLE_USER:
 	      resetSingleUser(payload.user);
+	      break;
+	    case UserConstants.EDIT_PROFILE:
+	      resetSingleUser(payload.profile);
 	      break;
 	  }
 	};
@@ -38016,10 +38078,9 @@
 	  },
 	
 	  showEventDetail: function () {
-	    this.setState({ event: this.getStateFromStore() });
-	  },
-	  componentDidUpdate: function () {
-	    console.log("updated");
+	    this.setState({ event: this.getStateFromStore() }, (function () {
+	      this.refs.detail.scrollIntoView();
+	    }).bind(this));
 	  },
 	
 	  convertTime: function (time) {
@@ -38056,7 +38117,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'event-detail col-md-4' },
+	      { className: 'event-detail col-md-4', ref: 'detail' },
 	      React.createElement(
 	        'div',
 	        null,
@@ -38149,10 +38210,152 @@
 
 	var React = __webpack_require__(1),
 	    LinkedStateMixin = __webpack_require__(251),
+	    UserStore = __webpack_require__(287),
+	    UserEditActions = __webpack_require__(293);
+	
+	var UserEdit = React.createClass({
+	  displayName: 'UserEdit',
+	
+	  mixins: [LinkedStateMixin],
+	
+	  getInitialState: function () {
+	    this.user = UserStore.fetch();
+	
+	    return {
+	      id: this.user.id,
+	      url: this.user.url,
+	      backgroundUrl: this.user.background_url,
+	      description: this.user.description
+	    };
+	  },
+	
+	  addProfileImage: function (e) {
+	    e.preventDefault();
+	    cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, (function (error, results) {
+	      if (!error) {
+	        this.setState({ url: "/" + results[0].path });
+	      }
+	    }).bind(this));
+	  },
+	
+	  addBackgroundImage: function (e) {
+	    e.preventDefault();
+	    cloudinary.openUploadWidget(CLOUDINARY_OPTIONS, (function (error, results) {
+	      if (!error) {
+	        this.setState({ backgroundUrl: "/" + results[0].path });
+	      }
+	    }).bind(this));
+	  },
+	
+	  updateProfile: function () {
+	    var that = this;
+	    UserEditActions.editProfile(this.state, function () {
+	      that.props.history.pushState(null, "api/users/" + that.props.params.userId);
+	    });
+	  },
+	
+	  handleCancel: function () {
+	    this.props.history.pushState(null, "api/users/" + this.props.params.userId);
+	  },
+	
+	  render: function () {
+	    var profileImage;
+	
+	    if (this.state.url === this.user.url) {
+	      profileImage = React.createElement('div', null);
+	    } else {
+	      var profileUrl = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_300" + this.state.url;
+	      profileImage = React.createElement(
+	        'div',
+	        { className: 'image-holder' },
+	        React.createElement('img', { src: profileUrl })
+	      );
+	    }
+	
+	    var backgroundImage;
+	
+	    if (this.state.backgroundUrl === this.user.background_url) {
+	      backgroundImage = React.createElement('div', null);
+	    } else {
+	      var backgroundUrl = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_300,w_300" + this.state.backgroundUrl;
+	      backgroundImage = React.createElement(
+	        'div',
+	        { className: 'image-holder' },
+	        React.createElement('img', { src: backgroundUrl })
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'edit-profile col-md-4' },
+	      React.createElement(
+	        'button',
+	        { id: 'image-button',
+	          onClick: this.addProfileImage,
+	          className: 'btn btn-default' },
+	        'change profile photo'
+	      ),
+	      React.createElement(
+	        'button',
+	        { id: 'background-image-button',
+	          onClick: this.addBackgroundImage,
+	          className: 'btn btn-default' },
+	        'change cover photo'
+	      ),
+	      profileImage,
+	      backgroundImage,
+	      React.createElement(
+	        'label',
+	        { htmlFor: 'form-description' },
+	        'Description'
+	      ),
+	      React.createElement('textarea', { valueLink: this.linkState('description'),
+	        rows: '6', cols: '50',
+	        id: 'form-description',
+	        className: 'form-control' }),
+	      React.createElement(
+	        'button',
+	        { onClick: this.updateProfile,
+	          className: 'btn btn-primary form-button btn-lg btn-block' },
+	        'update profile'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'btn btn-primary form-button',
+	          onClick: this.handleCancel },
+	        'cancel'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = UserEdit;
+
+/***/ },
+/* 293 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiUtil = __webpack_require__(181);
+	
+	UserEditActions = {
+	  editProfile: function (profileData, callback) {
+	    ApiUtil.editProfile(profileData, callback);
+	  }
+	};
+	
+	module.exports = UserEditActions;
+
+/***/ },
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    LinkedStateMixin = __webpack_require__(251),
 	    ReactDOM = __webpack_require__(158),
 	    FormActions = __webpack_require__(185),
-	    Error = __webpack_require__(293),
-	    ErrorStore = __webpack_require__(294),
+	    Error = __webpack_require__(295),
+	    ErrorStore = __webpack_require__(296),
 	    EventStore = __webpack_require__(159),
 	    NavTransitions = __webpack_require__(284);
 	
@@ -38548,11 +38751,11 @@
 	module.exports = EventForm;
 
 /***/ },
-/* 293 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ErrorStore = __webpack_require__(294);
+	    ErrorStore = __webpack_require__(296);
 	
 	var Error = React.createClass({
 	  displayName: 'Error',
@@ -38589,7 +38792,7 @@
 	module.exports = Error;
 
 /***/ },
-/* 294 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(177),

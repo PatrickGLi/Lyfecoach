@@ -24,7 +24,8 @@ Entering LVL 55, guests will encounter custom-made LED lights emanating from col
 
 At #TheNewTemple Nightclub, we've created a whole new nightlife experience and we want you to be a part of it—we can’t wait to see you on the dance floor!",
              password: "password123",
-             url: "/v1450658256/16034121_zjlywr.jpg")
+             url: "/v1450658256/16034121_zjlywr.jpg",
+             background_url: "/v1450654179/photo-1445965752525-ac2d3c195ffe_p1biyr.jpg")
 
 User.create!(email: "1015folsom@gmail.com",
              first_name: "1015",
@@ -36,7 +37,8 @@ The vast 20,000 square foot space, which houses 5 separate rooms, each with full
 
 Housing the city’s most advanced and powerful lighting and sound systems, the club technological effects are legendary. Generating over 150,000 watts of premium sound, the clubs precisely engineered sound environments provide the perfect showcase for both live and DJ entertainment.",
              password: "password123",
-             url: "/v1450654179/photo-1446071103084-c257b5f70672_k3ipzm.jpg")
+             url: "/v1450654179/photo-1446071103084-c257b5f70672_k3ipzm.jpg",
+             background_url: "/v1450654179/photo-1447653880973-a426557098a9_kvowym.jpg")
 
  User.create!(email: "rubyskye@gmail.com",
               first_name: "Ruby",
@@ -50,7 +52,8 @@ This impeccably appointed space is perfect setting for launch parties, wedding a
 
 Ruby Skye is in a class all by itself, innovative menu choices and our attention to detail at every level.",
               password: "password123",
-              url: "/v1450654168/dpzDUkJrTHb71Yla1EzF_IMG_4098_qzifm7.jpg")
+              url: "/v1450654168/dpzDUkJrTHb71Yla1EzF_IMG_4098_qzifm7.jpg",
+              background_url: "/v1450654178/photo-1446057032654-9d8885db76c6_oroacc.jpg")
 
 User.create!(email: "regencyballroom@gmail.com",
              first_name: "Regency",
@@ -73,7 +76,8 @@ User.create!(email: "regencyballroom@gmail.com",
 12.19.15 - Santa Ana - California - Observatory - So Cute! Tour w/ Slow Magic & Lindsay Lowend - Tickets
 12.20.15 - San Diego - California - Observatory North Park - So Cute! Tour w/ Slow Magic, Lindsay Lowend & Gupi - Tickets",
              password: "password123",
-             url: "/v1450654174/photo-1420161900862-9a86fa1f5c79_b1hev9.jpg")
+             url: "/v1450654174/photo-1420161900862-9a86fa1f5c79_b1hev9.jpg",
+             background_url: "/upload/v1450654174/photo-1418272443502-f4af3b83661e_ajxddd.jpg")
 
 Event.create!(title: "Big Boi (DJ Set) with Special Guest Falcons",
               location: "1015 Folsom St, San Francisco, CA 94103",

@@ -51,6 +51,13 @@ ApiActions = {
       actionType: UserConstants.REMOVE_FOLLOW,
       unfollow: unfollow
     });
+  },
+
+  editProfile: function(profileData) {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.EDIT_PROFILE,
+      profile: profileData
+    });
   }
 }
 
