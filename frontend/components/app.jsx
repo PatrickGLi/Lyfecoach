@@ -8,18 +8,20 @@ var App = React.createClass({
     return (
       <div>
         <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
-          <div className="modal-dialog" role="document">
+          <div className="modal-dialog modal-sm" role="document">
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 className="modal-title" id="myModalLabel">Modal title</h4>
+                <h4 className="modal-title" id="myModalLabel">lyfecoach</h4>
               </div>
               <div className="modal-body">
-                ...
+                Lyfecoach is an event management application that lets users follow their favorite hosts and organizers, and keep updated whereever they go.
+              </div>
+              <div className="modal-body">
+                Search and explore events anywhere. Follow friends or established organizer, and establish your professional presence as an event host.
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary">Save changes</button>
+                Developed by Patrick Li on Rails and React.
               </div>
             </div>
           </div>

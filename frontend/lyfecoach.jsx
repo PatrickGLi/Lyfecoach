@@ -10,6 +10,7 @@ var React = require('react'),
     EventPage = require('./components/event/event_page'),
     UserDetail = require('./components/user/detail'),
     EventDetail = require('./components/event/detail'),
+    UserFollows = require('./components/user/follows'),
     UserEdit = require('./components/user/edit'),
     EventForm = require('./components/event/form');
 
@@ -19,6 +20,7 @@ var routes = (
     <Route path="api/events" component={EventPage}/>
     <Route path="api/events/new" component={EventForm}/>
     <Route path="api/users/:userId" component={UserDetail}>
+      <Route path="follows" component={UserFollows}/>
       <Route path="events/:eventId" component={EventDetail}/>
       <Route path="edit" component={UserEdit}/>
     </Route>

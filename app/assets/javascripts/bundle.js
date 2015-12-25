@@ -56,6 +56,7 @@
 	    EventPage = __webpack_require__(260),
 	    UserDetail = __webpack_require__(286),
 	    EventDetail = __webpack_require__(290),
+	    UserFollows = __webpack_require__(297),
 	    UserEdit = __webpack_require__(292),
 	    EventForm = __webpack_require__(294);
 	
@@ -68,6 +69,7 @@
 	  React.createElement(
 	    Route,
 	    { path: 'api/users/:userId', component: UserDetail },
+	    React.createElement(Route, { path: 'follows', component: UserFollows }),
 	    React.createElement(Route, { path: 'events/:eventId', component: EventDetail }),
 	    React.createElement(Route, { path: 'edit', component: UserEdit })
 	  )
@@ -31620,7 +31622,7 @@
 	        { className: 'modal fade', id: 'myModal', tabIndex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel' },
 	        React.createElement(
 	          'div',
-	          { className: 'modal-dialog', role: 'document' },
+	          { className: 'modal-dialog modal-sm', role: 'document' },
 	          React.createElement(
 	            'div',
 	            { className: 'modal-content' },
@@ -31639,27 +31641,23 @@
 	              React.createElement(
 	                'h4',
 	                { className: 'modal-title', id: 'myModalLabel' },
-	                'Modal title'
+	                'lyfecoach'
 	              )
 	            ),
 	            React.createElement(
 	              'div',
 	              { className: 'modal-body' },
-	              '...'
+	              'Lyfecoach is an event management application that lets users follow their favorite hosts and organizers, and keep updated whereever they go.'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'modal-body' },
+	              'Search and explore events anywhere. Follow friends or established organizer, and establish your professional presence as an event host.'
 	            ),
 	            React.createElement(
 	              'div',
 	              { className: 'modal-footer' },
-	              React.createElement(
-	                'button',
-	                { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-	                'Close'
-	              ),
-	              React.createElement(
-	                'button',
-	                { type: 'button', className: 'btn btn-primary' },
-	                'Save changes'
-	              )
+	              'Developed by Patrick Li on Rails and React.'
 	            )
 	          )
 	        )
@@ -31721,6 +31719,11 @@
 	    this.props.history.pushState(null, 'api/users/' + ReactConstants.CURRENT_USER);
 	  },
 	
+	  goToFollows: function (e) {
+	    e.preventDefault();
+	    this.props.history.pushState(null, 'api/users/' + ReactConstants.CURRENT_USER + '/follows');
+	  },
+	
 	  aboutLyfecoach: function (e) {
 	    e.preventDefault();
 	  },
@@ -31762,7 +31765,7 @@
 	          React.createElement('li', { className: 'divider' }),
 	          React.createElement(
 	            'li',
-	            null,
+	            { onClick: this.goToFollows },
 	            React.createElement(
 	              'a',
 	              { href: '#' },
@@ -38826,6 +38829,26 @@
 	};
 	
 	module.exports = ErrorStore;
+
+/***/ },
+/* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var UserFollows = React.createClass({
+	  displayName: 'UserFollows',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'Follows page'
+	    );
+	  }
+	});
+	
+	module.exports = UserFollows;
 
 /***/ }
 /******/ ]);
