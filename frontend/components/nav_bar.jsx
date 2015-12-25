@@ -41,6 +41,11 @@ var NavBar = React.createClass({
     this.props.history.pushState(null, 'api/users/' + ReactConstants.CURRENT_USER);
   },
 
+  goToFollows: function(e) {
+    e.preventDefault();
+    this.props.history.pushState(null, 'api/users/' + ReactConstants.CURRENT_USER + '/follows')
+  },
+
   aboutLyfecoach: function(e) {
     e.preventDefault();
   },
@@ -55,7 +60,7 @@ var NavBar = React.createClass({
         <ul className="dropdown-menu" role="menu">
           <li onClick={this.goToProfile}><a href="#">your profile</a></li>
           <li className="divider"></li>
-          <li><a href="#">follows</a></li>
+          <li onClick={this.goToFollows}><a href="#">follows</a></li>
           <li className="divider"></li>
           <li onClick={this.aboutLyfecoach} data-toggle="modal" data-target="#myModal"><a href="#">about lyfecoach</a></li>
           <li className="divider"></li>
