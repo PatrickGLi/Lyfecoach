@@ -22,6 +22,7 @@ var FilterForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
+
     if (this.state.title.length !== 0) {
       FilterFormActions.filterByTitle(this.state.title);
     }

@@ -30,8 +30,9 @@ var Map = React.createClass({
                         nearLng: lng,
                         address: "you" };
 
-  if (Object.keys(FilterParamsStore.params()).length === 0) {
-    MapActions.updateLocation(locationData);
+  if (Object.keys(FilterParamsStore.params()).length === 0 ||
+      Object.keys(FilterParamsStore.params()).length === 1 && FilterParamsStore.params().title !== "") {
+        MapActions.updateLocation(locationData);
   }
 
    //when the map mounts, update location parameters and fetch

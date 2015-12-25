@@ -4,7 +4,17 @@ class Api::UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    debugger
+    if fetching
+      followings = User.find(params[:id]).followings
+
+      render json: followings
+    else
+      @user = User.find(params[:id])
+
+      render :show
+
+    end
   end
 
   def update
@@ -17,5 +27,9 @@ class Api::UsersController < ApplicationController
   private
   def user_params
     params.require(:user).permit(:url, :background_url, :description)
+  end
+
+  def fetching
+    params[:fetching]
   end
 end

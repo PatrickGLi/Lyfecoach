@@ -19,8 +19,8 @@ var UserDetailActions = {
     ApiUtil.addFollow(followData);
   },
 
-  removeFollow: function(followerId) {
-    ApiUtil.removeFollow(followerId);
+  removeFollow: function(unfollowData) {
+    ApiUtil.removeFollow(unfollowData);
   }
 };
 

@@ -25,7 +25,12 @@ class User < ActiveRecord::Base
   has_many :events,
   foreign_key: :organizer_id
 
-  has_many :followers
+  has_many :follows,
+  foreign_key: :follower_id
+
+  has_many :followings,
+  through: :follows,
+  source: :organizer
 
   attr_reader :password
 

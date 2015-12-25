@@ -1,8 +1,8 @@
 class Api::FollowsController < ApplicationController
   def index
-    followers = Follow.all.where("organizer_id = ?", organizer)
+      followers = Follow.all.where("organizer_id = ?", params[:user_id])
 
-    render json: followers
+      render json: followers
   end
 
   def create
@@ -26,7 +26,7 @@ class Api::FollowsController < ApplicationController
     params.require(:unfollow).permit(:follower_id, :organizer_id)
   end
 
-  def organizer
-    params[:organizer]
+  def fetching
+    params[:fetching]
   end
 end
