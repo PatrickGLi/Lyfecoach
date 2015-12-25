@@ -52,22 +52,28 @@ var ApiUtil = {
     });
   },
 
+  fetchFollowing: function(followerId) {
+    $.get('api/users/' + followerId, { fetching: true }, function(followings) {
+      ApiActions.getFollowings(followings);
+    });
+  },
+
   fetchFollowers: function(organizerId) {
-    $.get('api/follows', { organizer: organizerId}, function (followers) {
+    $.get('api/users/' + organizerId + '/follows', {}, function (followers) {
       ApiActions.receiveFollowers(followers);
     });
   },
 
   addFollow: function(followData) {
-    $.post('api/follows', { follow: followData }, function(successData) {
+    $.post('api/users/' + followData.organizer_id + "/follows", { follow: followData }, function(successData) {
       ApiActions.addFollow(successData);
     });
   },
 
-  removeFollow: function(followerId) {
+  removeFollow: function(unfollowData) {
     $.ajax({
       method: "delete",
-      url: "api/follows/" + followerId,
+      url: "api/users/" + unfollowData.organizerId + "/follows/" + unfollowData.followerId,
       success: function(successData) {
         ApiActions.removeFollow(successData);
       }
@@ -75,7 +81,7 @@ var ApiUtil = {
   },
 
   editProfile: function(profileData, callback) {
-    adjustedProfileData = {
+    var adjustedProfileData = {
       url: profileData.url,
       background_url: profileData.backgroundUrl,
       description: profileData.description

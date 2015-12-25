@@ -10,6 +10,7 @@ var _filter_titles = {
   price: '',
   category: '',
   date: '',
+  title: ''
  };
 
 var FilterParamsStore = new Store(AppDispatcher);
@@ -28,7 +29,8 @@ FilterParamsStore.resetFilters = function() {
     location: '',
     price: '',
     category: '',
-    date: ''
+    date: '',
+    title: ''
   };
 }
 
@@ -93,6 +95,7 @@ var handleDate = function(dateData) {
 
 var handleTitle = function(titleData) {
   _filter_params.title = titleData;
+  _filter_titles.title = titleData;
   FilterParamsStore.__emitChange();
 };
 

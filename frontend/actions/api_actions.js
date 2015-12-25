@@ -58,6 +58,13 @@ ApiActions = {
       actionType: UserConstants.EDIT_PROFILE,
       profile: profileData
     });
+  },
+
+  getFollowings: function(followingData) {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.FOLLOWINGS_RECEIVED,
+      following: followingData
+    });
   }
 }
 

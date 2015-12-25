@@ -18,7 +18,7 @@ var App = React.createClass({
                 Lyfecoach is an event management application that lets users follow their favorite hosts and organizers, and keep updated whereever they go.
               </div>
               <div className="modal-body">
-                Search and explore events anywhere. Follow friends or established organizer, and establish your professional presence as an event host.
+                Search and explore events anywhere. Follow friends or established organizers, and establish your professional presence as an event host.
               </div>
               <div className="modal-footer">
                 Developed by Patrick Li on Rails and React.

@@ -20,10 +20,10 @@ var routes = (
     <Route path="api/events" component={EventPage}/>
     <Route path="api/events/new" component={EventForm}/>
     <Route path="api/users/:userId" component={UserDetail}>
-      <Route path="follows" component={UserFollows}/>
       <Route path="events/:eventId" component={EventDetail}/>
       <Route path="edit" component={UserEdit}/>
     </Route>
+    <Route path="api/users/:userId/follows" component={UserFollows}/>
   </Route>
 );
 

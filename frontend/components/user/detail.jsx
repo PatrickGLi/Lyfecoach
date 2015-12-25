@@ -58,8 +58,12 @@ var UserDetail = React.createClass({
   },
 
   unfollow: function() {
-    var followerId = FollowStore.fetchId();
-    UserDetailActions.removeFollow(followerId);
+    var unfollowData = {
+      organizerId: parseInt(this.props.params.userId),
+      followerId: FollowStore.fetchId()
+    }
+
+    UserDetailActions.removeFollow(unfollowData);
   },
 
   editProfile: function() {
