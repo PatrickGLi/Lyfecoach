@@ -95,7 +95,7 @@ var Map = React.createClass({
     var marker = new google.maps.Marker({
       position: myLatLng,
       map: this.map,
-      title: "hosted by" + event.organizer.host_name,
+      title: "hosted by " + event.organizer.host_name,
       eventId: event.id,
       icon: 'http://res.cloudinary.com/dlqjek68b/image/upload/v1450771235/marker_black_mpnvvp.png'
     });

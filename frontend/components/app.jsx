@@ -15,7 +15,7 @@ var App = React.createClass({
                 <h4 className="modal-title" id="myModalLabel">lyfecoach</h4>
               </div>
               <div className="modal-body">
-                Lyfecoach is an event management application that lets users follow their favorite hosts and organizers, and keep updated whereever they go.
+                Lyfecoach is an event management application that lets users follow their favorite hosts and organizers, and keep updated wherever they go.
               </div>
               <div className="modal-body">
                 Search and explore events anywhere. Follow friends or established organizers, and establish your professional presence as an event host.

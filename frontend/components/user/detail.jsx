@@ -89,21 +89,23 @@ var UserDetail = React.createClass({
       });
     }
 
-    var followButton, followInfo;
+    var followButton;
 
     if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
       followButton =
         <button className="btn btn-primary user-button"
                      onClick={this.editProfile}>edit profile</button>;
 
+
+
     } else if (FollowStore.find(ReactConstants.CURRENT_USER)) {
       followButton = <button className="btn btn-primary user-button"
                                   onClick={this.unfollow}>unfollow</button>;
-
     } else {
       followButton = <div><button className="btn btn-primary user-button"
                              onClick={this.follow}>follow</button>;
                           <h4>follow and stay posted on all my events.</h4></div>;
+
     }
 
     var followers;
@@ -133,7 +135,6 @@ var UserDetail = React.createClass({
               </div>
               <div className="follow">
                 {followButton}
-                {followInfo}
               </div>
             </div>
 

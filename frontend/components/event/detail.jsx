@@ -1,5 +1,6 @@
 var React = require('react'),
     EventStore = require('../../stores/event_store'),
+    ReactConstants = require('../../constants/react_constants'),
     EventDetailActions = require('../../actions/event_detail_actions');
 
 var Detail = React.createClass({
@@ -26,6 +27,13 @@ var Detail = React.createClass({
 
   showEventDetail: function() {
     this.setState({ event: this.getStateFromStore() }, function () {this.refs.detail.scrollIntoView();}.bind(this));
+  },
+
+  deleteEvent: function() {
+    var that = this;
+    EventDetailActions.deleteEvent(parseInt(this.props.params.eventId), function() {
+      that.props.history.pushState(null, "api/users/" + that.props.params.userId);
+    });
   },
 
   convertTime: function(time) {
@@ -58,6 +66,16 @@ var Detail = React.createClass({
     startTime = this.convertTime(startTime);
     endTime = this.convertTime(endTime);
 
+    var deleteEventsButton;
+
+    if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
+      deleteEventsButton = <button className="btn btn-primary delete-event-button"
+                   onClick={this.deleteEvent}>delete event</button>;
+    } else {
+      deleteEventsButton = <button className="btn btn-primary buy-ticket-button"
+                   onClick={this.buyTickets}>buy tickets</button>;
+    }
+
     return (
       <div className="event-detail col-md-4" ref="detail">
         <div><h3>{event.title}</h3></div>
@@ -82,7 +100,7 @@ var Detail = React.createClass({
             </div>
           </div>
         </div>
-
+        {deleteEventsButton}
       </div>
 
 

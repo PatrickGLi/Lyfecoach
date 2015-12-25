@@ -18,6 +18,13 @@ ApiActions = {
     });
   },
 
+  deleteEvent: function(deletedEvent) {
+    AppDispatcher.dispatch({
+      actionType: EventConstants.DELETE_EVENT,
+      deleted: deletedEvent
+    });
+  },
+
   getCurrentUser: function(currentUser) {
     AppDispatcher.dispatch({
       actionType: NavBarConstants.GET_CURRENT_USER,
@@ -64,6 +71,13 @@ ApiActions = {
     AppDispatcher.dispatch({
       actionType: UserConstants.FOLLOWINGS_RECEIVED,
       following: followingData
+    });
+  },
+
+  getFollowingEvents: function(followingEventsData) {
+    AppDispatcher.dispatch({
+      actionType: EventConstants.FOLLOWING_EVENTS_RECEIVED,
+      followingEvents: followingEventsData
     });
   }
 }

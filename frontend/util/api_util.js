@@ -25,6 +25,18 @@ var ApiUtil = {
     });
   },
 
+  deleteSingleEvent: function(eventId, callback) {
+    $.ajax({
+      method: "delete",
+      url: "api/events/" + eventId,
+      success: function(successData) {
+        ApiActions.deleteEvent(successData);
+
+        callback();
+      }
+    });
+  },
+
   createEvent: function(eventData, callback) {
     $.ajax({
       method: "post",
@@ -53,8 +65,11 @@ var ApiUtil = {
   },
 
   fetchFollowing: function(followerId) {
-    $.get('api/users/' + followerId, { fetching: true }, function(followings) {
+    $.get('api/users/' + followerId, { fetchingUser: true }, function(followings) {
       ApiActions.getFollowings(followings);
+      $.get('api/users/' + followerId, { fetchingEvents: true }, function (followingEvents) {
+        ApiActions.getFollowingEvents(followingEvents);
+      });
     });
   },
 

@@ -4,6 +4,7 @@ var Store = require('flux/utils').Store,
     EventStore = new Store(AppDispatcher);
 
 var _events = [];
+var _followingEvents = {};
 
 EventStore.all = function() {
   return _events.slice(0);
@@ -11,6 +12,10 @@ EventStore.all = function() {
 
 EventStore.fetch = function() {
   return _events[0];
+};
+
+EventStore.fetchFollowingEvents = function() {
+  return Object.assign({}, _followingEvents);
 };
 
 var resetEvents = function(events){
@@ -25,6 +30,24 @@ var resetSingleEvent = function(event) {
   EventStore.__emitChange();
 };
 
+
+var deleteSingleEvent = function(deletedEvent) {
+  var index = -1;
+  for (var i = 0; i < _events.length; i++) {
+    if (_events[i].id === deletedEvent.id) {
+      index = i;
+      break;
+    }
+  }
+
+  if (index !== -1) {
+    _events.splice(index, 1);
+  }
+
+  EventStore.__emitChange();
+};
+
+
 EventStore.clearEvents = function() {
   _events = [];
 }
@@ -37,7 +60,27 @@ EventStore.__onDispatch = function(payload) {
     case EventConstants.SINGLE_EVENT_RECEIVED:
       resetSingleEvent(payload.event);
       break;
+    case EventConstants.FOLLOWING_EVENTS_RECEIVED:
+      resetFollowingEvents(payload.followingEvents);
+      break;
+    case EventConstants.DELETE_EVENT:
+      deleteSingleEvent(payload.deleted);
+      break;
   }
+};
+
+var resetFollowingEvents = function(followingEvents) {
+  _followingEvents = {};
+
+  followingEvents.forEach(function(followingEvent) {
+    if (typeof _followingEvents[followingEvent.organizer_id] === "undefined") {
+      _followingEvents[followingEvent.organizer_id] = [followingEvent];
+    } else {
+      _followingEvents[followingEvent.organizer_id].push(followingEvent);
+    }
+  });
+
+  EventStore.__emitChange();
 };
 
 

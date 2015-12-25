@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
   through: :follows,
   source: :organizer
 
+  has_many :followed_events,
+  through: :followings,
+  source: :events
+
   attr_reader :password
 
   def password=(password)

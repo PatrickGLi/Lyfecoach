@@ -173,6 +173,7 @@ var EventForm = React.createClass({
 
                   <select className="form-control form-select"
                           valueLink={this.linkState('startTime')}>
+                          <option></option>
                           {times}
                   </select>
 
@@ -184,6 +185,7 @@ var EventForm = React.createClass({
 
                   <select className="form-control form-select"
                           valueLink={this.linkState('endTime')}>
+                          <option></option>
                           {times}
                   </select>
 

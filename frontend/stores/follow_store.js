@@ -4,16 +4,11 @@ var Store = require('flux/utils').Store,
 
 var _follows = [];
 var _followId = null;
-var _followings = [];
 
 var FollowStore = new Store(AppDispatcher);
 
 FollowStore.fetch = function() {
   return _follows.slice(0);
-};
-
-FollowStore.fetchFollowing = function() {
-  return _followings.slice(0);
 };
 
 FollowStore.fetchId = function() {
@@ -43,20 +38,11 @@ FollowStore.__onDispatch = function(payload) {
     case UserConstants.REMOVE_FOLLOW:
       removeFollow(payload.unfollow);
       break;
-    case UserConstants.FOLLOWINGS_RECEIVED:
-      resetFollowings(payload.following)
-      break;
   }
 };
 
 var resetFollowers = function(followers) {
   _follows = followers;
-
-  FollowStore.__emitChange();
-};
-
-var resetFollowings = function(followings) {
-  _followings = followings;
 
   FollowStore.__emitChange();
 };
