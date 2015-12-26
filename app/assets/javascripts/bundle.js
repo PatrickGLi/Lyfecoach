@@ -38744,14 +38744,14 @@
 	              'button',
 	              { id: 'image-button',
 	                onClick: this.addProfileImage,
-	                className: 'btn btn-default form-control' },
+	                className: 'btn btn-default form-control change-button' },
 	              'change profile photo'
 	            ),
 	            React.createElement(
 	              'button',
 	              { id: 'background-image-button',
 	                onClick: this.addBackgroundImage,
-	                className: 'btn btn-default form-control' },
+	                className: 'btn btn-default form-control change-button' },
 	              'change cover photo'
 	            ),
 	            profileImage,
