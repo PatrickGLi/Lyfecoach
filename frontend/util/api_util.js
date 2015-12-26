@@ -13,6 +13,12 @@ var ApiUtil = {
     });
   },
 
+  getCurrentTitle: function(currentTitle) {
+    $.get('api/events', { autocomplete: currentTitle }, function(eventsData) {
+      ApiActions.getCurrentTitle(eventsData);
+    });
+  },
+
   fetchPopularEvents: function() {
     $.get('api/events', { popular: 8 }, function(eventsData) {
       ApiActions.receiveAll(eventsData);
