@@ -1,15 +1,18 @@
 var React = require('react'),
     UserStore = require('../../stores/user_store'),
     FollowStore = require('../../stores/follow_store'),
+    CommentStore = require('../../stores/comment_store'),
     NavTransitions = require('../../util/nav_transitions'),
     ReactConstants = require('../../constants/react_constants'),
     UserDetailActions = require('../../actions/user_detail_actions'),
+    Comments = require('../comment/comment'),
     IndexItem = require('../event/indexItem');
 
 var UserDetail = React.createClass({
   getInitialState: function() {
     return ({ user: this.getUserFromStore(),
-              followers: this.getFollowsFromStore()
+              followers: this.getFollowsFromStore(),
+              // comments: this.getCommentsFromStore()
             });
   },
 
@@ -21,11 +24,17 @@ var UserDetail = React.createClass({
     return FollowStore.fetch();
   },
 
+  getCommentsFromStore: function() {
+    return CommentStore.fetch();
+  },
+
   componentDidMount: function() {
     this.userListener = UserStore.addListener(this.showUserDetail);
     this.followListener = FollowStore.addListener(this.resetFollowers);
+    this.commentListener = CommentStore.addListener(this.resetComments);
     UserDetailActions.fetchSingleUser(parseInt(this.props.params.userId));
     UserDetailActions.fetchFollowers(parseInt(this.props.params.userId));
+    // UserDetailActions.fetchComments(parseInt(this.props.params.userId));
     NavTransitions.addNavTransitions();
   },
 
@@ -153,6 +162,7 @@ var UserDetail = React.createClass({
 
             <h3>All Events by {host.host_name}</h3>
             <div>{events}</div>
+            <Comments userId={this.props.params.userId}/>
           </div>
 
           {this.props.children}

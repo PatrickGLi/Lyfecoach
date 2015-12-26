@@ -1,4 +1,4 @@
-var Store = require('flux/utils').Store;
+var Store = require('flux/utils').Store,
     AppDispatcher = require('../dispatcher/dispatcher'),
     NavBarActions = require('../constants/nav_bar_constants');
 

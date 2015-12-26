@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :events, only: [:index, :create, :show, :destroy]
     resources :users, only:[:index, :show, :edit, :update] do
       resources :follows, only:[:index, :create, :destroy]
+      resources :comments, only:[:index, :create]
     end
   end
 end

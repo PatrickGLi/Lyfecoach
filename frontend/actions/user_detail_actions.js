@@ -10,6 +10,10 @@ var UserDetailActions = {
     ApiUtil.fetchFollowers(organizerId);
   },
 
+  fetchComments: function(userId) {
+    ApiUtil.fetchComments(userId);
+  },
+
   addFollow: function(organizerId) {
     var followData = {
       follower_id: ReactConstants.CURRENT_USER,

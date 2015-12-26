@@ -88,6 +88,8 @@ var Detail = React.createClass({
           <div>${event.price}</div>
         </div>
 
+        {deleteEventsButton}
+
         <div id="accordion2" role="tablist" aria-multiselectable="true">
           <div className="panel panel-default">
             <div className="panel-heading" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -100,7 +102,6 @@ var Detail = React.createClass({
             </div>
           </div>
         </div>
-        {deleteEventsButton}
       </div>
 
 

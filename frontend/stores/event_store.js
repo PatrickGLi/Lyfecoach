@@ -16,7 +16,7 @@ EventStore.fetch = function() {
 };
 
 EventStore.topTitleEvents = function() {
-  return _title_events.slice(0);
+  return _title_events.slice(0,5);
 };
 
 EventStore.fetchFollowingEvents = function() {

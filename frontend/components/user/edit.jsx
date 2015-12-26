@@ -67,39 +67,40 @@ var UserEdit = React.createClass({
     }
 
     return(
-      <div className="edit-profile col-md-4">
-        <button id="image-button"
-                onClick={this.addProfileImage}
-                className="btn btn-default">
-                change profile photo
-        </button>
+      <div className="edit-profile">
+        <div className="row">
+          <div className="col-md-4">
+            <form onSubmit={this.updateProfile}>
+              <button id="image-button"
+                      onClick={this.addProfileImage}
+                      className="btn btn-default form-control">
+                      change profile photo
+              </button>
 
-        <button id="background-image-button"
-                onClick={this.addBackgroundImage}
-                className="btn btn-default">
-                change cover photo
-        </button>
+              <button id="background-image-button"
+                      onClick={this.addBackgroundImage}
+                      className="btn btn-default form-control">
+                      change cover photo
+              </button>
 
-        {profileImage}
-        {backgroundImage}
+              {profileImage}
+              {backgroundImage}
 
-       <label htmlFor="form-description">Description</label>
-       <textarea valueLink={this.linkState('description')}
-                 rows="6" cols="50"
-                 id="form-description"
-                 className="form-control">
-       </textarea>
+              <label htmlFor="form-description">Description</label>
+              <textarea valueLink={this.linkState('description')}
+                       rows="6" cols="50"
+                       id="form-description"
+                       className="form-control">
+              </textarea>
 
-       <button onClick={this.updateProfile}
-               className="btn btn-primary form-button btn-lg btn-block">
-               update profile
-       </button>
-
-       <button className="btn btn-primary form-button"
-               onClick={this.handleCancel}>
-               cancel
-       </button>
-
+              <button type="submit" className="btn btn-primary form-button btn-lg btn-block">update profile</button>
+            </form>
+            <button className="btn btn-primary form-button"
+                    onClick={this.handleCancel}>
+                    cancel
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
   through: :followings,
   source: :events
 
+  has_many :comments
+
   attr_reader :password
 
   def password=(password)
