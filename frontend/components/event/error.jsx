@@ -17,7 +17,7 @@ var Error = React.createClass({
 
   _onChange: function () {
     if (ErrorStore.fetch()) {
-      this.setState({ error: "oops. some of those answers won't work. let's try again"});
+      this.setState({ error: "oops. those answers won't work. make sure all entries are filled in, and location, times, and prices are valid. let's try again."});
     }
   },
 

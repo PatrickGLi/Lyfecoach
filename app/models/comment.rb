@@ -3,7 +3,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :user
 
-  belongs_to :commenter
-  foreign_key: :commenter_id
+  belongs_to :commenter,
+  foreign_key: :commenter_id,
   class_name: "User"
 end

@@ -1,4 +1,5 @@
 var React = require('react'),
+    ReactConstants = require('../../constants/react_constants'),
     History = require('react-router').History;
 
 var Jumbotron = React.createClass({
@@ -9,6 +10,18 @@ var Jumbotron = React.createClass({
   },
 
   render: function() {
+    var button;
+    if (ReactConstants.CURRENT_USER === -1) {
+      button = <button data-toggle="modal"
+                       data-target="#myModal3"
+                       className="btn btn-primary btn-md">Get Started
+               </button>;
+    } else {
+      button = <button onClick={this.goToEventForm}
+              className="btn btn-primary btn-md">Get Started
+      </button>;
+    }
+
     return(
       <div className="jumbotron">
         <div className="container jumbo-text">
@@ -17,9 +30,7 @@ var Jumbotron = React.createClass({
             <p>
               Promote, manage, and host successful events.
             </p>
-            <button onClick={this.goToEventForm}
-                    className="btn btn-primary btn-md">Get Started
-            </button>
+            {button}
           </div>
           <div className="jumbo-customer col-md-6">
             <h3>explore.</h3>
