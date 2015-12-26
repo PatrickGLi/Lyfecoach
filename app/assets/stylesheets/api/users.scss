@@ -21,8 +21,23 @@
   margin-bottom: 20px;
 }
 
+.edit-profile {
+  padding-top: 50px;
+}
+
+.form-button {
+  margin-top: 15px;
+}
+
 .add-comment {
   padding-bottom: 20px;
+}
+
+.change-button {
+  transition: background-color, 0.5s;
+  width: 50%;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .comments-list-container {

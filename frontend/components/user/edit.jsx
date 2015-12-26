@@ -73,13 +73,13 @@ var UserEdit = React.createClass({
             <form onSubmit={this.updateProfile}>
               <button id="image-button"
                       onClick={this.addProfileImage}
-                      className="btn btn-default form-control">
+                      className="btn btn-default form-control change-button">
                       change profile photo
               </button>
 
               <button id="background-image-button"
                       onClick={this.addBackgroundImage}
-                      className="btn btn-default form-control">
+                      className="btn btn-default form-control change-button">
                       change cover photo
               </button>
 
