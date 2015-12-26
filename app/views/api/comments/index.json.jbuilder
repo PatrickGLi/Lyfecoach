@@ -1,5 +1,5 @@
 json.array! @comments do |comment|
   json.content comment.content
-  json.user comment.user.first_name
-  json.userId comment.user.id
+  json.commenter comment.commenter.first_name
+  json.commenterId comment.commenter.id
 end

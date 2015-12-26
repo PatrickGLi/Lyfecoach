@@ -45,13 +45,17 @@ var UserFollows = React.createClass({
 
       return(
         <div key={following.following.id}>
+
         <div>{following.following.host_name}</div>
           <ul>{followingEvents}</ul>
         </div>
       );
     });
 
-    return <div>{followings}</div>;
+    return <div>
+      <h1> Still have to finish this</h1>
+      {followings}
+    </div>;
   }
 });
 

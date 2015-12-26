@@ -15,11 +15,14 @@ var Comments = React.createClass({
     e.preventDefault();
 
     var commentData = {
-      userId: parseInt(this.props.userId),
+      user_id: parseInt(this.props.userId),
+      commenter_id: ReactConstants.CURRENT_USER,
       content: this.state.content
     };
 
     CommentActions.addComment(commentData);
+
+    this.setState({ content: ""});
   },
 
   render: function() {
@@ -28,18 +31,7 @@ var Comments = React.createClass({
       comments = <div></div>;
     } else {
       comments = this.props.comments.map(function(comment, index) {
-        if (comment.userId === ReactConstants.CURRENT_USER) {
-          return (
-            <li key={index}>
-              <b>{comment.user}:</b> {comment.content}
-              <button className="btn btn-primary user-button"
-                      onClick={this.deleteComment}>X</button>
-
-            </li>
-          );
-        } else {
-          return (<li key={index}><b>{comment.user}:</b> {comment.content}</li>);
-        }
+        return (<li key={index}><b>{comment.commenter}:</b> {comment.content}</li>);
       });
     }
 
@@ -51,12 +43,13 @@ var Comments = React.createClass({
           </ul>
         </div>
         <form onSubmit={this.handleSubmit}>
-          <div className="col-md-6">
-            <label htmlFor="form-content">add a comment</label>
+          <div className="col-md-6 add-comment">
+            <br/>
             <textarea valueLink={this.linkState('content')}
                       rows="6" cols="50"
                       id="form-content"
-                      className="form-control">
+                      className="form-control"
+                      placeholder="say something">
             </textarea>
             <button type="submit" className="btn btn-primary form-button btn-lg btn-block">submit</button>
           </div>

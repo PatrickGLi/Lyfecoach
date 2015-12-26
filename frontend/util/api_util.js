@@ -22,7 +22,7 @@ var ApiUtil = {
   addComment: function(commentData) {
     $.ajax({
       method: "post",
-      url: 'api/users/' + commentData.userId + "/comments",
+      url: 'api/users/' + commentData.user_id + "/comments",
       data: { comment: commentData },
       success: function(successData) {
         ApiActions.addComment(successData);

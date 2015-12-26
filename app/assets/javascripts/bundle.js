@@ -26500,7 +26500,7 @@
 	  addComment: function (commentData) {
 	    $.ajax({
 	      method: "post",
-	      url: 'api/users/' + commentData.userId + "/comments",
+	      url: 'api/users/' + commentData.user_id + "/comments",
 	      data: { comment: commentData },
 	      success: function (successData) {
 	        ApiActions.addComment(successData);
@@ -31443,6 +31443,58 @@
 	          )
 	        )
 	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'modal fade', id: 'myModal2', tabIndex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel' },
+	        React.createElement(
+	          'div',
+	          { className: 'modal-dialog modal-sm', role: 'document' },
+	          React.createElement(
+	            'div',
+	            { className: 'modal-content' },
+	            React.createElement(
+	              'div',
+	              { className: 'modal-header' },
+	              React.createElement(
+	                'button',
+	                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+	                React.createElement(
+	                  'span',
+	                  { 'aria-hidden': 'true' },
+	                  '×'
+	                )
+	              ),
+	              React.createElement(
+	                'h4',
+	                { className: 'modal-title', id: 'myModalLabel' },
+	                'sorry'
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'modal-body' },
+	              'Unfortunately, you can\'t actually buy tickets here. That would be cool. But you can leave your card information in a comment below and we\'ll get them for you.'
+	            )
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'modal fade', id: 'myModal3', tabIndex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel' },
+	        React.createElement(
+	          'div',
+	          { className: 'modal-dialog modal-sm', role: 'document' },
+	          React.createElement(
+	            'div',
+	            { className: 'modal-content' },
+	            React.createElement(
+	              'div',
+	              { className: 'modal-body' },
+	              'You have to sign in first to host events.'
+	            )
+	          )
+	        )
+	      ),
 	      React.createElement(NavBar, { history: this.props.history }),
 	      this.props.children,
 	      React.createElement(Footer, null)
@@ -32280,6 +32332,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
+	    ReactConstants = __webpack_require__(238),
 	    History = __webpack_require__(182).History;
 	
 	var Jumbotron = React.createClass({
@@ -32292,6 +32345,24 @@
 	  },
 	
 	  render: function () {
+	    var button;
+	    if (ReactConstants.CURRENT_USER === -1) {
+	      button = React.createElement(
+	        'button',
+	        { 'data-toggle': 'modal',
+	          'data-target': '#myModal3',
+	          className: 'btn btn-primary btn-md' },
+	        'Get Started'
+	      );
+	    } else {
+	      button = React.createElement(
+	        'button',
+	        { onClick: this.goToEventForm,
+	          className: 'btn btn-primary btn-md' },
+	        'Get Started'
+	      );
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'jumbotron' },
@@ -32311,12 +32382,7 @@
 	            null,
 	            'Promote, manage, and host successful events.'
 	          ),
-	          React.createElement(
-	            'button',
-	            { onClick: this.goToEventForm,
-	              className: 'btn btn-primary btn-md' },
-	            'Get Started'
-	          )
+	          button
 	        ),
 	        React.createElement(
 	          'div',
@@ -37687,7 +37753,7 @@
 	          ),
 	          React.createElement(
 	            'div',
-	            null,
+	            { className: 'col-md-12 user-event-index' },
 	            events
 	          ),
 	          React.createElement(Comments, { userId: this.props.params.userId, comments: this.state.comments })
@@ -37972,11 +38038,14 @@
 	    e.preventDefault();
 	
 	    var commentData = {
-	      userId: parseInt(this.props.userId),
+	      user_id: parseInt(this.props.userId),
+	      commenter_id: ReactConstants.CURRENT_USER,
 	      content: this.state.content
 	    };
 	
 	    CommentActions.addComment(commentData);
+	
+	    this.setState({ content: "" });
 	  },
 	
 	  render: function () {
@@ -37985,39 +38054,18 @@
 	      comments = React.createElement('div', null);
 	    } else {
 	      comments = this.props.comments.map(function (comment, index) {
-	        if (comment.userId === ReactConstants.CURRENT_USER) {
-	          return React.createElement(
-	            'li',
-	            { key: index },
-	            React.createElement(
-	              'b',
-	              null,
-	              comment.user,
-	              ':'
-	            ),
-	            ' ',
-	            comment.content,
-	            React.createElement(
-	              'button',
-	              { className: 'btn btn-primary user-button',
-	                onClick: this.deleteComment },
-	              'X'
-	            )
-	          );
-	        } else {
-	          return React.createElement(
-	            'li',
-	            { key: index },
-	            React.createElement(
-	              'b',
-	              null,
-	              comment.user,
-	              ':'
-	            ),
-	            ' ',
-	            comment.content
-	          );
-	        }
+	        return React.createElement(
+	          'li',
+	          { key: index },
+	          React.createElement(
+	            'b',
+	            null,
+	            comment.commenter,
+	            ':'
+	          ),
+	          ' ',
+	          comment.content
+	        );
 	      });
 	    }
 	
@@ -38038,16 +38086,13 @@
 	        { onSubmit: this.handleSubmit },
 	        React.createElement(
 	          'div',
-	          { className: 'col-md-6' },
-	          React.createElement(
-	            'label',
-	            { htmlFor: 'form-content' },
-	            'add a comment'
-	          ),
+	          { className: 'col-md-6 add-comment' },
+	          React.createElement('br', null),
 	          React.createElement('textarea', { valueLink: this.linkState('content'),
 	            rows: '6', cols: '50',
 	            id: 'form-content',
-	            className: 'form-control' }),
+	            className: 'form-control',
+	            placeholder: 'say something' }),
 	          React.createElement(
 	            'button',
 	            { type: 'submit', className: 'btn btn-primary form-button btn-lg btn-block' },
@@ -38396,7 +38441,8 @@
 	      deleteEventsButton = React.createElement(
 	        'button',
 	        { className: 'btn btn-primary buy-ticket-button',
-	          onClick: this.buyTickets },
+	          'data-toggle': 'modal',
+	          'data-target': '#myModal2' },
 	        'buy tickets'
 	      );
 	    }
@@ -38447,7 +38493,11 @@
 	          event.price
 	        )
 	      ),
-	      deleteEventsButton,
+	      React.createElement(
+	        'div',
+	        { className: 'buy-or-delete' },
+	        deleteEventsButton
+	      ),
 	      React.createElement(
 	        'div',
 	        { id: 'accordion2', role: 'tablist', 'aria-multiselectable': 'true' },
@@ -38571,6 +38621,11 @@
 	    return React.createElement(
 	      'div',
 	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        ' Still have to finish this'
+	      ),
 	      followings
 	    );
 	  }
@@ -39252,7 +39307,7 @@
 	
 	  _onChange: function () {
 	    if (ErrorStore.fetch()) {
-	      this.setState({ error: "oops. some of those answers won't work. let's try again" });
+	      this.setState({ error: "oops. those answers won't work. make sure all entries are filled in, and location, times, and prices are valid. let's try again." });
 	    }
 	  },
 	

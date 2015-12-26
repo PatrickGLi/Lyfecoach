@@ -13,6 +13,15 @@
   float: left;
 }
 
+.buy-or-delete {
+  padding-bottom: 20px;
+}
+
+.buy-or-delete button {
+  border-radius: 0;
+  transition: background-color, 0.5s;
+}
+
 .autocomplete-items {
   list-style: none;
 }
@@ -211,7 +220,7 @@
   position: relative;
   bottom: 200px;
   left: 40px;
-  font-size: 26px;
+  font-size: 20px;
 }
 
 .image-holder {

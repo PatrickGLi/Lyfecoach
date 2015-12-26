@@ -73,7 +73,8 @@ var Detail = React.createClass({
                    onClick={this.deleteEvent}>delete event</button>;
     } else {
       deleteEventsButton = <button className="btn btn-primary buy-ticket-button"
-                   onClick={this.buyTickets}>buy tickets</button>;
+                                   data-toggle="modal"
+                                   data-target="#myModal2">buy tickets</button>;
     }
 
     return (
@@ -88,7 +89,9 @@ var Detail = React.createClass({
           <div>${event.price}</div>
         </div>
 
-        {deleteEventsButton}
+        <div className="buy-or-delete">
+          {deleteEventsButton}
+        </div>
 
         <div id="accordion2" role="tablist" aria-multiselectable="true">
           <div className="panel panel-default">
