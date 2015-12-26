@@ -38,6 +38,9 @@ class User < ActiveRecord::Base
 
   has_many :comments
 
+  has_many :made_comments,
+  foreign_key: :commenter_id
+
   attr_reader :password
 
   def password=(password)
