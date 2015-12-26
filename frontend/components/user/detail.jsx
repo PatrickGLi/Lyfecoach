@@ -12,7 +12,7 @@ var UserDetail = React.createClass({
   getInitialState: function() {
     return ({ user: this.getUserFromStore(),
               followers: this.getFollowsFromStore(),
-              // comments: this.getCommentsFromStore()
+              comments: this.getCommentsFromStore()
             });
   },
 
@@ -34,7 +34,7 @@ var UserDetail = React.createClass({
     this.commentListener = CommentStore.addListener(this.resetComments);
     UserDetailActions.fetchSingleUser(parseInt(this.props.params.userId));
     UserDetailActions.fetchFollowers(parseInt(this.props.params.userId));
-    // UserDetailActions.fetchComments(parseInt(this.props.params.userId));
+    UserDetailActions.fetchComments(parseInt(this.props.params.userId));
     NavTransitions.addNavTransitions();
   },
 
@@ -45,9 +45,11 @@ var UserDetail = React.createClass({
   componentWillUnmount: function() {
     this.userListener.remove();
     this.followListener.remove();
+    this.commentListener.remove();
     NavTransitions.removeNavTransitions();
     EventStore.clearEvents();
     UserStore.clearUser();
+    CommentStore.clearComments();
   },
 
   showUserDetail: function() {
@@ -56,6 +58,10 @@ var UserDetail = React.createClass({
 
   resetFollowers: function() {
     this.setState({ followers: this.getFollowsFromStore() });
+  },
+
+  resetComments: function() {
+    this.setState({ comments: this.getCommentsFromStore() });
   },
 
   showEventDetail: function(event) {
@@ -162,7 +168,7 @@ var UserDetail = React.createClass({
 
             <h3>All Events by {host.host_name}</h3>
             <div>{events}</div>
-            <Comments userId={this.props.params.userId}/>
+            <Comments userId={this.props.params.userId} comments={this.state.comments}/>
           </div>
 
           {this.props.children}

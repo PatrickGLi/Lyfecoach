@@ -34,7 +34,7 @@ ApiActions = {
 
   removeComment: function(comment) {
     AppDispatcher.dispatch({
-      actionType: UserConstants.ADD_COMMENT,
+      actionType: UserConstants.REMOVE_COMMENT,
       comment: comment
     });
   },

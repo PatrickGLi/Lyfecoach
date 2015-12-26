@@ -26504,11 +26504,6 @@
 	      data: { comment: commentData },
 	      success: function (successData) {
 	        ApiActions.addComment(successData);
-	        // callback && callback(successData.organizer_id, successData.id);
-	      },
-	      error: function (errorData) {
-	        debugger;
-	        FormActions.formError(errorData);
 	      }
 	    });
 	  },
@@ -37465,11 +37460,11 @@
 	
 	  getInitialState: function () {
 	    return { user: this.getUserFromStore(),
-	      followers: this.getFollowsFromStore()
+	      followers: this.getFollowsFromStore(),
+	      comments: this.getCommentsFromStore()
 	    };
 	  },
 	
-	  // comments: this.getCommentsFromStore()
 	  getUserFromStore: function () {
 	    return UserStore.fetch();
 	  },
@@ -37488,7 +37483,7 @@
 	    this.commentListener = CommentStore.addListener(this.resetComments);
 	    UserDetailActions.fetchSingleUser(parseInt(this.props.params.userId));
 	    UserDetailActions.fetchFollowers(parseInt(this.props.params.userId));
-	    // UserDetailActions.fetchComments(parseInt(this.props.params.userId));
+	    UserDetailActions.fetchComments(parseInt(this.props.params.userId));
 	    NavTransitions.addNavTransitions();
 	  },
 	
@@ -37499,9 +37494,11 @@
 	  componentWillUnmount: function () {
 	    this.userListener.remove();
 	    this.followListener.remove();
+	    this.commentListener.remove();
 	    NavTransitions.removeNavTransitions();
 	    EventStore.clearEvents();
 	    UserStore.clearUser();
+	    CommentStore.clearComments();
 	  },
 	
 	  showUserDetail: function () {
@@ -37510,6 +37507,10 @@
 	
 	  resetFollowers: function () {
 	    this.setState({ followers: this.getFollowsFromStore() });
+	  },
+	
+	  resetComments: function () {
+	    this.setState({ comments: this.getCommentsFromStore() });
 	  },
 	
 	  showEventDetail: function (event) {
@@ -37689,7 +37690,7 @@
 	            null,
 	            events
 	          ),
-	          React.createElement(Comments, { userId: this.props.params.userId })
+	          React.createElement(Comments, { userId: this.props.params.userId, comments: this.state.comments })
 	        ),
 	        this.props.children
 	      )
@@ -37866,17 +37867,46 @@
 	  return _comments.slice(0);
 	};
 	
-	CommentStore.__onDispatch = function (payload) {
+	CommentStore.clearComments = function () {
+	  _comments = [];
+	}, CommentStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case UserConstants.COMMENTS_RECEIVED:
 	      resetComments(payload.comments);
+	      break;
+	    case UserConstants.ADD_COMMENT:
+	      addComment(payload.comment);
+	      break;
+	    case UserConstants.REMOVE_COMMENT:
+	      removeComment(payload.comment);
 	      break;
 	  }
 	};
 	
 	var resetComments = function (comments) {
-	  debugger;
 	  _comments = comments;
+	
+	  CommentStore.__emitChange();
+	};
+	
+	var addComment = function (comment) {
+	  _comments.push(comment);
+	
+	  CommentStore.__emitChange();
+	};
+	
+	var removeComment = function (comment) {
+	  var index = -1;
+	  for (var i = 0; i < _comments.length; i++) {
+	    if (_comments[i].id === comment.id) {
+	      index = i;
+	      break;
+	    }
+	  }
+	
+	  if (index !== -1) {
+	    _comments.splice(index, 1);
+	  }
 	
 	  CommentStore.__emitChange();
 	};
@@ -37925,6 +37955,8 @@
 
 	var React = __webpack_require__(1),
 	    CommentActions = __webpack_require__(286),
+	    CommentStore = __webpack_require__(283),
+	    ReactConstants = __webpack_require__(238),
 	    LinkedStateMixin = __webpack_require__(287);
 	
 	var Comments = React.createClass({
@@ -37948,10 +37980,59 @@
 	  },
 	
 	  render: function () {
+	    var comments;
+	    if (typeof this.props.comments === "undefined") {
+	      comments = React.createElement('div', null);
+	    } else {
+	      comments = this.props.comments.map(function (comment, index) {
+	        if (comment.userId === ReactConstants.CURRENT_USER) {
+	          return React.createElement(
+	            'li',
+	            { key: index },
+	            React.createElement(
+	              'b',
+	              null,
+	              comment.user,
+	              ':'
+	            ),
+	            ' ',
+	            comment.content,
+	            React.createElement(
+	              'button',
+	              { className: 'btn btn-primary user-button',
+	                onClick: this.deleteComment },
+	              'X'
+	            )
+	          );
+	        } else {
+	          return React.createElement(
+	            'li',
+	            { key: index },
+	            React.createElement(
+	              'b',
+	              null,
+	              comment.user,
+	              ':'
+	            ),
+	            ' ',
+	            comment.content
+	          );
+	        }
+	      });
+	    }
+	
 	    return React.createElement(
 	      'div',
-	      null,
-	      'I am the comments',
+	      { className: 'comments-container' },
+	      React.createElement(
+	        'div',
+	        { className: 'comments-list-container' },
+	        React.createElement(
+	          'ul',
+	          null,
+	          comments
+	        )
+	      ),
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },
@@ -39261,7 +39342,7 @@
 	
 	  removeComment: function (comment) {
 	    AppDispatcher.dispatch({
-	      actionType: UserConstants.ADD_COMMENT,
+	      actionType: UserConstants.REMOVE_COMMENT,
 	      comment: comment
 	    });
 	  },

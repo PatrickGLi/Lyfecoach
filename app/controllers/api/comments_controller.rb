@@ -1,10 +1,8 @@
 class Api::CommentsController < ApplicationController
   def index
+    @comments = Comment.where("user_id = ?", params[:user_id])
 
-    debugger
-    comments = Comment.find_by(user_id: params[:user_id])
-
-    render json: comments
+    render :index
   end
 
   def create

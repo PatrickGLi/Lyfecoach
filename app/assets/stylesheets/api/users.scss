@@ -12,6 +12,12 @@
   background-color: #f2f2f2;
 }
 
+.comments-list-container {
+  width: 90%;
+  max-height: 400px;
+  overflow: scroll;
+}
+
 .host-head {
   display: inline-block;
   width: 300px;
