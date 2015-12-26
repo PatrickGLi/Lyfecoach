@@ -18,6 +18,13 @@ ApiActions = {
     });
   },
 
+  getCurrentTitle: function(eventsData) {
+    AppDispatcher.dispatch({
+      actionType: EventConstants.TITLE_RECEIVED,
+      events: eventsData
+    });
+  },
+
   deleteEvent: function(deletedEvent) {
     AppDispatcher.dispatch({
       actionType: EventConstants.DELETE_EVENT,

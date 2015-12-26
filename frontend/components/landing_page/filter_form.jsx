@@ -1,14 +1,17 @@
 var React = require('react'),
-    LinkedStateMixin = require('react-addons-linked-state-mixin'),
     FilterParamsStore = require('../../stores/filter_params_store'),
+    EventStore = require('../../stores/event_store'),
     SearchFilter = require('../filter/search_filter'),
+    Autocomplete = require('./autocomplete'),
     FilterFormActions = require('../../actions/filter_form_actions');
 
 var FilterForm = React.createClass({
-  mixins: [LinkedStateMixin],
 
   getInitialState: function() {
-    return({ title: "" });
+    return({
+      title: "",
+      autocomplete: []
+    });
   },
 
   componentDidMount: function() {
@@ -18,6 +21,23 @@ var FilterForm = React.createClass({
         return false;
       }
     });
+
+    this.eventListener = EventStore.addListener(this._onChange);
+  },
+
+  componentWillUnmount: function() {
+    this.eventListener.remove();
+  },
+
+  _onChange: function() {
+    this.setState({ autocomplete: EventStore.topTitleEvents() });
+  },
+
+  handleInput: function(e) {
+    this.setState({ title: e.currentTarget.value });
+
+
+    FilterFormActions.autoComplete(e.currentTarget.value);
   },
 
   handleSubmit: function(e) {
@@ -39,10 +59,13 @@ var FilterForm = React.createClass({
             <input type="text"
                    className="form-control"
                    placeholder="Search by Event or Category"
-                   valueLink={this.linkState('title')}/>
+                   onChange={this.handleInput}
+                   value={this.state.title}/>
+
             <SearchFilter/>
           <button type="submit" className="btn btn-default">Search</button>
         </form>
+        <Autocomplete events={this.state.autocomplete}/>
       </div>
 
     );

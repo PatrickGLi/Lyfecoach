@@ -4,6 +4,7 @@ var Store = require('flux/utils').Store,
     EventStore = new Store(AppDispatcher);
 
 var _events = [];
+var _title_events = [];
 var _followingEvents = {};
 
 EventStore.all = function() {
@@ -14,12 +15,22 @@ EventStore.fetch = function() {
   return _events[0];
 };
 
+EventStore.topTitleEvents = function() {
+  return _title_events.slice(0);
+};
+
 EventStore.fetchFollowingEvents = function() {
   return Object.assign({}, _followingEvents);
 };
 
-var resetEvents = function(events){
+var resetEvents = function(events) {
   _events = events;
+
+  EventStore.__emitChange();
+};
+
+var resetTitleEvents = function(events) {
+  _title_events = events;
 
   EventStore.__emitChange();
 };
@@ -50,6 +61,7 @@ var deleteSingleEvent = function(deletedEvent) {
 
 EventStore.clearEvents = function() {
   _events = [];
+  _title_events = [];
 }
 
 EventStore.__onDispatch = function(payload) {
@@ -65,6 +77,9 @@ EventStore.__onDispatch = function(payload) {
       break;
     case EventConstants.DELETE_EVENT:
       deleteSingleEvent(payload.deleted);
+      break;
+    case EventConstants.TITLE_RECEIVED:
+      resetTitleEvents(payload.events);
       break;
   }
 };
