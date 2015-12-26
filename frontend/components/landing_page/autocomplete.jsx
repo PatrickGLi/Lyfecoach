@@ -9,7 +9,7 @@ var Autocomplete = React.createClass({
     });
 
     return (
-      <ul>{events}</ul>
+      <ul className="autocomplete-items">{events}</ul>
     );
   }
 });

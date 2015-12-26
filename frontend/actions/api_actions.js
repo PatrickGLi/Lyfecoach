@@ -18,6 +18,27 @@ ApiActions = {
     });
   },
 
+  receiveComments: function(comments) {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.COMMENTS_RECEIVED,
+      comments: comments
+    });
+  },
+
+  addComment: function(comment) {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.ADD_COMMENT,
+      comment: comment
+    });
+  },
+
+  removeComment: function(comment) {
+    AppDispatcher.dispatch({
+      actionType: UserConstants.ADD_COMMENT,
+      comment: comment
+    });
+  },
+
   getCurrentTitle: function(eventsData) {
     AppDispatcher.dispatch({
       actionType: EventConstants.TITLE_RECEIVED,

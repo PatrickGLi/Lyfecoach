@@ -13,6 +13,28 @@ var ApiUtil = {
     });
   },
 
+  fetchComments: function(userId) {
+    $.get('api/users/' + userId + "/comments", {}, function(commentsData) {
+      ApiActions.receiveComments(commentsData);
+    });
+  },
+
+  addComment: function(commentData) {
+    $.ajax({
+      method: "post",
+      url: 'api/users/' + commentData.userId + "/comments",
+      data: { comment: commentData },
+      success: function(successData) {
+        ApiActions.addComment(successData);
+        // callback && callback(successData.organizer_id, successData.id);
+      },
+      error: function(errorData) {
+        debugger
+        FormActions.formError(errorData);
+      }
+    });
+  },
+
   getCurrentTitle: function(currentTitle) {
     $.get('api/events', { autocomplete: currentTitle }, function(eventsData) {
       ApiActions.getCurrentTitle(eventsData);

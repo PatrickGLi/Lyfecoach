@@ -63,7 +63,7 @@ var FilterForm = React.createClass({
                    value={this.state.title}/>
 
             <SearchFilter/>
-          <button type="submit" className="btn btn-default">Search</button>
+          <button type="submit" className="search-button btn btn-default">Search</button>
         </form>
         <Autocomplete events={this.state.autocomplete}/>
       </div>
