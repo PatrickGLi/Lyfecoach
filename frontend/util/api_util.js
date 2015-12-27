@@ -53,9 +53,8 @@ var ApiUtil = {
       method: "delete",
       url: "api/events/" + eventId,
       success: function(successData) {
-        ApiActions.deleteEvent(successData);
-
         callback();
+        ApiActions.deleteEvent(successData);
       }
     });
   },

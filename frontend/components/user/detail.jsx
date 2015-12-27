@@ -37,10 +37,11 @@ var UserDetail = React.createClass({
     UserDetailActions.fetchComments(parseInt(this.props.params.userId));
     NavTransitions.addNavTransitions();
   },
-
-  componentWillReceiveProps: function(newProps) {
-    UserDetailActions.fetchSingleUser(parseInt(newProps.params.userId));
-  },
+  //
+  // componentWillReceiveProps: function(newProps) {
+  //   UserDetailActions.fetchSingleUser(parseInt(newProps.params.userId));
+  // },
+  //
 
   componentWillUnmount: function() {
     this.userListener.remove();

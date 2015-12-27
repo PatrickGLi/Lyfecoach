@@ -19,6 +19,7 @@ var Detail = React.createClass({
 
   componentWillUnmount: function() {
     this.token.remove();
+    EventDetailActions.fetchSingleUser(parseInt(this.props.params.userId));
   },
 
   componentWillReceiveProps: function(newProps) {
@@ -31,6 +32,7 @@ var Detail = React.createClass({
 
   deleteEvent: function() {
     var that = this;
+
     EventDetailActions.deleteEvent(parseInt(this.props.params.eventId), function() {
       that.props.history.pushState(null, "api/users/" + that.props.params.userId);
     });
