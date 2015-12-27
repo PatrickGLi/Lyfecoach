@@ -28,7 +28,7 @@ var IndexItem = React.createClass({
     startTime = this.convertTime(startTime);
     endTime = this.convertTime(endTime);
 
-
+    debugger
 
     var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_250,w_300" + this.props.event.url;
 

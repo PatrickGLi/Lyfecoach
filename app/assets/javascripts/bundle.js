@@ -32829,6 +32829,8 @@
 	    startTime = this.convertTime(startTime);
 	    endTime = this.convertTime(endTime);
 	
+	    debugger;
+	
 	    var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_250,w_300" + this.props.event.url;
 	
 	    return React.createElement(
@@ -37626,9 +37628,11 @@
 	      var showEventDetail = this.showEventDetail;
 	      events = host.events.map(function (event) {
 	        var bindedClick = showEventDetail.bind(null, event);
+	        var editedEvent = event;
+	        editedEvent.organizer = { host_name: host.host_name };
 	        return React.createElement(IndexItem, { key: event.id,
 	          onClick: bindedClick,
-	          event: event });
+	          event: editedEvent });
 	      });
 	    }
 	
@@ -39314,12 +39318,14 @@
 	        break;
 	    }
 	
+	    var newUrl = "/" + newEventData.url;
+	
 	    var convertedEventData = {
 	      category: category,
 	      description: newEventData.description,
 	      location: newEventData.location,
 	      title: newEventData.title,
-	      url: "/" + newEventData.url,
+	      url: newUrl,
 	      organizer_id: ReactConstants.CURRENT_USER,
 	      lat: parseFloat(newEventData.lat),
 	      lng: parseFloat(newEventData.lng),
