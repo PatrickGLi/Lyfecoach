@@ -32635,13 +32635,8 @@
 	    });
 	
 	    marker.addListener('click', this.goToHost.bind(this, event));
-	    marker.addListener('mouseover', this.showEventDetail.bind(this, event));
 	
 	    this.markers.push(marker);
-	  },
-	
-	  showEventDetail: function (event) {
-	    console.log(event);
 	  },
 	
 	  goToHost: function (event) {
@@ -38083,7 +38078,7 @@
 	        { className: 'comments-list-container' },
 	        React.createElement(
 	          'ul',
-	          null,
+	          { className: 'comments-list' },
 	          comments
 	        )
 	      ),
@@ -38595,42 +38590,94 @@
 	    }
 	  },
 	
-	  render: function () {
-	    var followings = this.state.followings.map(function (following) {
+	  goToUserPage: function (e) {
+	    this.props.history.pushState(null, "api/users/" + e.following.id);
+	  },
 	
+	  goToEventPage: function (e) {
+	    this.props.history.pushState(null, "api/users/" + e.organizer_id + "/events/" + e.id);
+	  },
+	
+	  render: function () {
+	    var that = this;
+	    var followings = this.state.followings.map(function (following) {
 	      var followingEvents = following.events.map(function (event) {
+	        var eventImage = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_100,w_100/" + event.url;
+	
 	        return React.createElement(
 	          'li',
-	          { key: event.id },
-	          event.title,
-	          ' ',
-	          event.location
+	          { key: event.id, className: 'event-item' },
+	          React.createElement('img', { onClick: that.goToEventPage.bind(that, event), src: eventImage }),
+	          React.createElement(
+	            'div',
+	            { className: 'event-title-price', onClick: that.goToEventPage.bind(that, event) },
+	            event.title,
+	            ', $',
+	            event.price
+	          )
 	        );
 	      });
 	
+	      var hostImage = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_200,w_200/" + following.following.url;
+	
 	      return React.createElement(
 	        'div',
-	        { key: following.following.id },
+	        { key: following.following.id, className: 'single-following' },
 	        React.createElement(
 	          'div',
-	          null,
-	          following.following.host_name
+	          { className: 'row' },
+	          React.createElement(
+	            'div',
+	            { className: 'col-md-2 col-md-offset-1' },
+	            React.createElement(
+	              'div',
+	              null,
+	              React.createElement(
+	                'h3',
+	                null,
+	                following.following.host_name
+	              )
+	            )
+	          )
 	        ),
 	        React.createElement(
-	          'ul',
-	          null,
-	          followingEvents
+	          'div',
+	          { className: 'row' },
+	          React.createElement(
+	            'div',
+	            { className: 'col-md-2 col-md-offset-1' },
+	            React.createElement('img', { onClick: that.goToUserPage.bind(that, following),
+	              src: hostImage })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'col-md-8 col-sm-offset-1' },
+	            React.createElement(
+	              'h4',
+	              null,
+	              React.createElement(
+	                'b',
+	                null,
+	                'Upcoming Events:'
+	              )
+	            ),
+	            React.createElement(
+	              'ul',
+	              { className: 'following-list' },
+	              followingEvents
+	            )
+	          )
 	        )
 	      );
 	    });
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'follows-container' },
 	      React.createElement(
-	        'h1',
-	        null,
-	        ' Still have to finish this'
+	        'h2',
+	        { className: 'follows-title' },
+	        'Your Follows'
 	      ),
 	      followings
 	    );
@@ -38768,7 +38815,7 @@
 	              'Description'
 	            ),
 	            React.createElement('textarea', { valueLink: this.linkState('description'),
-	              rows: '6', cols: '50',
+	              rows: '8', cols: '70',
 	              id: 'form-description',
 	              className: 'form-control' }),
 	            React.createElement(
