@@ -77,7 +77,49 @@ User.create!(email: "regencyballroom@gmail.com",
 12.20.15 - San Diego - California - Observatory North Park - So Cute! Tour w/ Slow Magic, Lindsay Lowend & Gupi - Tickets",
              password: "password123",
              url: "/v1450654174/photo-1420161900862-9a86fa1f5c79_b1hev9.jpg",
-             background_url: "/upload/v1450654174/photo-1418272443502-f4af3b83661e_ajxddd.jpg")
+             background_url: "/v1450654174/photo-1418272443502-f4af3b83661e_ajxddd.jpg")
+
+
+ User.create!(email: "caroljohnstone@gmail.com",
+              first_name: "Carol",
+              last_name: "Johnstone",
+              host_name: "JCCSF",
+              description: "Carol Johnstone is the Founder of PopStar Booty Camp, a pop-up dance class organization focused on re-creating popstar music videos and live performances.  Carol managed Beyoncé's featured dancers, LES TWINS (Larry & Laurent Bourgeois) from 2010-2012 and organizes private dance classes and flash mob events.",
+              password: "password123",
+              url: "/v1450654178/photo-1445258975206-cb4c5d8031d1_oegmcg.jpg",
+              background_url: "/v1450772148/photo-1448318440207-ef1893eb8ac0_vji9ei.jpg")
+
+User.create!(email: "cannonproductions@gmail.com",
+             first_name: "Cannon",
+             last_name: "Productions",
+             host_name: "Cannon Productions",
+             description: "  Cannonball Productions
+
+               Cannonball Productions is an event management company dedicated to producing unforgettable experiences for its guests, host cities, clients and sponsors. As the world gets larger the demand for social living options increases, we strive to fill this void and realize that in order to have an unforgettable experience it should make a huge splash and leave a lasting impression. By bringing people together, we create events that both celebrate tradition and ignite new interests through the spirit of curiosity and exploration.
+",
+             password: "password123",
+             url: "/v1450654167/DHHQbqc0RrWVf0uDNe5E_The_Litte_Cafe_lma7do.jpg",
+             background_url: "/v1450644799/photo-1442406964439-e46ab8eff7c4_enfcny.jpg")
+
+User.create!(email: "sacramentorepublic@gmail.com",
+            first_name: "Sacramento",
+            last_name: "Republic",
+            host_name: "Sac Republic FC",
+            description: "acramento Republic FC are the 2014 USL Champions. The club host their home matches at Bonney Field located on the grounds of Cal Expo. The club’s motto is urbs indomita – Indomitable City. Indomitable Club. The club’s commitment to position Sacramento as an “indomitable city” is evident through its community investments and efforts to procure an MLS franchise and soccer-specific stadium in The Railyards.
+The club is “Built for MLS” with the highest caliber of talent, both on and off the pitch. For more information, visit www.SacRepublicFC.com.",
+            password: "password123",
+            url: "/v1450644798/photo-1431817986760-7cc7fbb937b2_sjfawl.jpg",
+            background_url: "/v1450644793/photo-1418846531910-2b7bb1043512_nheg6j.jpg")
+
+User.create!(email: "partiesthatcook@gmail.com",
+            first_name: "PartiesThatCook",
+            last_name: "Inc.",
+            host_name: "Parties That Cook",
+            description: "Parties That Cook offers a unique opportunity to engage with exceptional cooking classes in San Francisco – a city that's famous for exceptional food. Experience new ingredients. Savor a guided tour through a new cuisine. Meet new people at a singles cooking class event. New cooking classes are added all the time so bookmark this page and check back often.",
+            password: "password123",
+            url: "/v1450654175/photo-1426869884541-df7117556757_detk2b.jpg",
+            background_url: "/v1450654178/photo-1446034730750-a0b64d06ad13_lrpp9c.jpg")
+
 
 Event.create!(title: "Big Boi (DJ Set) with Special Guest Falcons",
               location: "1015 Folsom St, San Francisco, CA 94103",
@@ -290,29 +332,195 @@ Giraffage is San Francisco-based producer and beat guru, Charlie Yin. His signat
               organizer_id: 4
         )
 
+Event.create!(title: "Justin Bieber's SORRY dance class (weeknight in SF, 6 weeks, Jan. start)",
+              location: "3200 California Street San Francisco, CA 94109",
+              start_date: 1457938800000,
+              end_date: 1457938800000,
+              start_time: 19,
+              end_time: 21,
+              description: "Wow!  The Tuesday night Justin Bieber SORRY dance class sold out in 2 hours, so we're creating a wait list for those interested in adding another weeknight San Francisco class.  We'll be learning Request Dance Crew's viral video version of The Bieb's official music video in 6 weeks and we'll all get a chance to perform it at the end of February.
+
+Please add your name to this wait list so we can contact you with details on the additional class (most likely Monday night).  Should know the skinny by Dec. 5 - thanks!",
+              ticket_max: 500,
+              price: 6.00,
+              view_count: rand(3000..4000),
+              url: "/v1451184345/photo-1443745029291-d5c27bc0b562_uqfmhr.jpg",
+              category: "Art",
+              lat: 37.787374,
+              lng: -122.447355,
+              organizer_id: 5
+        )
+
+Event.create!(title: "ArtSpan Artist Reception at the Mosser Hotel Exhibition",
+              location: "54 4th Street San Francisco, CA 94103",
+              start_date: 1463727600000,
+              end_date: 1463727600000,
+              start_time: 15,
+              end_time: 21,
+              description: "*Appetizers & Beverages Catered by The Mosser Hotel*
+
+Featuring ArtSpan Artists:
+
+Michele de la Menardiere, Mel Smothers, Holly Coley, & Nobuhiro Sato
+
+Please join us to celebrate the artists and the exhibition, on display December 15th, 2015, through February 1st, 2016.
+
+About the Art-in-Neighborhoods program:
+
+The Art-In-Neighborhoods program strives to create visibility and accessibility for local arts in San Francisco by connecting communities with local artists and activating vacant spaces with vibrant, locally made artwork. We partner with local businesses and building owners to bring pop-up art exhibitions and art events to dormant storefronts, empty spaces for lease, and businesses seeking artwork for their walls. Local artists who are ArtSpan members are given the opportunity to display, promote and sell their artwork in these diverse venues. The Art-in-Neighborhoods program allow otherwise unused properties/spaces to become creative arenas for celebrating local arts",
+              ticket_max: 500,
+              price: 49.99,
+              view_count: rand(40000..70000),
+              url: "/v1450654174/photo-1420802532821-8a885e88e95c_mbcfba.jpg",
+              category: "Art",
+              lat: 37.784883,
+              lng: -122.405142,
+              organizer_id: 5
+        )
 
 
 
-# 40.times do |index|
-#   variancelat = rand(0..0.05) * 2 - 0.05
-#   variancelng = rand(0..0.05) * 2 - 0.05
-#   lat_coordinate = 37.7758 + variancelat
-#   lng_coordinate = -122.435 + variancelng
-#
-#   Event.create!(title: "#{Faker::Book.title} #{index}",
-#                location: Faker::Address.street_address,
-#                start_date: Time.now.to_i*1000 + rand(0..2.68 * 10**9),
-#                end_date: Time.now.to_i*1000 + rand(2.68 * 10**9 .. 2.68 * 10**10),
-#                start_time: rand(0..10),
-#                end_time: rand(11..23),
-#                description: Faker::Lorem.paragraph,
-#                ticket_max: rand(100..10000),
-#                price: rand(10..100),
-#                view_count: rand(1000..100000),
-#                url: Faker::Avatar.image,
-#                category: event_type[rand(0...event_type.length)],
-#                lat: lat_coordinate,
-#                lng: lng_coordinate,
-#                organizer_id: rand(1..2))
-#
-# end
+Event.create!(title: "24th Annual Winter WINEland ~ 2016",
+              location: "Wine Road, Sonoma County, California, US",
+              start_date: 1453276800000,
+              end_date: 1453276800000,
+              start_time: 15,
+              end_time: 22,
+              description: " A great opportunity to meet winemakers, taste limited production wines, new releases or library wines and save with a weekend of special offers.  All wineries will be offering savings on select wines, select food products, logo items, giftware of shipping discounts.  Some wineries will offer food pairings and others may have tours.  By mid-December 2015 you will be able to download the detailed program to see exactly what each winery will offer for the weekend.....then plan your tasting adventure.
+Ticket price will include wine tasting at all of the participating wineries for the weekend.
+Attendees will receive a tasting glass & wristband upon check-in.
+*Designated Drivers are given a different color wristband and they are not served wine
+
+This year we will also be having a Winemaker Breakfast and Q & A on Saturday January 16th from 9am - 10:30am at 2 different locations. To buy your ticket to one of our Winemaker Breakfast locations CLICK HERE
+
+This event does not take place at one location, you travel from winery to winery, visiting the ones you are interested in exploring.
+PRINT IT OR SHOW IT – Your PDF ticket when registering at your chosen starting winery
+You are required to select just your starting winery, then are welcome to visit any & all of the wineries that are participating in this year’s event throughout the weekend.
+Each participating winery is limited to 50 check-in registrations. When a winery has sold out as a check in location their name is “greyed out” on the list and will not be able to accept any more check ins
+Wineries with an * next to their name have requested no groups of 8 or more and no limos
+Event takes place Rain or Shine",
+              ticket_max: 2000,
+              price: 10.00,
+              view_count: rand(40000..70000),
+              url: "/v1450654177/photo-1444728399417-08d2aa39e6f4_j9wdgt.jpg",
+              category: "Food & Drink",
+              lat: 38.688369,
+              lng: -122.824786,
+              organizer_id: 5
+        )
+
+
+Event.create!(title: "Whiskies of the World",
+              location: "Pier 3  San Francisco, CA 94109",
+              start_date: 1453276800000,
+              end_date: 1453276800000,
+              start_time: 12,
+              end_time: 22,
+              description: "Whiskies of the World® Expo brings together distillers from around the world to share their finest spirits and knowledge with whisky enthusiasts.  Discover the Art of Whisky in the company of connoisseurs and whisky celebrities.
+•Hundreds of whiskies to sample (Scotch, Bourbon, American Craft, Malts, Grains, …)
+•Scottish, Irish, American, Canadian, Indian, Australian ...
+•Meet Distillers and Brand Ambassadors
+•Dinner buffet
+•Whisky Masterclasses: A guided tasting and educational experience.
+•Whisky mixology
+•Cigar and Whisky pairing
+Please note attendance at this event is limited to persons aged 21 or older. Photo I.D. showing age is required.",
+              ticket_max: 2400,
+              price: 58.50,
+              view_count: rand(20000..70000),
+              url: "/v1450654167/EOZpjI3oSqKPNnF2S4Tp_Untitled_tmjk3c.jpg",
+              category: "Food & Drink",
+              lat: 37.799955,
+              lng: -122.397993,
+              organizer_id: 6
+        )
+
+Event.create!(title: "Mixologi",
+              location: "555 Golden Gate Avenue, San Francisco, CA 94102",
+              start_date: 1455523200000,
+              end_date: 1455609600000,
+              start_time: 22,
+              end_time: 4,
+              description: "VERY LIMITED EARLY BIRD TICKETS AVAILABLE NOW.
+
+Mixologi is closing out the year by bringing together those special folks who have rocked with us all year.
+
+We are taking over the brand new Empire Room, San Francisco's new creative nightlife environment.
+We have a huge dance floor, a separate cocktail bar room in addition to the main bar, and some of the dopest DJs playing nothing but the best throughout the course of the night.
+
+Interested in bottle service for this event? Contact jane@mixologi.com.",
+              ticket_max: 2400,
+              price: 65.0,
+              view_count: rand(20000..70000),
+              url: "/v1450654175/photo-1428992992979-aaeb02b6960c_trmija.jpg",
+              category: "Nightlife",
+              lat: 37.780979,
+              lng: -122.419607,
+              organizer_id: 6
+        )
+
+Event.create!(title: "Run the Road to Super Bowl 50 - 10K and 5K Run",
+              location: "4900 Marie P. DeBartolo Way, Santa Clara, CA 95054",
+              start_date: 1453968000000,
+              end_date: 1453968000000,
+              start_time: 12,
+              end_time: 16,
+              description: "Be a part of history and join in the celebration of the 50th Super Bowl!
+Join the action by running a 10K, 5K or the Kids Fun Run and finish inside Levi's Stadium, the very same field that will host the Golden 50 Super Bowl. Interact with heroes of past and make memories for the future as you join in the fun running the road to Super Bowl 50. This is your chance to make your own history and be among the first to kick off the excitement in the City of Santa Clara as the Bay Area hosts Super Bowl 50. Check out the website HERE.
+
+
+
+
+Have questions about Run the Road to Super Bowl 50 - 10K and 5K Run? Contact Easy Day Sports",
+              ticket_max: 2400,
+              price: 21.00,
+              view_count: rand(20000..70000),
+              url: "/v1450644800/photo-1432753759888-b30b2bdac995_sjedwh.jpg",
+              category: "Sports & Fitness",
+              lat: 37.403154,
+              lng: -121.969836,
+              organizer_id: 7
+        )
+
+
+Event.create!(title: "Republic FC Winter Holiday Camp",
+              location: "4500 Pell Dr, Sacramento, CA 95838",
+              start_date: 1458457200000,
+              end_date: 1458716400000,
+              start_time: 12,
+              end_time: 17,
+              description: "Every camp is designed to provide athletes with an opportunity to develop skill level and acquire technical and tactical knowledge of the sport in a professional and fun environment. Athletes will be exposed to various exercises and strategies, helping to improve awareness in general skills. The camp will cover passing, dribbling, and shooting drills, to include 1v1, 2v2, and group play exercises.
+
+The three day camp is co-ed and is designed for athletes within the 6-14 year old age range, although all skill levels and positions are welcome. Every athlete will receive a t-shirt on the first day of camp. Participants are asked to arrive at least 15 minutes prior to start time for check-in the first day of camp.
+
+Equipment: Republic FC asks all registered camp participants to bring appropriate cleats and sporting
+attire, including shin guards and a soccer ball. BODYARMOR Sports Drink will be provided but please bring your own water. No Cleats: Players will be on multiple surfaces throughout the camp.  Please wear comfortable tennis shoes, athletic sneakers, or indoor soccer/turf shoes.
+
+Please bring your own water.",
+              ticket_max: 30400,
+              price: 315.00,
+              view_count: rand(20000..70000),
+              url: "/v1450644800/photo-1432753759888-b30b2bdac995_sjedwh.jpg",
+              category: "Sports & Fitness",
+              lat: 38.649099,
+              lng: -121.470393,
+              organizer_id: 7
+              )
+
+
+Event.create!(title: "Date Night: Ice Cream Social",
+              location: "271 Francisco Street, San Francisco, CA 94133",
+              start_date: 1458457200000,
+              end_date: 1458716400000,
+              start_time: 14,
+              end_time: 17,
+              description: "Ever dreamed of exploring the exotic ingredients and prepared foods of the night markets in Marrakech? The colors and aromas will draw you in and Parties That Cook will take you on a culinary tour of the “Red City” in this hands-on cooking class. You’ll learn how to preserve your own lemons (Meyers are perfect for preserving and abundant in the Bay Area), which by the way make a great gift for your foodie friends and family. We’ll prepare a few Moroccan appetizers - wonderful starters to whet your appetite for the main events - Six-Vegetable Couscous and a fork-tender Moroccan Chicken Tagine with Honeyed Prunes. After a big meal we’ll cool down with a Cardamom Orange Upside-Down Cake with Spice Ice Cream. This is a feast for all of the senses!",
+              ticket_max: 30400,
+              price: 15.00,
+              view_count: rand(20000..70000),
+              url: "/v1450654175/photo-1422246478030-ac94dfdc1dae_lfcix6.jpg",
+              category: "Food & Drink",
+              lat: 37.804996,
+              lng: -122.409662,
+              organizer_id: 8
+              )
