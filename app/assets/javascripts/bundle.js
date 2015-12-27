@@ -32027,6 +32027,7 @@
 	var handleLocation = function (locationData) {
 	  _filter_params.location = locationData;
 	  _filter_titles.location = locationData.address.split(',')[0].toLowerCase();
+	
 	  FilterParamsStore.__emitChange();
 	};
 	
@@ -32565,7 +32566,8 @@
 	      nearLng: lng,
 	      address: "you" };
 	
-	    if (Object.keys(FilterParamsStore.params()).length === 0 || Object.keys(FilterParamsStore.params()).length === 1 && FilterParamsStore.params().title !== "") {
+	    //if there are no location params, search by own location.
+	    if (typeof Object.keys(FilterParamsStore.params()).location !== "undefined") {
 	      MapActions.updateLocation(locationData);
 	    }
 	
@@ -32827,8 +32829,6 @@
 	
 	    startTime = this.convertTime(startTime);
 	    endTime = this.convertTime(endTime);
-	
-	    debugger;
 	
 	    var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_250,w_300" + this.props.event.url;
 	
