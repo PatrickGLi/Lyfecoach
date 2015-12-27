@@ -26,9 +26,9 @@ var Jumbotron = React.createClass({
       <div className="jumbotron">
         <div className="container jumbo-text">
           <div className="jumbo-host col-md-6">
-            <h3>sell tickets.</h3>
+            <h3>be a host.</h3>
             <p>
-              Promote, manage, and host successful events.
+              Sell tickets and manage successful events.
             </p>
             {button}
           </div>

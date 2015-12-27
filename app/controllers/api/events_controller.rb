@@ -37,10 +37,10 @@ class Api::EventsController < ApplicationController
       end
 
       if popular
-        events = events.order(view_count: :desc).limit(popular)
+        events = events.limit(popular)
       end
 
-      @events = events
+      @events = events.order(view_count: :desc)
       render :index
     end
   end
