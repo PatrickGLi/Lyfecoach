@@ -168,7 +168,7 @@ var UserDetail = React.createClass({
 
             <h3>All Events by {host.host_name}</h3>
             <div className="col-md-12 user-event-index">{events}</div>
-            <Comments userId={this.props.params.userId} comments={this.state.comments}/>
+            <Comments userId={this.props.params.userId} comments={this.state.comments} user={this.state.user}/>
           </div>
 
           {this.props.children}

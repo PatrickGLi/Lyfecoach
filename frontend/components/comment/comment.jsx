@@ -35,6 +35,8 @@ var Comments = React.createClass({
       });
     }
 
+    var placeholder = "say something to " + this.props.user.host_name;
+
     return(
       <div className="comments-container">
         <div className="comments-list-container">
@@ -49,7 +51,7 @@ var Comments = React.createClass({
                       rows="6" cols="50"
                       id="form-content"
                       className="form-control"
-                      placeholder="say something">
+                      placeholder={placeholder}>
             </textarea>
             <button type="submit" className="btn btn-primary form-button btn-lg btn-block">submit</button>
           </div>

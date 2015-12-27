@@ -37767,7 +37767,7 @@
 	            { className: 'col-md-12 user-event-index' },
 	            events
 	          ),
-	          React.createElement(Comments, { userId: this.props.params.userId, comments: this.state.comments })
+	          React.createElement(Comments, { userId: this.props.params.userId, comments: this.state.comments, user: this.state.user })
 	        ),
 	        this.props.children
 	      )
@@ -38080,6 +38080,8 @@
 	      });
 	    }
 	
+	    var placeholder = "say something to " + this.props.user.host_name;
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'comments-container' },
@@ -38103,7 +38105,7 @@
 	            rows: '6', cols: '50',
 	            id: 'form-content',
 	            className: 'form-control',
-	            placeholder: 'say something' }),
+	            placeholder: placeholder }),
 	          React.createElement(
 	            'button',
 	            { type: 'submit', className: 'btn btn-primary form-button btn-lg btn-block' },
