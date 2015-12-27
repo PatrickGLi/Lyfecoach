@@ -31937,6 +31937,11 @@
 	    this.props.history.pushState(null, 'api/users/' + ReactConstants.CURRENT_USER + '/follows');
 	  },
 	
+	  goToEventPage: function (e) {
+	    e.preventDefault();
+	    this.props.history.pushState(null, 'api/events/');
+	  },
+	
 	  aboutLyfecoach: function (e) {
 	    e.preventDefault();
 	  },
@@ -32035,6 +32040,15 @@
 	            'a',
 	            { id: 'logo', className: 'navbar-brand logo', href: '#' },
 	            'lyfecoach'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { onClick: this.goToEventPage },
+	          React.createElement(
+	            'a',
+	            { className: 'navbar-brand', id: 'browse-link', href: '#' },
+	            'browse'
 	          )
 	        ),
 	        React.createElement(
@@ -32177,13 +32191,16 @@
 	    var $jumbotron = $('.jumbotron');
 	    this.$navbar = $('.navbar-default .navbar-nav>li>a');
 	    this.$logo = $('#logo');
+	    this.$browseLink = $('#browse-link');
 	
 	    $jumbotron.css('background-image', backgrounds[current]);
 	    $jumbotron.css('color', text_colors[current]);
 	    this.$navbar.css('color', text_colors[current]);
 	    this.$logo.css('color', text_colors[current]);
+	    this.$browseLink.css('color', text_colors[current]);
 	    this.$navbar.css('transition', 'color, 2s');
 	    this.$logo.css('transition', 'color, 2s');
+	    this.$browseLink.css('transition', 'color, 2s');
 	
 	    var that = this;
 	    this.interval = setInterval(function () {
@@ -32192,14 +32209,17 @@
 	      $jumbotron.css('color', text_colors[current]);
 	      that.$navbar.css('color', text_colors[current]);
 	      that.$logo.css('color', text_colors[current]);
+	      that.$browseLink.css('color', text_colors[current]);
 	    }, 6000);
 	  },
 	
 	  removeNavChanges: function () {
 	    this.$navbar.css('color', 'white');
 	    this.$logo.css('color', 'white');
+	    this.$browseLink.css('color', 'white');
 	    this.$navbar.css('transition', 'color, 0s');
 	    this.$logo.css('transition', 'color, 0s');
+	    this.$browseLink.css('transition', 'color, 0s');
 	  },
 	
 	  render: function () {
@@ -32315,7 +32335,7 @@
 	          'Search'
 	        )
 	      ),
-	      React.createElement(Autocomplete, { events: this.state.autocomplete })
+	      React.createElement(Autocomplete, { events: this.state.autocomplete, history: this.props.history })
 	    );
 	  }
 	
@@ -32455,12 +32475,22 @@
 	var Autocomplete = React.createClass({
 	  displayName: "Autocomplete",
 	
+	  goToEvent: function (event) {
+	    this.props.history.pushState(null, "api/users/" + event.organizer_id + "/events/" + event.id);
+	  },
+	
 	  render: function () {
+	    var that = this;
 	    var events = this.props.events.map(function (event) {
 	      return React.createElement(
 	        "li",
-	        { key: event.id },
-	        event.title
+	        { key: event.id,
+	          className: "autocomplete-item" },
+	        React.createElement(
+	          "h5",
+	          { onClick: that.goToEvent.bind(that, event) },
+	          event.title
+	        )
 	      );
 	    });
 	
@@ -37438,6 +37468,7 @@
 	  addNavTransitions: function () {
 	    this.$navbar = $(".navbar-default .navbar-nav > li > a");
 	    this.$logo = $("#logo");
+	    this.$browseLink = $("#browse-link");
 	
 	    this.$navbar.hover(function () {
 	      $(this).css("color", "#bdbdbd");
@@ -37451,16 +37482,25 @@
 	      $(this).css("color", "white");
 	    });
 	
+	    this.$browseLink.hover(function () {
+	      $(this).css("color", "#bdbdbd");
+	    }, function () {
+	      $(this).css("color", "white");
+	    });
+	
 	    this.$navbar.css('transition', 'color, 0.7s');
 	    this.$logo.css('transition', 'color, 0.7s');
+	    this.$browseLink.css('transition', 'color, 0.7s');
 	  },
 	
 	  removeNavTransitions: function () {
 	    this.$logo.unbind('mouseenter mouseleave');
 	    this.$navbar.unbind('mouseenter mouseleave');
+	    this.$browseLink.unbind('mouseenter mouseleave');
 	
 	    this.$navbar.css('transition', 'color, 0s');
 	    this.$logo.css('transition', 'color, 0s');
+	    this.$browseLink.css('transition', 'color, 0s');
 	  }
 	
 	};

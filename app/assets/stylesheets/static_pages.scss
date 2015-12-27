@@ -18,6 +18,19 @@ img:hover {
   color: #bdbdbd;
 }
 
+#browse-link {
+  color: black;
+  font-weight: 200;
+  transition: color, 0.5s;
+  position: relative;
+  top: 6px;
+}
+
+#browse-link:hover,
+#browse-link:focus {
+  color: #bdbdbd;
+}
+
 .modal-content {
   background-color: #f2f2f2;
   border-radius: 1;

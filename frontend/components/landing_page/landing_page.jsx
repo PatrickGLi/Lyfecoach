@@ -47,13 +47,16 @@ LandingPage = React.createClass({
     var $jumbotron= $('.jumbotron');
     this.$navbar = $('.navbar-default .navbar-nav>li>a');
     this.$logo = $('#logo');
+    this.$browseLink = $('#browse-link');
 
     $jumbotron.css('background-image', backgrounds[current]);
     $jumbotron.css('color', text_colors[current]);
     this.$navbar.css('color', text_colors[current]);
     this.$logo.css('color', text_colors[current]);
+    this.$browseLink.css('color', text_colors[current]);
     this.$navbar.css('transition', 'color, 2s');
     this.$logo.css('transition', 'color, 2s');
+    this.$browseLink.css('transition', 'color, 2s');
 
     var that = this;
     this.interval = setInterval(function() {
@@ -62,14 +65,17 @@ LandingPage = React.createClass({
       $jumbotron.css('color', text_colors[current]);
       that.$navbar.css('color', text_colors[current]);
       that.$logo.css('color', text_colors[current]);
+      that.$browseLink.css('color', text_colors[current]);
     }, 6000);
   },
 
   removeNavChanges: function() {
     this.$navbar.css('color', 'white');
     this.$logo.css('color', 'white');
+    this.$browseLink.css('color', 'white');
     this.$navbar.css('transition', 'color, 0s');
     this.$logo.css('transition', 'color, 0s');
+    this.$browseLink.css('transition', 'color, 0s');
   },
 
   render: function() {
