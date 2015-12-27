@@ -32859,6 +32859,12 @@
 	        React.createElement(
 	          'div',
 	          null,
+	          'Hosted by ',
+	          this.props.event.organizer.host_name
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
 	          this.props.event.location
 	        ),
 	        React.createElement('br', null),
@@ -39313,7 +39319,7 @@
 	      description: newEventData.description,
 	      location: newEventData.location,
 	      title: newEventData.title,
-	      url: newEventData.url,
+	      url: "/" + newEventData.url,
 	      organizer_id: ReactConstants.CURRENT_USER,
 	      lat: parseFloat(newEventData.lat),
 	      lng: parseFloat(newEventData.lng),
