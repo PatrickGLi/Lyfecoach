@@ -1,3 +1,87 @@
 // Place all the styles related to the sessions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.session-page {
+  font-family: 'Raleway', sans-serif;
+  background-color: #2a2a2a;
+  color: white;
+  letter-spacing: 2px;
+  min-height: 800px;
+}
+
+.session-page h1 {
+  letter-spacing: 7px;
+  font-weight: 100;
+}
+
+.session-page h2 {
+  letter-spacing: 4px;
+  font-weight: 100;
+}
+
+.session-logo {
+  margin-top: 100px;
+}
+
+.labels {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+  margin-top: 20px;
+}
+
+.sign-in-button {
+  border-radius: 0;
+  transition: background-color, 0.5s;
+}
+
+.spinner {
+  margin: 100px auto;
+  width: 40px;
+  height: 40px;
+  position:absolute;
+  left: 250px;
+  top: 20px;
+  text-align: center;
+
+  -webkit-animation: sk-rotate 2.0s infinite linear;
+  animation: sk-rotate 2.0s infinite linear;
+}
+
+.dot1, .dot2 {
+  width: 60%;
+  height: 60%;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  background-color: white;
+  border-radius: 100%;
+
+  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+  animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.dot2 {
+  top: auto;
+  bottom: 0;
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+@-webkit-keyframes sk-rotate { 100% { -webkit-transform: rotate(360deg) }}
+@keyframes sk-rotate { 100% { transform: rotate(360deg); -webkit-transform: rotate(360deg) }}
+
+@-webkit-keyframes sk-bounce {
+  0%, 100% { -webkit-transform: scale(0.0) }
+  50% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bounce {
+  0%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}

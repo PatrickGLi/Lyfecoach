@@ -1,7 +1,7 @@
 <div class="user-container">
   <div class="row">
     <div class="col-xs-4 col-xs-offset-1">
-      <h1 class="logo">Lyfecoach</h1>
+      <h1 class="logo">lyfecoach</h1>
 
       <form action="<%=users_url%>" method="post">
         <%= auth_token %>
@@ -30,7 +30,8 @@
                  id="host_name"
                  type="text"
                  name="user[host_name]"
-                 value="<%=@user.host_name%>"/>
+                 value="<%=@user.host_name%>"
+                 placeholder="What will be your host name?"/>
         </div>
 
         <div class="form-group">
@@ -50,15 +51,16 @@
                  name="user[password]"/>
         </div>
 
-        <button class="btn btn-primary" type="submit">Sign Up</button>
+        <button class="btn btn-primary sign-up-button" type="submit">Sign Up</button>
       </form>
 
-      <button type="button" class="btn btn-default" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-original-title="" title="">Right</button>
-      <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="" data-original-title="Tooltip on right">Right</button>
+      <div class="or-sign-in">
+        <%=link_to "Or, Sign in.", new_session_url%>
+      </div>
 
-      <br/><%=link_to "Or, Sign in.", new_session_url%><br/>
-
-      <%= render "/shared/errors" %>
+      <div class="errors-container">
+        <%= render "/shared/errors" %>
+      </div>
 
 
 

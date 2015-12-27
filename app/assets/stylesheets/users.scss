@@ -3,8 +3,38 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .user-container {
-  background-image: url('http://res.cloudinary.com/dlqjek68b/image/upload/v1450772408/photo-1448318440207-ef1893eb8ac0_1_lgb6am.jpg');
+  background-image: url('http://res.cloudinary.com/dlqjek68b/image/upload/v1451174219/photo-1430651717504-ebb9e3e6795e_bjgflk.jpg');
   background-size: cover;
-  // background-position: 0% 50%;
   background-repeat: no-repeat;
+  min-height: 800px;
+  width: 100%;
+}
+
+.logo {
+  letter-spacing: 7px;
+  font-weight: 100;
+}
+
+.sign-up-button {
+  border-radius: 0;
+  transition: background-color, 0.5s;
+}
+
+.or-sign-in {
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 10px;
+  letter-spacing: 2px;
+}
+
+.errors {
+  margin-top: 15px;
+  font-size: 18px;
+  list-style: none;
+}
+
+.errors-container {
+  position: relative;
+  bottom: 400px;
+  left: 360px;
 }

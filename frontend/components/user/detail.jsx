@@ -105,14 +105,12 @@ var UserDetail = React.createClass({
     }
 
     var followButton;
-
-    if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
+    if (ReactConstants.CURRENT_USER === -1) {
+      followButton = <div></div>;
+    } else if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
       followButton =
         <button className="btn btn-primary user-button"
                      onClick={this.editProfile}>edit profile</button>;
-
-
-
     } else if (FollowStore.find(ReactConstants.CURRENT_USER)) {
       followButton = <button className="btn btn-primary user-button"
                                   onClick={this.unfollow}>unfollow</button>;

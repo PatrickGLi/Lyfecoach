@@ -32635,8 +32635,13 @@
 	    });
 	
 	    marker.addListener('click', this.goToHost.bind(this, event));
+	    marker.addListener('mouseover', this.showEventDetail.bind(this, event));
 	
 	    this.markers.push(marker);
+	  },
+	
+	  showEventDetail: function (event) {
+	    console.log(event);
 	  },
 	
 	  goToHost: function (event) {
@@ -37627,8 +37632,9 @@
 	    }
 	
 	    var followButton;
-	
-	    if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
+	    if (ReactConstants.CURRENT_USER === -1) {
+	      followButton = React.createElement('div', null);
+	    } else if (parseInt(this.props.params.userId) === ReactConstants.CURRENT_USER) {
 	      followButton = React.createElement(
 	        'button',
 	        { className: 'btn btn-primary user-button',
