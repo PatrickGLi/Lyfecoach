@@ -53,7 +53,7 @@ var Comments = React.createClass({
                       className="form-control"
                       placeholder={placeholder}>
             </textarea>
-            <button type="submit" className="btn btn-primary form-button btn-lg btn-block">submit</button>
+            <button id="submit-comment" type="submit" className="btn btn-primary form-button btn-lg btn-block">submit</button>
           </div>
         </form>
       </div>

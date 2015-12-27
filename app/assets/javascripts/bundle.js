@@ -38300,7 +38300,7 @@
 	            placeholder: placeholder }),
 	          React.createElement(
 	            'button',
-	            { type: 'submit', className: 'btn btn-primary form-button btn-lg btn-block' },
+	            { id: 'submit-comment', type: 'submit', className: 'btn btn-primary form-button btn-lg btn-block' },
 	            'submit'
 	          )
 	        )
