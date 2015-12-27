@@ -62,8 +62,6 @@ var NavBar = React.createClass({
           <li className="divider"></li>
           <li onClick={this.goToFollows}><a href="#">follows</a></li>
           <li className="divider"></li>
-          <li onClick={this.aboutLyfecoach} data-toggle="modal" data-target="#myModal"><a href="#">about lyfecoach</a></li>
-          <li className="divider"></li>
           <li className="sign-out-li">
             <form method="post" action="session">
               <input type="hidden" name="_method" value="delete"/>
@@ -90,6 +88,7 @@ var NavBar = React.createClass({
             <ul className="nav navbar-nav">
               {events}
               {user}
+              <li onClick={this.aboutLyfecoach} data-toggle="modal" data-target="#myModal"><a href="#">about lyfecoach</a></li>
             </ul>
           </div>
         </div>

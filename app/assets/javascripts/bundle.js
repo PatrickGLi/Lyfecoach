@@ -31608,16 +31608,6 @@
 	          React.createElement('li', { className: 'divider' }),
 	          React.createElement(
 	            'li',
-	            { onClick: this.aboutLyfecoach, 'data-toggle': 'modal', 'data-target': '#myModal' },
-	            React.createElement(
-	              'a',
-	              { href: '#' },
-	              'about lyfecoach'
-	            )
-	          ),
-	          React.createElement('li', { className: 'divider' }),
-	          React.createElement(
-	            'li',
 	            { className: 'sign-out-li' },
 	            React.createElement(
 	              'form',
@@ -31674,7 +31664,16 @@
 	            'ul',
 	            { className: 'nav navbar-nav' },
 	            events,
-	            user
+	            user,
+	            React.createElement(
+	              'li',
+	              { onClick: this.aboutLyfecoach, 'data-toggle': 'modal', 'data-target': '#myModal' },
+	              React.createElement(
+	                'a',
+	                { href: '#' },
+	                'about lyfecoach'
+	              )
+	            )
 	          )
 	        )
 	      )
