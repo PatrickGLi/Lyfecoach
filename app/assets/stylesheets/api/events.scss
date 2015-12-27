@@ -26,6 +26,15 @@
   list-style: none;
 }
 
+.autocomplete-item h5 {
+  width: 370px;
+  margin: 0 auto;
+}
+
+.autocomplete-item h5:hover {
+  cursor: pointer;
+}
+
 .autocomplete-items li {
   margin-top: 20px;
   font-weight: 500;

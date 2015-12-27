@@ -43,7 +43,12 @@ var NavBar = React.createClass({
 
   goToFollows: function(e) {
     e.preventDefault();
-    this.props.history.pushState(null, 'api/users/' + ReactConstants.CURRENT_USER + '/follows')
+    this.props.history.pushState(null, 'api/users/' + ReactConstants.CURRENT_USER + '/follows');
+  },
+
+  goToEventPage: function(e) {
+    e.preventDefault();
+    this.props.history.pushState(null, 'api/events/');
   },
 
   aboutLyfecoach: function(e) {
@@ -83,6 +88,9 @@ var NavBar = React.createClass({
         <div className="container-fluid">
           <div onClick={this.returnToHomepage}>
             <a id="logo" className="navbar-brand logo" href="#">lyfecoach</a>
+          </div>
+          <div onClick={this.goToEventPage}>
+            <a className="navbar-brand" id="browse-link" href="#">browse</a>
           </div>
           <div className="collapse navbar-collapse navbar-right">
             <ul className="nav navbar-nav">
