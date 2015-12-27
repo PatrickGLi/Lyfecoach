@@ -35,7 +35,7 @@ var FormActions = {
       description: newEventData.description,
       location: newEventData.location,
       title: newEventData.title,
-      url: newEventData.url,
+      url: "/" + newEventData.url,
       organizer_id: ReactConstants.CURRENT_USER,
       lat: parseFloat(newEventData.lat),
       lng: parseFloat(newEventData.lng),

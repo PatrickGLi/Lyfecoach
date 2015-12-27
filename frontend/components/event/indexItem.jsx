@@ -43,6 +43,7 @@ var IndexItem = React.createClass({
           </img>
           <div className="caption">
             <div className="event-title">{this.props.event.title}</div><br/>
+            <div>Hosted by {this.props.event.organizer.host_name}</div>
             <div>{this.props.event.location}</div>
             <br/>
             <div>{startDate} {startTime} to {endDate} {endTime}</div>
