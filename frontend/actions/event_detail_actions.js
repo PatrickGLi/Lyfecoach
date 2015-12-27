@@ -7,6 +7,10 @@ var EventDetailActions = {
 
   deleteEvent: function(eventId, callback) {
     ApiUtil.deleteSingleEvent(eventId, callback);
+  },
+
+  fetchSingleUser: function(userId) {
+    ApiUtil.fetchSingleUser(userId);
   }
 };
 
