@@ -38,7 +38,7 @@ var Comments = React.createClass({
     return(
       <div className="comments-container">
         <div className="comments-list-container">
-          <ul>
+          <ul className="comments-list">
             {comments}
           </ul>
         </div>

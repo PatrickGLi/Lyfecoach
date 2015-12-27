@@ -88,7 +88,7 @@ var UserEdit = React.createClass({
 
               <label htmlFor="form-description">Description</label>
               <textarea valueLink={this.linkState('description')}
-                       rows="6" cols="50"
+                       rows="8" cols="70"
                        id="form-description"
                        className="form-control">
               </textarea>

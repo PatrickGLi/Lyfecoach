@@ -101,13 +101,8 @@ var Map = React.createClass({
     });
 
     marker.addListener('click', this.goToHost.bind(this, event));
-    marker.addListener('mouseover', this.showEventDetail.bind(this, event));
 
     this.markers.push(marker);
-  },
-
-  showEventDetail: function(event) {
-    console.log(event);
   },
 
   goToHost: function(event) {

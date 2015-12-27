@@ -16,13 +16,21 @@
   width: 100%;
 }
 
+.comments-list {
+  list-style: none;
+}
+
+.comments-list li {
+  padding: 4px 0;
+}
+
 .user-event-index {
   height: 100%;
   margin-bottom: 20px;
 }
 
 .edit-profile {
-  padding-top: 50px;
+  margin-top: 125px;
 }
 
 .form-button {
@@ -119,4 +127,43 @@
   margin: 20px 20px;
   font-weight: 400;
   line-height: 24px;
+}
+
+.follows-container {
+  min-height: 800px;
+}
+
+.following-list {
+  list-style: none;
+}
+
+.event-title-price {
+  vertical-align: top;
+  display:inline-block;
+  height: 30px;
+  padding-left: 10px;
+  padding-bottom: 7px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color, 0.7s, transform, 0.7s;
+}
+
+.event-title-price:hover {
+  cursor: pointer;
+  transform: translateY(-4px);
+}
+
+.event-item {
+  margin-bottom: 10px;
+}
+
+.single-following {
+  padding-bottom: 20px;
+  width: 90%;
+  margin: 0 auto;
+  border-bottom: 1px solid black;
+}
+
+.follows-title {
+  margin-left: 50px;
 }
