@@ -30,12 +30,14 @@ var FormActions = {
         break;
     }
 
+    var newUrl = "/" + newEventData.url;
+
     var convertedEventData = {
       category: category,
       description: newEventData.description,
       location: newEventData.location,
       title: newEventData.title,
-      url: "/" + newEventData.url,
+      url: newUrl,
       organizer_id: ReactConstants.CURRENT_USER,
       lat: parseFloat(newEventData.lat),
       lng: parseFloat(newEventData.lng),

@@ -97,9 +97,11 @@ var UserDetail = React.createClass({
       var showEventDetail = this.showEventDetail;
       events = host.events.map(function(event) {
         var bindedClick = showEventDetail.bind(null, event);
+        var editedEvent = event;
+            editedEvent.organizer = { host_name: host.host_name };
         return (<IndexItem key={event.id}
                            onClick={bindedClick}
-                           event={event}/>
+                           event={editedEvent}/>
                );
       });
     }

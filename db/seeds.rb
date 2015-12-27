@@ -123,7 +123,7 @@ User.create!(email: "partiesthatcook@gmail.com",
 User.create!(email: "guestlogin@gmail.com",
             first_name: "Guest",
             last_name: "Login.",
-            host_name: "lyfecoach guest",
+            host_name: "Lyfecoach Guest",
             description: "Thank you for visiting lyfecoach.",
             password: "password123")
 
