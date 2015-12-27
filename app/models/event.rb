@@ -32,8 +32,8 @@ class Event < ActiveRecord::Base
   validates :lat, :lng, numericality: true
   validates :category, inclusion: { in: event_type }
   validates :title, uniqueness: true
-  validates :ticket_max, numericality: { greater_than: 100 }
-  validates :price, numericality: { greater_than: 5 }
+  validates :ticket_max, numericality: { greater_than: 50 }
+  validates :price, numericality: { greater_than: 3 }
   validates :start_date, :end_date, numericality: { greater_than: 100000000 }
   validates :start_time, :end_time,
             numericality: { greater_than_or_equal_to: 0, less_than: 24 }

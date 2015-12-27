@@ -32375,12 +32375,12 @@
 	          React.createElement(
 	            'h3',
 	            null,
-	            'sell tickets.'
+	            'be a host.'
 	          ),
 	          React.createElement(
 	            'p',
 	            null,
-	            'Promote, manage, and host successful events.'
+	            'Sell tickets and manage successful events.'
 	          ),
 	          button
 	        ),
@@ -38600,76 +38600,89 @@
 	
 	  render: function () {
 	    var that = this;
-	    var followings = this.state.followings.map(function (following) {
-	      var followingEvents = following.events.map(function (event) {
-	        var eventImage = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_100,w_100/" + event.url;
-	
-	        return React.createElement(
-	          'li',
-	          { key: event.id, className: 'event-item' },
-	          React.createElement('img', { onClick: that.goToEventPage.bind(that, event), src: eventImage }),
-	          React.createElement(
-	            'div',
-	            { className: 'event-title-price', onClick: that.goToEventPage.bind(that, event) },
-	            event.title,
-	            ', $',
-	            event.price
-	          )
-	        );
-	      });
-	
-	      var hostImage = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_200,w_200/" + following.following.url;
-	
-	      return React.createElement(
+	    var followings;
+	    if (this.state.followings.length === 0) {
+	      followings = React.createElement(
 	        'div',
-	        { key: following.following.id, className: 'single-following' },
+	        { className: 'no-follows' },
 	        React.createElement(
-	          'div',
-	          { className: 'row' },
-	          React.createElement(
-	            'div',
-	            { className: 'col-md-2 col-md-offset-1' },
+	          'h3',
+	          null,
+	          'you have not followed anyone yet.'
+	        )
+	      );
+	    } else {
+	      followings = this.state.followings.map(function (following) {
+	        var followingEvents = following.events.map(function (event) {
+	          var eventImage = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_100,w_100/" + event.url;
+	
+	          return React.createElement(
+	            'li',
+	            { key: event.id, className: 'event-item' },
+	            React.createElement('img', { onClick: that.goToEventPage.bind(that, event), src: eventImage }),
 	            React.createElement(
 	              'div',
-	              null,
-	              React.createElement(
-	                'h3',
-	                null,
-	                following.following.host_name
-	              )
+	              { className: 'event-title-price', onClick: that.goToEventPage.bind(that, event) },
+	              event.title,
+	              ', $',
+	              event.price
 	            )
-	          )
-	        ),
-	        React.createElement(
+	          );
+	        });
+	
+	        var hostImage = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_200,w_200/" + following.following.url;
+	
+	        return React.createElement(
 	          'div',
-	          { className: 'row' },
+	          { key: following.following.id, className: 'single-following' },
 	          React.createElement(
 	            'div',
-	            { className: 'col-md-2 col-md-offset-1' },
-	            React.createElement('img', { onClick: that.goToUserPage.bind(that, following),
-	              src: hostImage })
+	            { className: 'row' },
+	            React.createElement(
+	              'div',
+	              { className: 'col-md-2 col-md-offset-1' },
+	              React.createElement(
+	                'div',
+	                null,
+	                React.createElement(
+	                  'h3',
+	                  null,
+	                  following.following.host_name
+	                )
+	              )
+	            )
 	          ),
 	          React.createElement(
 	            'div',
-	            { className: 'col-md-8 col-sm-offset-1' },
+	            { className: 'row' },
 	            React.createElement(
-	              'h4',
-	              null,
-	              React.createElement(
-	                'b',
-	                null,
-	                'Upcoming Events:'
-	              )
+	              'div',
+	              { className: 'col-md-2 col-md-offset-1' },
+	              React.createElement('img', { onClick: that.goToUserPage.bind(that, following),
+	                src: hostImage })
 	            ),
 	            React.createElement(
-	              'ul',
-	              { className: 'following-list' },
-	              followingEvents
+	              'div',
+	              { className: 'col-md-8 col-sm-offset-1' },
+	              React.createElement(
+	                'h4',
+	                null,
+	                React.createElement(
+	                  'b',
+	                  null,
+	                  'Upcoming Events:'
+	                )
+	              ),
+	              React.createElement(
+	                'ul',
+	                { className: 'following-list' },
+	                followingEvents
+	              )
 	            )
 	          )
-	        )
-	      );
-	    });
+	        );
+	      });
+	    }
 	
 	    return React.createElement(
 	      'div',

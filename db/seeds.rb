@@ -95,7 +95,7 @@ User.create!(email: "cannonproductions@gmail.com",
              host_name: "Cannon Productions",
              description: "  Cannonball Productions
 
-               Cannonball Productions is an event management company dedicated to producing unforgettable experiences for its guests, host cities, clients and sponsors. As the world gets larger the demand for social living options increases, we strive to fill this void and realize that in order to have an unforgettable experience it should make a huge splash and leave a lasting impression. By bringing people together, we create events that both celebrate tradition and ignite new interests through the spirit of curiosity and exploration.
+               Cannon Productions is an event management company dedicated to producing unforgettable experiences for its guests, host cities, clients and sponsors. As the world gets larger the demand for social living options increases, we strive to fill this void and realize that in order to have an unforgettable experience it should make a huge splash and leave a lasting impression. By bringing people together, we create events that both celebrate tradition and ignite new interests through the spirit of curiosity and exploration.
 ",
              password: "password123",
              url: "/v1450654167/DHHQbqc0RrWVf0uDNe5E_The_Litte_Cafe_lma7do.jpg",
@@ -120,6 +120,12 @@ User.create!(email: "partiesthatcook@gmail.com",
             url: "/v1450654175/photo-1426869884541-df7117556757_detk2b.jpg",
             background_url: "/v1450654178/photo-1446034730750-a0b64d06ad13_lrpp9c.jpg")
 
+User.create!(email: "guestlogin@gmail.com",
+            first_name: "Guest",
+            last_name: "Login.",
+            host_name: "lyfecoach guest",
+            description: "Thank you for visiting lyfecoach.",
+            password: "password123")
 
 Event.create!(title: "Big Boi (DJ Set) with Special Guest Falcons",
               location: "1015 Folsom St, San Francisco, CA 94103",
@@ -276,7 +282,7 @@ Event.create!(title: "Ruby Skye & Control Present EPHWURD",
               description: "EPHWURD [SF DEBUT] & AUTOEROTIQUE Ruby Skye Thursday, January 14, 2016 at 9:00 PM (PST) San Francisco, CA",
               ticket_max: 1000,
               price: 14.99,
-              view_count: rand(1000..100000),
+              view_count: rand(1000..50000),
               url: "/v1450654167/01-15-16_Awakening_Ephwurd_450x8002_spesxh.jpg",
               category: "Music",
               lat: 37.787566,
@@ -297,7 +303,7 @@ BUY TICKETS NOW
 ",
               ticket_max: 1000,
               price: 19.99,
-              view_count: rand(1000..100000),
+              view_count: rand(1000..50000),
               url: "/v1450657532/03124_pj9fpe.jpg",
               category: "Music",
               lat: 37.787566,
@@ -500,7 +506,7 @@ Please bring your own water.",
               ticket_max: 30400,
               price: 315.00,
               view_count: rand(20000..70000),
-              url: "/v1450644800/photo-1432753759888-b30b2bdac995_sjedwh.jpg",
+              url: "/v1450654176/photo-1431324155629-1a6deb1dec8d_vdtuli.jpg",
               category: "Sports & Fitness",
               lat: 38.649099,
               lng: -121.470393,
@@ -522,5 +528,29 @@ Event.create!(title: "Date Night: Ice Cream Social",
               category: "Food & Drink",
               lat: 37.804996,
               lng: -122.409662,
+              organizer_id: 8
+              )
+
+
+
+Event.create!(title: "FOG Design+Art Preview Gala",
+              location: "Fort Mason Center, 2 Marina Blvd San, Francisco, CA 94123",
+              start_date: 1454918400000,
+              end_date: 1454918400000,
+              start_time: 16,
+              end_time: 23,
+              description: "Kick off the annual FOG Design+Art Fair in style at the FOG Preview Gala. Enjoy exclusive early access to the fair’s vast range of exquisite furniture, fine art, and design objects before it opens to the public. Stay for a festive evening of live entertainment, culinary creations by McCalls, and design-centric cocktails.
+
+Platinum, Gold, Silver, and Bronze Circle ticketholders receive early entry. Please refer to your ticket for more details.
+
+All proceeds from the FOG Design+Art Preview Gala will benefit the San Francisco Museum of Modern Art’s California-wide exhibitions and education programs, which serve more than 60,000 students, teachers, and families each year.",
+
+              ticket_max: 30400,
+              price: 4.99,
+              view_count: rand(20000..70000),
+              url: "/v1450654175/photo-1422246358533-95dcd3d48961_j8x6sy.jpg",
+              category: "Art",
+              lat: 37.806789,
+              lng: -122.431507,
               organizer_id: 8
               )

@@ -46,7 +46,11 @@ var UserFollows = React.createClass({
 
   render: function() {
     var that = this;
-    var followings = this.state.followings.map(function(following) {
+    var followings;
+    if (this.state.followings.length === 0) {
+      followings = <div className="no-follows"><h3>you have not followed anyone yet.</h3></div>
+    } else {
+      followings = this.state.followings.map(function(following) {
       var followingEvents = following.events.map(function(event) {
         var eventImage = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_100,w_100/" + event.url;
 
@@ -88,6 +92,9 @@ var UserFollows = React.createClass({
         </div>
       );
     });
+    }
+
+
 
     return (
       <div className="follows-container">
