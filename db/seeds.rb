@@ -93,9 +93,7 @@ User.create!(email: "cannonproductions@gmail.com",
              first_name: "Cannon",
              last_name: "Productions",
              host_name: "Cannon Productions",
-             description: "  Cannonball Productions
-
-               Cannon Productions is an event management company dedicated to producing unforgettable experiences for its guests, host cities, clients and sponsors. As the world gets larger the demand for social living options increases, we strive to fill this void and realize that in order to have an unforgettable experience it should make a huge splash and leave a lasting impression. By bringing people together, we create events that both celebrate tradition and ignite new interests through the spirit of curiosity and exploration.
+             description: "Cannon Productions is an event management company dedicated to producing unforgettable experiences for its guests, host cities, clients and sponsors. As the world gets larger the demand for social living options increases, we strive to fill this void and realize that in order to have an unforgettable experience it should make a huge splash and leave a lasting impression. By bringing people together, we create events that both celebrate tradition and ignite new interests through the spirit of curiosity and exploration.
 ",
              password: "password123",
              url: "/v1450654167/DHHQbqc0RrWVf0uDNe5E_The_Litte_Cafe_lma7do.jpg",
@@ -105,7 +103,7 @@ User.create!(email: "sacramentorepublic@gmail.com",
             first_name: "Sacramento",
             last_name: "Republic",
             host_name: "Sac Republic FC",
-            description: "acramento Republic FC are the 2014 USL Champions. The club host their home matches at Bonney Field located on the grounds of Cal Expo. The club’s motto is urbs indomita – Indomitable City. Indomitable Club. The club’s commitment to position Sacramento as an “indomitable city” is evident through its community investments and efforts to procure an MLS franchise and soccer-specific stadium in The Railyards.
+            description: "Sacramento Republic FC are the 2014 USL Champions. The club host their home matches at Bonney Field located on the grounds of Cal Expo. The club’s motto is urbs indomita – Indomitable City. Indomitable Club. The club’s commitment to position Sacramento as an “indomitable city” is evident through its community investments and efforts to procure an MLS franchise and soccer-specific stadium in The Railyards.
 The club is “Built for MLS” with the highest caliber of talent, both on and off the pitch. For more information, visit www.SacRepublicFC.com.",
             password: "password123",
             url: "/v1450644798/photo-1431817986760-7cc7fbb937b2_sjfawl.jpg",
@@ -125,6 +123,13 @@ User.create!(email: "guestlogin@gmail.com",
             last_name: "Login.",
             host_name: "Lyfecoach Guest",
             description: "Thank you for visiting lyfecoach.",
+            password: "password123")
+
+User.create!(email: "patrickli727@gmail.com",
+            first_name: "Patrick",
+            last_name: "Li",
+            host_name: "Pat Li",
+            description: "Hi. Leave a message below if you find this. Cheers :)",
             password: "password123")
 
 Event.create!(title: "Big Boi (DJ Set) with Special Guest Falcons",
@@ -553,4 +558,21 @@ All proceeds from the FOG Design+Art Preview Gala will benefit the San Francisco
               lat: 37.806789,
               lng: -122.431507,
               organizer_id: 8
+              )
+
+Event.create!(title: "Welcome to Lyfecoach",
+              location: "1400 Market Street, San Francisco, CA 94102",
+              start_date: 1451635200000,
+              end_date: 1472713200000,
+              start_time: 16,
+              end_time: 23,
+              description: "Welcome to Lyfecoach."
+              ticket_max: 30400,
+              price: 0.99,
+              view_count: 100000,
+              url: "/v1451174219/photo-1430651717504-ebb9e3e6795e_bjgflk.jpg",
+              category: "Nightlife",
+              lat: 37.776368,
+              lng: -122.418169,
+              organizer_id: 9
               )

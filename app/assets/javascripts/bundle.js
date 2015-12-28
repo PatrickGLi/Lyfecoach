@@ -31853,7 +31853,7 @@
 	            React.createElement(
 	              'div',
 	              { className: 'modal-body' },
-	              'Unfortunately, you can\'t actually buy tickets here. That would be cool. But you can leave your card information in a comment below and we\'ll get them for you.'
+	              'Unfortunately, you can\'t actually buy tickets here. That would be cool. But you can explore, follow, and find details about your favorite events and organizers, or you can leave your card information in a comment below and we\'ll get them for you.'
 	            )
 	          )
 	        )
