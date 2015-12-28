@@ -551,7 +551,7 @@ Platinum, Gold, Silver, and Bronze Circle ticketholders receive early entry. Ple
 All proceeds from the FOG Design+Art Preview Gala will benefit the San Francisco Museum of Modern Art’s California-wide exhibitions and education programs, which serve more than 60,000 students, teachers, and families each year.",
 
               ticket_max: 30400,
-              price: 4.99,
+              price: 5.99,
               view_count: rand(20000..70000),
               url: "/v1450654175/photo-1422246358533-95dcd3d48961_j8x6sy.jpg",
               category: "Art",
