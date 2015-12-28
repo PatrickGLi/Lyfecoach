@@ -574,5 +574,5 @@ Event.create!(title: "Welcome to Lyfecoach",
               category: "Nightlife",
               lat: 37.776368,
               lng: -122.418169,
-              organizer_id: 9
+              organizer_id: 10
               )
