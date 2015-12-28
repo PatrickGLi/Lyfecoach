@@ -193,7 +193,7 @@ var EventForm = React.createClass({
                   <input type="text"
                          valueLink={this.linkState('price')}
                          id="form-ticket"
-                         placeholder="number value please."
+                         placeholder="must be 5 or more."
                          className="form-control form-numbers"/>
 
 
@@ -201,7 +201,7 @@ var EventForm = React.createClass({
                   <input type="text"
                          valueLink={this.linkState('ticketMax')}
                          id="form-ticket-max"
-                         placeholder="number value please."
+                         placeholder="must be 50 or more."
                          className="form-control form-numbers"/>
 
                  <label htmlFor="form-category">Category</label>
