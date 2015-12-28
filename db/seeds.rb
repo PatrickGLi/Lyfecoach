@@ -566,7 +566,7 @@ Event.create!(title: "Welcome to Lyfecoach",
               end_date: 1472713200000,
               start_time: 16,
               end_time: 23,
-              description: "Welcome to Lyfecoach."
+              description: "Welcome to Lyfecoach.",
               ticket_max: 30400,
               price: 0.99,
               view_count: 100000,

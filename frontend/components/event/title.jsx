@@ -42,8 +42,6 @@ var Title = React.createClass({
 
     var category_title = this.state.title.category.toLowerCase() + " ";
 
-    console.log(this.state.title)
-
     return (
       <div className="event-title">
         <h3>{category_title}{title_title}events near {location_title}{price_title} {date_title}</h3>
