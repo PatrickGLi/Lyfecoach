@@ -1,6 +1,5 @@
 var React = require('react'),
-    IndexItem = require('./indexItem'),
-    Masonry = require('react-masonry-component')(React);
+    IndexItem = require('./indexItem');
 
 var EventIndex = React.createClass({
   showUserDetail: function(event) {
