@@ -20,18 +20,6 @@
   background-color: #f2f2f2;
 }
 
-.comments-container {
-  width: 100%;
-}
-
-.comments-list {
-  list-style: none;
-}
-
-.comments-list li {
-  padding: 4px 0;
-}
-
 .user-event-index {
   height: 100%;
   margin-bottom: 20px;
@@ -57,13 +45,6 @@
   margin-bottom: 10px;
 }
 
-.comments-list-container {
-  width: 90%;
-  height: 300px;
-  word-wrap: break-word;
-  overflow: scroll;
-}
-
 .host-head {
   display: inline-block;
   width: 300px;
@@ -72,6 +53,7 @@
 
 .event-detail {
   top: 20px;
+  font-family: Helvetica, sans-serif;
 }
 
 .host-background {
@@ -133,6 +115,7 @@
 
 #collapseOne,
 #collapseTwo {
+  font-family: Helvetica, sans-serif;
   margin: 20px 20px;
   font-weight: 400;
   line-height: 24px;

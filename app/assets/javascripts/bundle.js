@@ -26485,7 +26485,6 @@
 	  fetchEvents: function () {
 	    var filter = FilterParamsStore.params();
 	
-	    console.log(filter);
 	    $.get('api/events', filter, function (eventsData) {
 	      ApiActions.receiveAll(eventsData);
 	    });
@@ -31813,7 +31812,7 @@
 	            React.createElement(
 	              'div',
 	              { className: 'modal-body' },
-	              'Search and explore events anywhere. Follow friends or established organizers, and establish your professional presence as an event host.'
+	              'Search and explore events anywhere. Follow friends and established organizers, or establish your professional presence as a host.'
 	            ),
 	            React.createElement(
 	              'div',
@@ -31853,7 +31852,7 @@
 	            React.createElement(
 	              'div',
 	              { className: 'modal-body' },
-	              'Unfortunately, you can\'t actually buy tickets here. That would be cool. But you can explore, follow, and find details about your favorite events and organizers, or you can leave your card information in a comment below and we\'ll get them for you.'
+	              'Unfortunately, you can\'t actually buy tickets here. That would be cool. But you can explore, follow, and find details about your favorite events and organizers. But if you really want tickets, you can leave your card information in a comment below and we\'ll get them for you.'
 	            )
 	          )
 	        )
@@ -32972,8 +32971,6 @@
 	    }
 	
 	    var category_title = this.state.title.category.toLowerCase() + " ";
-	
-	    console.log(this.state.title);
 	
 	    return React.createElement(
 	      'div',
@@ -39357,7 +39354,7 @@
 	              React.createElement('input', { type: 'text',
 	                valueLink: this.linkState('price'),
 	                id: 'form-ticket',
-	                placeholder: 'number value please.',
+	                placeholder: 'must be 5 or more.',
 	                className: 'form-control form-numbers' }),
 	              React.createElement(
 	                'label',
@@ -39367,7 +39364,7 @@
 	              React.createElement('input', { type: 'text',
 	                valueLink: this.linkState('ticketMax'),
 	                id: 'form-ticket-max',
-	                placeholder: 'number value please.',
+	                placeholder: 'must be 50 or more.',
 	                className: 'form-control form-numbers' }),
 	              React.createElement(
 	                'label',
