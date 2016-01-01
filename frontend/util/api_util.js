@@ -1,6 +1,8 @@
 var ApiActions = require('../actions/api_actions'),
     FormActions = require('../actions/form_actions'),
+    EventStore = require('../stores/event_store'),
     FilterParamsStore = require('../stores/filter_params_store');
+
 
 
 var ApiUtil = {

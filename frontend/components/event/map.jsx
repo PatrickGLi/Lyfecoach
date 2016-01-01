@@ -31,7 +31,7 @@ var Map = React.createClass({
                         address: "you" };
 
   //if there are no location params, search by own location.
-  if (typeof Object.keys(FilterParamsStore.params()).location !== "undefined") {
+  if (typeof FilterParamsStore.params().location !== "object") {
     MapActions.updateLocation(locationData);
   }
 
@@ -48,10 +48,10 @@ var Map = React.createClass({
       return;
     } //component receives props before geolocation
 
+    this.setMapCenter(newProps.filterParams);
+
     if (this.props.events !== newProps.events) {
       this._onChange(newProps.events);
-    } else if (this.props.filterParams !== newProps.filterParams) {
-      this.setMapCenter(newProps.filterParams)
     }
   },
 
