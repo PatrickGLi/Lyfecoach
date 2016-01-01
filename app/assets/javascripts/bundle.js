@@ -26479,6 +26479,7 @@
 
 	var ApiActions = __webpack_require__(182),
 	    FormActions = __webpack_require__(185),
+	    EventStore = __webpack_require__(159),
 	    FilterParamsStore = __webpack_require__(188);
 	
 	var ApiUtil = {
@@ -32807,7 +32808,7 @@
 	      address: "you" };
 	
 	    //if there are no location params, search by own location.
-	    if (typeof Object.keys(FilterParamsStore.params()).location !== "undefined") {
+	    if (typeof FilterParamsStore.params().location !== "object") {
 	      MapActions.updateLocation(locationData);
 	    }
 	
@@ -32824,10 +32825,10 @@
 	      return;
 	    } //component receives props before geolocation
 	
+	    this.setMapCenter(newProps.filterParams);
+	
 	    if (this.props.events !== newProps.events) {
 	      this._onChange(newProps.events);
-	    } else if (this.props.filterParams !== newProps.filterParams) {
-	      this.setMapCenter(newProps.filterParams);
 	    }
 	  },
 	
