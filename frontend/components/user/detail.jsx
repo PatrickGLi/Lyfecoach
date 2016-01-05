@@ -40,6 +40,8 @@ var UserDetail = React.createClass({
 
   componentWillReceiveProps: function(newProps) {
     UserDetailActions.fetchSingleUser(parseInt(newProps.params.userId));
+    UserDetailActions.fetchComments(parseInt(this.props.params.userId));
+    UserDetailActions.fetchFollowers(parseInt(this.props.params.userId));
   },
 
   componentWillUnmount: function() {
@@ -66,6 +68,10 @@ var UserDetail = React.createClass({
 
   showEventDetail: function(event) {
     this.props.history.pushState(null, "api/users/" + event.organizer_id + "/events/" + event.id);
+  },
+
+  showFollowers: function(event) {
+    this.props.history.pushState(null, "api/users/" + this.state.user.id + "/followers");
   },
 
   follow: function() {
@@ -143,7 +149,7 @@ var UserDetail = React.createClass({
         <div className="row user-info">
           <div className="col-md-6 col-md-offset-1">
             <div className="host-head"><h2>{host.host_name}</h2></div>
-            <div><h4>{followers}</h4></div>
+            <div onClick={this.showFollowers}><h4>{followers}</h4></div>
             <div className="row">
               <div className="host-head">
                 <div><img src={hostImage}/></div>
