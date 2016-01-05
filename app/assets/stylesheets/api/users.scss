@@ -15,6 +15,15 @@
   top: 150px;
 }
 
+.follower-count {
+  width: 170px;
+}
+
+.follower-count:hover {
+  cursor: pointer;
+  color: #9999cc;
+}
+
 .user-detail-filler {
   height: 1000px;
   background-color: #f2f2f2;
