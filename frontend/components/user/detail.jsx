@@ -149,7 +149,7 @@ var UserDetail = React.createClass({
         <div className="row user-info">
           <div className="col-md-6 col-md-offset-1">
             <div className="host-head"><h2>{host.host_name}</h2></div>
-            <div onClick={this.showFollowers}><h4>{followers}</h4></div>
+            <div onClick={this.showFollowers}><h4 className="follower-count">{followers}</h4></div>
             <div className="row">
               <div className="host-head">
                 <div><img src={hostImage}/></div>

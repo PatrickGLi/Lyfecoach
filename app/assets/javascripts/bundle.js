@@ -33650,7 +33650,7 @@
 	            { onClick: this.showFollowers },
 	            React.createElement(
 	              'h4',
-	              null,
+	              { className: 'follower-count' },
 	              followers
 	            )
 	          ),
@@ -35333,8 +35333,12 @@
 	    if (followers.length === 0) {
 	      title = React.createElement(
 	        'div',
-	        null,
-	        'no followers yet.'
+	        { className: 'no-followers' },
+	        React.createElement(
+	          'h3',
+	          null,
+	          'no followers yet.'
+	        )
 	      );
 	    } else {
 	      title = React.createElement('div', null);
@@ -35342,9 +35346,9 @@
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'follower-container col-md-4' },
 	      React.createElement(
-	        'h3',
+	        'h2',
 	        null,
 	        'Followers'
 	      ),

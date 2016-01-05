@@ -34,14 +34,14 @@ var UserFollowers = React.createClass({
 
     var title;
     if (followers.length === 0){
-      title = <div>no followers yet.</div>;
+      title = <div className="no-followers"><h3>no followers yet.</h3></div>;
     } else {
       title = <div></div>;
     }
 
     return(
-      <div>
-        <h3>Followers</h3>
+      <div className="follower-container col-md-4">
+        <h2>Followers</h2>
         {title}
         <ul>
           {followers}
