@@ -1,20 +1,20 @@
 class Api::FollowsController < ApplicationController
   def index
-      followers = Follow.all.where("organizer_id = ?", params[:user_id])
+      @followers = Follow.all.where("organizer_id = ?", params[:user_id])
 
-      render json: followers
+      render :index
   end
 
   def create
-    follow = Follow.create!(follow_params)
+    @follow = Follow.create!(follow_params)
 
-    render json: follow
+    render :create
   end
 
   def destroy
-    delete = Follow.destroy(params[:id])
+    @follow = Follow.destroy(params[:id])
 
-    render json: delete
+    render :destroy
   end
 
   private

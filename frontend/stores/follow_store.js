@@ -17,7 +17,7 @@ FollowStore.fetchId = function() {
 
 FollowStore.find = function(userId) {
   for (var i = 0; i < _follows.length; i++) {
-    if (userId === _follows[i].follower_id) {
+    if (userId === _follows[i].follower.id) {
       _followId = _follows[i].id;
       return _follows[i];
       break;
@@ -56,7 +56,7 @@ var addFollow = function(followData) {
 var removeFollow = function(unfollowData) {
   var index = -1;
   for (var i = 0; i < _follows.length; i++) {
-    if (_follows[i].id === unfollowData.id) {
+    if (_follows[i].follower.id === unfollowData.follower.id) {
       index = i;
       break;
     }

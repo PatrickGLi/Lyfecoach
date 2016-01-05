@@ -3,8 +3,6 @@ var ApiActions = require('../actions/api_actions'),
     EventStore = require('../stores/event_store'),
     FilterParamsStore = require('../stores/filter_params_store');
 
-
-
 var ApiUtil = {
   fetchEvents: function(){
     var filter = FilterParamsStore.params();

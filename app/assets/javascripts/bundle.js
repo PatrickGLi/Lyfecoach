@@ -57,6 +57,7 @@
 	    UserDetail = __webpack_require__(266),
 	    EventDetail = __webpack_require__(277),
 	    UserFollows = __webpack_require__(279),
+	    UserFollowers = __webpack_require__(286),
 	    UserEdit = __webpack_require__(281),
 	    EventForm = __webpack_require__(283);
 	
@@ -70,7 +71,8 @@
 	    Route,
 	    { path: 'api/users/:userId', component: UserDetail },
 	    React.createElement(Route, { path: 'events/:eventId', component: EventDetail }),
-	    React.createElement(Route, { path: 'edit', component: UserEdit })
+	    React.createElement(Route, { path: 'edit', component: UserEdit }),
+	    React.createElement(Route, { path: 'followers', component: UserFollowers })
 	  ),
 	  React.createElement(Route, { path: 'api/users/:userId/follows', component: UserFollows })
 	);
@@ -33493,6 +33495,8 @@
 	
 	  componentWillReceiveProps: function (newProps) {
 	    UserDetailActions.fetchSingleUser(parseInt(newProps.params.userId));
+	    UserDetailActions.fetchComments(parseInt(this.props.params.userId));
+	    UserDetailActions.fetchFollowers(parseInt(this.props.params.userId));
 	  },
 	
 	  componentWillUnmount: function () {
@@ -33519,6 +33523,10 @@
 	
 	  showEventDetail: function (event) {
 	    this.props.history.pushState(null, "api/users/" + event.organizer_id + "/events/" + event.id);
+	  },
+	
+	  showFollowers: function (event) {
+	    this.props.history.pushState(null, "api/users/" + this.state.user.id + "/followers");
 	  },
 	
 	  follow: function () {
@@ -33639,7 +33647,7 @@
 	          ),
 	          React.createElement(
 	            'div',
-	            null,
+	            { onClick: this.showFollowers },
 	            React.createElement(
 	              'h4',
 	              null,
@@ -33786,7 +33794,7 @@
 	
 	FollowStore.find = function (userId) {
 	  for (var i = 0; i < _follows.length; i++) {
-	    if (userId === _follows[i].follower_id) {
+	    if (userId === _follows[i].follower.id) {
 	      _followId = _follows[i].id;
 	      return _follows[i];
 	      break;
@@ -33825,7 +33833,7 @@
 	var removeFollow = function (unfollowData) {
 	  var index = -1;
 	  for (var i = 0; i < _follows.length; i++) {
-	    if (_follows[i].id === unfollowData.id) {
+	    if (_follows[i].follower.id === unfollowData.follower.id) {
 	      index = i;
 	      break;
 	    }
@@ -35278,6 +35286,80 @@
 	};
 	
 	module.exports = ErrorStore;
+
+/***/ },
+/* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    FollowStore = __webpack_require__(268);
+	
+	var UserFollowers = React.createClass({
+	  displayName: 'UserFollowers',
+	
+	  getInitialState: function () {
+	    return { followers: FollowStore.fetch() };
+	  },
+	
+	  componentDidMount: function () {
+	    this.followListener = FollowStore.addListener(this.resetFollowers);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.followListener.remove();
+	  },
+	
+	  resetFollowers: function () {
+	    this.setState({ followers: FollowStore.fetch() });
+	  },
+	
+	  goToUser: function (follower) {
+	    this.props.history.pushState(null, "api/users/" + follower.follower.id);
+	  },
+	
+	  render: function () {
+	    var goToUser = this.goToUser;
+	    var followers = this.state.followers.map(function (follower) {
+	      var bindedClick = goToUser.bind(null, follower);
+	      return React.createElement(
+	        'li',
+	        { onClick: bindedClick,
+	          key: follower.follower.id },
+	        follower.follower.host_name
+	      );
+	    });
+	
+	    var title;
+	    if (followers.length === 0) {
+	      title = React.createElement(
+	        'div',
+	        null,
+	        'no followers yet.'
+	      );
+	    } else {
+	      title = React.createElement('div', null);
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Followers'
+	      ),
+	      title,
+	      React.createElement(
+	        'ul',
+	        null,
+	        followers
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = UserFollowers;
 
 /***/ }
 /******/ ]);

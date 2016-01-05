@@ -11,6 +11,7 @@ var React = require('react'),
     UserDetail = require('./components/user/detail'),
     EventDetail = require('./components/event/detail'),
     UserFollows = require('./components/user/follows'),
+    UserFollowers = require('./components/user/followers'),
     UserEdit = require('./components/user/edit'),
     EventForm = require('./components/event/form');
 
@@ -22,6 +23,7 @@ var routes = (
     <Route path="api/users/:userId" component={UserDetail}>
       <Route path="events/:eventId" component={EventDetail}/>
       <Route path="edit" component={UserEdit}/>
+      <Route path="followers" component={UserFollowers}/>
     </Route>
     <Route path="api/users/:userId/follows" component={UserFollows}/>
   </Route>
