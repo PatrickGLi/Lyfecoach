@@ -102,7 +102,7 @@ var Detail = React.createClass({
                   Details
               </h4>
             </div>
-            <div id="collapseTwo" className="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div id="collapseTwo" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
               {event.description}
             </div>
           </div>

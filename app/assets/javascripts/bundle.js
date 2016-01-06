@@ -33689,7 +33689,7 @@
 	              ),
 	              React.createElement(
 	                'div',
-	                { id: 'collapseOne', className: 'panel-collapse collapse', role: 'tabpanel', 'aria-labelledby': 'headingOne' },
+	                { id: 'collapseOne', className: 'panel-collapse collapse in', role: 'tabpanel', 'aria-labelledby': 'headingOne' },
 	                host.description
 	              )
 	            )
@@ -34450,7 +34450,7 @@
 	          ),
 	          React.createElement(
 	            'div',
-	            { id: 'collapseTwo', className: 'panel-collapse collapse', role: 'tabpanel', 'aria-labelledby': 'headingTwo' },
+	            { id: 'collapseTwo', className: 'panel-collapse collapse in', role: 'tabpanel', 'aria-labelledby': 'headingTwo' },
 	            event.description
 	          )
 	        )
