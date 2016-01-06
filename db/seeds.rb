@@ -265,9 +265,7 @@ He wasn't sure if he could carry on. But, he said, \"I took a holiday, took some
 
 After all, they have a library of finished tracks and ideas they worked on together that have yet to be released and Maarten can continue his and Paul's dream of making the music that they heard on the radio as kids. The scene might have gotten bigger, and the production might be made on something more sophisticated than ProTracker, but, says Maarten, \"The vibe is still the same. People want to have a good time, come together, and experience the music.\"
 
-And Bingo Players live on.
-
-Contact us at 415.312.3668 or vip@templesf.com to make a reservation",
+And Bingo Players live on.",
               ticket_max: 1000,
               price: 24.99,
               view_count: rand(30000..100000),
