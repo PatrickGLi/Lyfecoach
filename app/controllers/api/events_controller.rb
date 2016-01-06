@@ -40,7 +40,7 @@ class Api::EventsController < ApplicationController
         events = events.limit(popular)
       end
 
-      @events = events.order(start_date: :asc)
+      @events = events.order(view_count: :desc)
       render :index
     end
   end
