@@ -13,12 +13,10 @@ favorite organizers, and always know what's going on in your area. Features on
 Lyfecoach include:
 
 - [ ] Account creation and Log in
-- [ ] Event browsing and event creation
+- [ ] Event browsing and event creation using Google Autocomplete
 - [ ] Event locating using Google Map API
 - [ ] Event filtering by category, date, and price
-- [ ] Ticket records and saved events
-- [ ] Organizer ratings and reviews
-- [ ] Email notifications
+- [ ] User's followers and user's followings
 
 ## Design Docs
 * [View Wireframes][view]
@@ -54,16 +52,17 @@ with Google's Map API.
 
 An event belongs to an organizer, which has its own 'Index' view. I will create
 the JSON API for event organizers. Both the organizers and the events can be searched
-for, ordered by the popularity of the organizer and the event. Reviews can be
-read, and created. The number of followers an organizer has can be seen, and
+for, ordered by the popularity of the organizer and the event. Comments can be
+read and created. The number of followers an organizer has can be seen, and
 an organizer can be followed or unfollowed. Events can be created.
 
 [Details][phase-three]
 
 ### Phase 4: User Profile/ Saved Events/ Tickets (2.5 days)
 
-A user has a profile with name, image, and description. In the profile lists
-the users purchased tickets and saved events. Events can be removed from the
+A user has a profile with name, image, cover image, and description. In the nav
+bar, the user can view all hosts that are followed, and on the user's profile,
+the user can view all users that follow him/her. Events can be removed from the
 list here.
 
 [Details][phase-four]
