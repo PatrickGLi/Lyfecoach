@@ -1,8 +1,8 @@
 # Lyfecoach
 
-[Heroku link][heroku]
+[Live link][link]
 
-[heroku]: https://lyfecoach.herokuapp.com/
+[link]: www.lyfecoach.io
 
 ## Minimum Viable Product
 
