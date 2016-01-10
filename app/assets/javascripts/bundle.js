@@ -57,9 +57,9 @@
 	    UserDetail = __webpack_require__(266),
 	    EventDetail = __webpack_require__(277),
 	    UserFollows = __webpack_require__(279),
-	    UserFollowers = __webpack_require__(286),
-	    UserEdit = __webpack_require__(281),
-	    EventForm = __webpack_require__(283);
+	    UserFollowers = __webpack_require__(281),
+	    UserEdit = __webpack_require__(282),
+	    EventForm = __webpack_require__(284);
 	
 	var routes = React.createElement(
 	  Route,
@@ -33982,7 +33982,17 @@
 	  render: function () {
 	    var comments;
 	    if (typeof this.props.comments === "undefined") {
-	      comments = React.createElement('div', null);
+	      comments = React.createElement('li', null);
+	    } else if (this.props.comments.length === 0) {
+	      comments = React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'h4',
+	          { className: 'no-comments' },
+	          'no comments yet'
+	        )
+	      );
 	    } else {
 	      comments = this.props.comments.map(function (comment, index) {
 	        return React.createElement(
@@ -34656,9 +34666,93 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
+	    FollowStore = __webpack_require__(268);
+	
+	var UserFollowers = React.createClass({
+	  displayName: 'UserFollowers',
+	
+	  getInitialState: function () {
+	    return { followers: FollowStore.fetch() };
+	  },
+	
+	  componentDidMount: function () {
+	    this.followListener = FollowStore.addListener(this.resetFollowers);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.followListener.remove();
+	  },
+	
+	  resetFollowers: function () {
+	    this.setState({ followers: FollowStore.fetch() });
+	  },
+	
+	  goToUser: function (follower) {
+	    this.props.history.pushState(null, "api/users/" + follower.follower.id);
+	  },
+	
+	  render: function () {
+	    var goToUser = this.goToUser;
+	    var followers = this.state.followers.map(function (follower) {
+	      var bindedClick = goToUser.bind(null, follower);
+	      var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_50,w_50" + follower.follower.url;
+	      return React.createElement(
+	        'li',
+	        { onClick: bindedClick,
+	          key: follower.follower.id },
+	        React.createElement('img', { src: image }),
+	        React.createElement(
+	          'div',
+	          { className: 'follower-text' },
+	          follower.follower.host_name
+	        )
+	      );
+	    });
+	
+	    var title;
+	    if (followers.length === 0) {
+	      title = React.createElement(
+	        'div',
+	        { className: 'no-followers' },
+	        React.createElement(
+	          'h3',
+	          null,
+	          'no followers yet.'
+	        )
+	      );
+	    } else {
+	      title = React.createElement('div', null);
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'follower-container col-md-4' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Followers'
+	      ),
+	      title,
+	      React.createElement(
+	        'ul',
+	        null,
+	        followers
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = UserFollowers;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
 	    LinkedStateMixin = __webpack_require__(273),
 	    UserStore = __webpack_require__(267),
-	    UserEditActions = __webpack_require__(282);
+	    UserEditActions = __webpack_require__(283);
 	
 	var UserEdit = React.createClass({
 	  displayName: 'UserEdit',
@@ -34791,7 +34885,7 @@
 	module.exports = UserEdit;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ApiUtil = __webpack_require__(181);
@@ -34805,15 +34899,15 @@
 	module.exports = UserEditActions;
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    LinkedStateMixin = __webpack_require__(273),
 	    ReactDOM = __webpack_require__(158),
 	    FormActions = __webpack_require__(185),
-	    Error = __webpack_require__(284),
-	    ErrorStore = __webpack_require__(285),
+	    Error = __webpack_require__(285),
+	    ErrorStore = __webpack_require__(286),
 	    EventStore = __webpack_require__(159),
 	    NavTransitions = __webpack_require__(264);
 	
@@ -35211,11 +35305,11 @@
 	module.exports = EventForm;
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ErrorStore = __webpack_require__(285);
+	    ErrorStore = __webpack_require__(286);
 	
 	var Error = React.createClass({
 	  displayName: 'Error',
@@ -35252,7 +35346,7 @@
 	module.exports = Error;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(177),
@@ -35286,90 +35380,6 @@
 	};
 	
 	module.exports = ErrorStore;
-
-/***/ },
-/* 286 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    FollowStore = __webpack_require__(268);
-	
-	var UserFollowers = React.createClass({
-	  displayName: 'UserFollowers',
-	
-	  getInitialState: function () {
-	    return { followers: FollowStore.fetch() };
-	  },
-	
-	  componentDidMount: function () {
-	    this.followListener = FollowStore.addListener(this.resetFollowers);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.followListener.remove();
-	  },
-	
-	  resetFollowers: function () {
-	    this.setState({ followers: FollowStore.fetch() });
-	  },
-	
-	  goToUser: function (follower) {
-	    this.props.history.pushState(null, "api/users/" + follower.follower.id);
-	  },
-	
-	  render: function () {
-	    var goToUser = this.goToUser;
-	    var followers = this.state.followers.map(function (follower) {
-	      var bindedClick = goToUser.bind(null, follower);
-	      var image = "http://res.cloudinary.com/dlqjek68b/image/upload/c_fill,h_50,w_50" + follower.follower.url;
-	      return React.createElement(
-	        'li',
-	        { onClick: bindedClick,
-	          key: follower.follower.id },
-	        React.createElement('img', { src: image }),
-	        React.createElement(
-	          'div',
-	          { className: 'follower-text' },
-	          follower.follower.host_name
-	        )
-	      );
-	    });
-	
-	    var title;
-	    if (followers.length === 0) {
-	      title = React.createElement(
-	        'div',
-	        { className: 'no-followers' },
-	        React.createElement(
-	          'h3',
-	          null,
-	          'no followers yet.'
-	        )
-	      );
-	    } else {
-	      title = React.createElement('div', null);
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'follower-container col-md-4' },
-	      React.createElement(
-	        'h2',
-	        null,
-	        'Followers'
-	      ),
-	      title,
-	      React.createElement(
-	        'ul',
-	        null,
-	        followers
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = UserFollowers;
 
 /***/ }
 /******/ ]);

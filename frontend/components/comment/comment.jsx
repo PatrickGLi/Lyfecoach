@@ -28,7 +28,9 @@ var Comments = React.createClass({
   render: function() {
     var comments;
     if (typeof this.props.comments === "undefined") {
-      comments = <div></div>;
+      comments = <li></li>;
+    } else if (this.props.comments.length === 0) {
+      comments = <li><h4 className="no-comments">no comments yet</h4></li>;
     } else {
       comments = this.props.comments.map(function(comment, index) {
         return (<li key={index}><b>{comment.commenter}:</b> {comment.content}</li>);
