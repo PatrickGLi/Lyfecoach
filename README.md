@@ -2,7 +2,7 @@
 
 [Live link][link]
 
-[link]: www.lyfecoach.io
+[link]: http://www.lyfecoach.io
 
 ## Minimum Viable Product
 
