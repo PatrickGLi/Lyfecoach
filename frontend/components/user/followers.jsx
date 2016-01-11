@@ -19,7 +19,11 @@ var UserFollowers = React.createClass({
   },
 
   goToUser: function(follower) {
-    this.props.history.pushState(null, "api/users/" + follower.follower.id);
+    if (follower.events.length === 0) {
+      this.props.history.pushState(null, "api/users/" + follower.follower.id);
+    } else {
+      this.props.history.pushState(null, "api/users/" + follower.follower.id + "/events/" + follower.events[0].id);
+    }
   },
 
   render: function() {
