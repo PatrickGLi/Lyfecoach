@@ -35275,7 +35275,7 @@
 	              React.createElement(
 	                'a',
 	                { className: 'left carousel-control', href: '#form-carousel', role: 'button', 'data-slide': 'prev' },
-	                React.createElement('span', { className: 'glyphicon glyphicon-chevron-left', 'aria-hidden': 'true' }),
+	                React.createElement('span', { className: '', 'aria-hidden': 'true' }),
 	                React.createElement(
 	                  'span',
 	                  { className: 'sr-only' },
@@ -35285,7 +35285,7 @@
 	              React.createElement(
 	                'a',
 	                { className: 'right carousel-control', href: '#form-carousel', role: 'button', 'data-slide': 'next' },
-	                React.createElement('span', { className: 'glyphicon glyphicon-chevron-right', 'aria-hidden': 'true' }),
+	                React.createElement('span', { className: '', 'aria-hidden': 'true' }),
 	                React.createElement(
 	                  'span',
 	                  { className: 'sr-only' },
