@@ -4,6 +4,8 @@
 
 [link]: http://www.lyfecoach.io
 
+[![Screenshot](/app/assets/images/screenshot.png)](//github.com/PatrickLi727/Lyfecoach/)
+
 ## Minimum Viable Product
 
 Lyfecoach is an event management web application inspired by Eventbrite built
