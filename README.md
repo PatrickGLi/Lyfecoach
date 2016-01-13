@@ -14,11 +14,12 @@ see what is happening in your city, and expand your horizons. Follow your
 favorite organizers, and always know what's going on in your area. Features on
 Lyfecoach include:
 
-- [ ] Account creation and Log in
+- [ ] Account authentication utilizing BCrypt hashing
 - [ ] Event browsing and event creation using Google Autocomplete
 - [ ] Event locating using Google Map API
 - [ ] Event filtering by category, date, and price
 - [ ] User's followers and user's followings
+- [ ] Single page implementation and nested associations
 
 ## Design Docs
 * [View Wireframes][view]
