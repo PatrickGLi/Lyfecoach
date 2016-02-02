@@ -32135,6 +32135,7 @@
 	  displayName: 'Footer',
 	
 	  render: function () {
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'footer-container' },
@@ -32145,6 +32146,7 @@
 	      )
 	    );
 	  }
+	
 	});
 	
 	module.exports = Footer;
