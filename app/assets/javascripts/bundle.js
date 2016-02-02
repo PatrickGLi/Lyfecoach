@@ -32135,7 +32135,15 @@
 	  displayName: 'Footer',
 	
 	  render: function () {
-	    return React.createElement('div', { className: 'footer-container' });
+	    return React.createElement(
+	      'div',
+	      { className: 'footer-container' },
+	      React.createElement(
+	        'a',
+	        { href: 'http://li-patrick.com' },
+	        'patrick li © 2015'
+	      )
+	    );
 	  }
 	});
 	
