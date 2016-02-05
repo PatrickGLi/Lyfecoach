@@ -4,11 +4,8 @@
 
 [link]: http://www.lyfecoach.io
 
-<<<<<<< HEAD
 [![Screenshot](/app/assets/images/screenshot.png)](//github.com/PatrickLi727/Lyfecoach/)
 
-=======
->>>>>>> ad9ef9d8718a42c60c9922bfa8e844a4db242486
 ## Minimum Viable Product
 
 Lyfecoach is an event management web application inspired by Eventbrite built
@@ -17,19 +14,13 @@ see what is happening in your city, and expand your horizons. Follow your
 favorite organizers, and always know what's going on in your area. Features on
 Lyfecoach include:
 
-<<<<<<< HEAD
 - [ ] Account authentication utilizing BCrypt hashing
-=======
 - [ ] Account creation and Log in
->>>>>>> ad9ef9d8718a42c60c9922bfa8e844a4db242486
 - [ ] Event browsing and event creation using Google Autocomplete
 - [ ] Event locating using Google Map API
 - [ ] Event filtering by category, date, and price
 - [ ] User's followers and user's followings
-<<<<<<< HEAD
 - [ ] Single page implementation and nested associations
-=======
->>>>>>> ad9ef9d8718a42c60c9922bfa8e844a4db242486
 
 ## Design Docs
 * [View Wireframes][view]
